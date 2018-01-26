@@ -23,9 +23,11 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * An immutable {@link Tag} implementation.
+ *
  * @author Jon Schneider
  */
-public class ImmutableTag implements Tag {
+class ImmutableTag implements Tag {
 
     private String key;
 
