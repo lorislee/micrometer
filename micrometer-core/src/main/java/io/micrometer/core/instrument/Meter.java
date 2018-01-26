@@ -93,7 +93,7 @@ public interface Meter {
         }
 
         public Id withTag(Tag tag) {
-            return new Id(name, Tags.concat(tags, Collections.singletonList(tag)), baseUnit, description, type);
+            return new Id(this.name, Tags.concat(this.tags, Collections.singletonList(tag)), this.baseUnit, this.description, this.type);
         }
 
         public Id withTag(Statistic statistic) {
@@ -101,20 +101,20 @@ public interface Meter {
         }
 
         public Id withBaseUnit(@Nullable String newBaseUnit) {
-            return new Id(name, tags, newBaseUnit, description, type);
+            return new Id(this.name, this.tags, newBaseUnit, this.description, this.type);
         }
 
         public String getName() {
-            return name;
+            return this.name;
         }
 
         public Iterable<Tag> getTags() {
-            return tags;
+            return this.tags;
         }
 
         @Nullable
         public String getTag(String name) {
-            for (Tag tag : tags) {
+            for (Tag tag : this.tags) {
                 if (tag.getKey().equals(name))
                     return tag.getValue();
             }
@@ -123,23 +123,23 @@ public interface Meter {
 
         @Nullable
         public String getBaseUnit() {
-            return baseUnit;
+            return this.baseUnit;
         }
 
         public String getConventionName(NamingConvention namingConvention) {
-            return namingConvention.name(name, type, baseUnit);
+            return namingConvention.name(this.name, this.type, this.baseUnit);
         }
 
         @Nullable
         public String getDescription() {
-            return description;
+            return this.description;
         }
 
         /**
          * Tags that are sorted by key and formatted
          */
         public List<Tag> getConventionTags(NamingConvention namingConvention) {
-            return tags.stream()
+            return this.tags.stream()
                 .map(t -> Tag.of(namingConvention.tagKey(t.getKey()), namingConvention.tagValue(t.getValue())))
                 .collect(Collectors.toList());
         }
@@ -157,16 +157,16 @@ public interface Meter {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Meter.Id meterId = (Meter.Id) o;
-            return Objects.equals(name, meterId.name) && Objects.equals(tags, meterId.tags);
+            return Objects.equals(this.name, meterId.name) && Objects.equals(this.tags, meterId.tags);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(name, tags);
+            return Objects.hash(this.name, this.tags);
         }
 
         public Type getType() {
-            return type;
+            return this.type;
         }
 
     }

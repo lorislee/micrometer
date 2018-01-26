@@ -104,7 +104,7 @@ public interface FunctionTimer extends Meter {
         }
 
         public Builder<T> tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+        	this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -119,8 +119,9 @@ public interface FunctionTimer extends Meter {
         }
 
         public FunctionTimer register(MeterRegistry registry) {
-            return registry.more().timer(new Meter.Id(name, tags, baseUnit, description, Type.Timer), obj, countFunction, totalTimeFunction,
-                totalTimeFunctionUnits);
+            return registry.more().timer(
+                    new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.Timer), this.obj,
+                    this.countFunction, this.totalTimeFunction, this.totalTimeFunctionUnits);
         }
 
     }

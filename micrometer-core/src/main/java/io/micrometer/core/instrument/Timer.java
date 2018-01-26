@@ -217,7 +217,7 @@ public interface Timer extends Meter {
         }
 
         public Builder tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+            this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -310,8 +310,9 @@ public interface Timer extends Meter {
 
         public Timer register(MeterRegistry registry) {
             // the base unit for a timer will be determined by the monitoring system implementation
-            return registry.timer(new Meter.Id(name, tags, null, description, Type.Timer), histogramConfigBuilder.build(),
-                pauseDetector == null ? registry.config().pauseDetector() : pauseDetector);
+            return registry.timer(new Meter.Id(this.name, this.tags, null, this.description, Type.Timer),
+                    this.histogramConfigBuilder.build(),
+                    this.pauseDetector == null ? registry.config().pauseDetector() : this.pauseDetector);
         }
 
     }

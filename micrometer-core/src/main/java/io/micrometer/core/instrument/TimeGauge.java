@@ -75,7 +75,7 @@ public interface TimeGauge extends Gauge {
         }
 
         public Builder<T> tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+            this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -85,8 +85,8 @@ public interface TimeGauge extends Gauge {
         }
 
         public TimeGauge register(MeterRegistry registry) {
-            return registry.more().timeGauge(new Meter.Id(name, tags, null, description, Type.Gauge),
-                obj, fUnits, f);
+            return registry.more().timeGauge(new Meter.Id(this.name, this.tags, null, this.description, Type.Gauge),
+                    this.obj, this.fUnits, this.f);
         }
 
     }

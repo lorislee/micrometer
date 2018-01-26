@@ -111,7 +111,7 @@ public interface DistributionSummary extends Meter {
         }
 
         public Builder tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+        	this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -188,7 +188,7 @@ public interface DistributionSummary extends Meter {
         }
 
         public DistributionSummary register(MeterRegistry registry) {
-            return registry.summary(new Meter.Id(name, tags, baseUnit, description, Type.DistributionSummary), histogramConfigBuilder.build());
+            return registry.summary(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.DistributionSummary), this.histogramConfigBuilder.build());
         }
 
     }

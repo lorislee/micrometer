@@ -167,11 +167,11 @@ public interface LongTaskTimer extends Meter {
          * @return The duration that was stop in nanoseconds
          */
         public long stop() {
-            return timer.stop(task);
+            return this.timer.stop(task);
         }
 
         public double duration(TimeUnit unit) {
-            return timer.duration(task, unit);
+            return this.timer.duration(task, unit);
         }
 
     }
@@ -202,7 +202,7 @@ public interface LongTaskTimer extends Meter {
         }
 
         public Builder tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+            this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -212,7 +212,7 @@ public interface LongTaskTimer extends Meter {
         }
 
         public LongTaskTimer register(MeterRegistry registry) {
-            return registry.more().longTaskTimer(new Meter.Id(name, tags, null, description, Type.LongTaskTimer));
+            return registry.more().longTaskTimer(new Meter.Id(this.name, this.tags, null, this.description, Type.LongTaskTimer));
         }
 
     }
