@@ -27,6 +27,8 @@ import static java.util.stream.StreamSupport.stream;
 
 /**
  * A counter, gauge, timer, or distribution summary that results collects one or more metrics.
+ *
+ * @author Jon Schneider
  */
 public interface Meter {
 

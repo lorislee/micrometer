@@ -21,10 +21,16 @@ import java.lang.annotation.Target;
 
 /**
  * This is a feature that may still yet change before 1.0.0 GA.
+ *
+ * @author Jon Schneider
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface Incubating {
 
+    /**
+     * The version that the feature was introduced.
+     * @return the since version
+     */
     String since();
 
 }

@@ -16,6 +16,9 @@
 
 package io.micrometer.core.instrument;
 
+/**
+ * @author Jon Schneider
+ */
 public enum Statistic {
 
     /**

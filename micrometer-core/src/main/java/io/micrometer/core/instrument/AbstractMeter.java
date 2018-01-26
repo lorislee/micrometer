@@ -16,6 +16,11 @@
 
 package io.micrometer.core.instrument;
 
+/**
+ * Abstract base class for {@link Meter} implementations.
+ *
+ * @author Jon Schneider
+ */
 public abstract class AbstractMeter implements Meter {
 
 	private final Meter.Id id;

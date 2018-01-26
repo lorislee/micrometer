@@ -22,6 +22,9 @@ import io.micrometer.core.lang.Nullable;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Jon Schneider
+ */
 public final class HistogramSnapshot {
 
     private static final ValueAtPercentile[] EMPTY_VALUES = new ValueAtPercentile[0];

@@ -25,6 +25,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToLongFunction;
 
+/**
+ * @author Jon Schneider
+ */
 public interface FunctionTimer extends Meter {
 
     static <T> Builder<T> builder(String name, T obj, ToLongFunction<T> countFunction,

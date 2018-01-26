@@ -20,6 +20,9 @@ import io.micrometer.core.instrument.util.TimeUtils;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Jon Schneider
+ */
 public final class ValueAtPercentile {
 
     private final double percentile;

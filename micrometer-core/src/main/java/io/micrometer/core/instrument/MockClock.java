@@ -19,6 +19,9 @@ package io.micrometer.core.instrument;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Jon Schneider
+ */
 public class MockClock implements Clock {
 
 	// has to be non-zero to prevent divide-by-zeroes and other weird math results based on the clock

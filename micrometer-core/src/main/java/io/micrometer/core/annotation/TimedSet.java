@@ -18,11 +18,20 @@ package io.micrometer.core.annotation;
 
 import java.lang.annotation.*;
 
+/**
+ * An array of {@link Timed} annotations.
+ *
+ * @author Jon Schneider
+ */
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface TimedSet {
 
+    /**
+     * The {@link Timed @Timed} annotations.
+     * @return  the annotations
+     */
     Timed[] value();
 
 }

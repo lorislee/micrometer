@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * Used to measure the rate of change based on calls to increment.
+ *
+ * @author Jon Schneider
  */
 public interface Counter extends Meter {
 
@@ -40,13 +42,13 @@ public interface Counter extends Meter {
 
     /**
      * Update the counter by {@code amount}.
-     *
      * @param amount Amount to add to the counter.
      */
     void increment(double amount);
 
     /**
      * The cumulative count since this counter was created.
+     * @return the cumulative count
      */
     double count();
 
@@ -60,6 +62,9 @@ public interface Counter extends Meter {
         return Type.Counter;
     }
 
+    /**
+     * A Counter builder.
+     */
     class Builder {
 
         private final String name;
@@ -77,17 +82,30 @@ public interface Counter extends Meter {
         }
 
         /**
-         * @param tags Must be an even number of arguments representing key/value pairs of tags.
+         * Add the specified tag pairs.
+         * @param tags tags to add. The Must be an even number of arguments representing key/value pairs of tags.
+         * @return this builder
          */
         public Builder tags(String... tags) {
             return tags(Tags.zip(tags));
         }
 
+        /**
+         * Add the specified tags.
+         * @param tags the tags to add
+         * @return this builder
+         */
         public Builder tags(Iterable<Tag> tags) {
             tags.forEach(this.tags::add);
             return this;
         }
 
+        /**
+         * Add an individual tag.
+         * @param key the tag key
+         * @param value the tag value
+         * @return this builder
+         */
         public Builder tag(String key, String value) {
             tags.add(Tag.of(key, value));
             return this;

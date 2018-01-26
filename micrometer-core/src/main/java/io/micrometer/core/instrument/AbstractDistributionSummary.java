@@ -21,6 +21,11 @@ import io.micrometer.core.instrument.histogram.TimeWindowHistogram;
 import io.micrometer.core.instrument.util.MeterEquivalence;
 import io.micrometer.core.lang.Nullable;
 
+/**
+ * Abstract base class for {@link DistributionSummary} implementations.
+ *
+ * @author Jon Schneider
+ */
 public abstract class AbstractDistributionSummary extends AbstractMeter implements DistributionSummary {
 
     private final TimeWindowHistogram histogram;

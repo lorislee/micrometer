@@ -27,6 +27,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * @author Jon Schneider
+ */
 public interface LongTaskTimer extends Meter {
 
     static Builder builder(String name) {

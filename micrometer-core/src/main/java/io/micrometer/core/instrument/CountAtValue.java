@@ -20,6 +20,11 @@ import io.micrometer.core.instrument.util.TimeUtils;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Data class to hold a {code value} and a {@code count}.
+ *
+ * @author Jon Schneider
+ */
 public final class CountAtValue {
 
     private final long value;
@@ -31,18 +36,37 @@ public final class CountAtValue {
         this.count = count;
     }
 
+    /**
+     * Return a new {@link CountAtValue} with the specified {@code value} and {@code count}.
+     * @param value the value in nanoseconds
+     * @param count the count
+     * @return a new {@link CountAtValue} instance
+     */
     public static CountAtValue of(long value, double count) {
         return new CountAtValue(value, count);
     }
 
+    /**
+     * Return the contained value.
+     * @return the value in nanoseconds
+     */
     public long value() {
         return this.value;
     }
 
+    /**
+     * Return the value expressed in the given time unit.
+     * @param unit the time unit
+     * @return the value in converted to the specified time unit
+     */
     public double value(TimeUnit unit) {
         return TimeUtils.nanosToUnit(this.value, unit);
     }
 
+    /**
+     * Return the contained count.
+     * @return the count
+     */
     public double count() {
         return this.count;
     }

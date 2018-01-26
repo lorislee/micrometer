@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 
+/**
+ * @author Jon Schneider
+ */
 public interface Gauge extends Meter {
 
     static <T> Builder<T> builder(String name, @Nullable T obj, ToDoubleFunction<T> f) {

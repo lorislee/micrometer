@@ -27,6 +27,8 @@ import java.util.List;
 /**
  * Track the sample distribution of events. An example would be the response sizes for requests
  * hitting and http server.
+ *
+ * @author Jon Schneider
  */
 public interface DistributionSummary extends Meter {
 

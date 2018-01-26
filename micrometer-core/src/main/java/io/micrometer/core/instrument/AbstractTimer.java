@@ -26,6 +26,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+/**
+ * Abstract base class for {@link Timer} implementations.
+ *
+ * @author Jon Schneider
+ */
 public abstract class AbstractTimer extends AbstractMeter implements Timer {
 
     protected final Clock clock;

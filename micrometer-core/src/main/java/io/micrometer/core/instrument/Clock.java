@@ -18,8 +18,16 @@ package io.micrometer.core.instrument;
 
 import io.micrometer.core.instrument.step.StepLong;
 
+/**
+ * Interface used to represent the current time.
+ *
+ * @author Jon Schneider
+ */
 public interface Clock {
 
+    /**
+     * {@link Clock} implementation backed by Java's {@link System} class.
+     */
     Clock SYSTEM = new Clock() {
 
         @Override
@@ -36,7 +44,7 @@ public interface Clock {
 
     /**
      * Current wall time in milliseconds since the epoch. Typically equivalent to
-     * System.currentTimeMillis. Should not be used to determine durations. Used
+     * {@code System.currentTimeMillis}. Should not be used to determine durations. Used
      * for timestamping metrics being pushed to a monitoring system or for determination
      * of step boundaries (e.g. {@link StepLong}.
      * @return Wall time in milliseconds
@@ -47,7 +55,7 @@ public interface Clock {
      * Current time from a monotonic clock source. The value is only meaningful when compared with
      * another snapshot to determine the elapsed time for an operation. The difference between two
      * samples will have a unit of nanoseconds. The returned value is typically equivalent to
-     * System.nanoTime.
+     * {@code System.nanoTime}.
      * @return Monotonic time in nanoseconds
      */
     long monotonicTime();

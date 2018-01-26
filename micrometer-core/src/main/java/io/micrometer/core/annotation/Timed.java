@@ -18,22 +18,57 @@ package io.micrometer.core.annotation;
 
 import java.lang.annotation.*;
 
+import io.micrometer.core.instrument.LongTaskTimer;
+
+/**
+ * Indicates that a type or method should have time metrics recorded for each
+ * method invocation.
+ *
+ * @author Jon Schneider
+ */
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.METHOD})
 @Repeatable(TimedSet.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Timed {
 
+	/**
+	 * The name of the metric that should be produced. When not specific a
+	 * default metric name will be used.1
+	 * @return the name of the metric
+	 */
     String value() default "";
 
+    /**
+     * Any additional tags that should me produced with the metrics.
+     * @return any additional tags
+     */
     String[] extraTags() default {};
 
+    /**
+     * If the metric should be produced using a {@link LongTaskTimer long task}.
+     * @return if a long task timer should be used
+     */
     boolean longTask() default false;
 
+    /**
+     * Any additional time series percentiles that should be produced.
+     * @return any additional percentiles
+     */
     double[] percentiles() default {};
 
+    /**
+	 * If a histogram bucket usable for generating aggregable percentile
+	 * approximations should be produced.
+	 * @return if a histogram bucket is produced
+	 */
     boolean histogram() default false;
 
+    /**
+	 * Any additional description meta-data that should be attached to the
+	 * produced metric.
+	 * @return an additional description
+	 */
     String description() default "";
 
 }

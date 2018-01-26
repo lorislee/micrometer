@@ -22,6 +22,9 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * @author Jon Schneider
+ */
 public class ImmutableTag implements Tag {
 
     private String key;

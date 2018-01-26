@@ -33,6 +33,8 @@ import java.util.function.Supplier;
  * Timer intended to track of a large number of short running events. Example would be something like
  * an HTTP request. Though "short running" is a bit subjective the assumption is that it should be
  * under a minute.
+ *
+ * @author Jon Schneider
  */
 public interface Timer extends Meter {
 
