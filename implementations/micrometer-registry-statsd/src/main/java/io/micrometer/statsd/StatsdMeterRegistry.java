@@ -213,15 +213,15 @@ public class StatsdMeterRegistry extends MeterRegistry {
         measurements.forEach(ms -> {
             StatsdLineBuilder line = lineBuilder(id);
             switch (ms.getStatistic()) {
-                case Count:
-                case Total:
-                case TotalTime:
+                case COUNT:
+                case TOTAL:
+                case TOTAL_TIME:
                     pollableMeters.add(() -> publisher.onNext(line.count((long) ms.getValue(), ms.getStatistic())));
                     break;
-                case Value:
-                case ActiveTasks:
-                case Duration:
-                case Unknown:
+                case VALUE:
+                case ACTIVE_TASKS:
+                case DURATION:
+                case UNKNOWN:
                     pollableMeters.add(() -> publisher.onNext(line.gauge(ms.getValue(), ms.getStatistic())));
                     break;
             }

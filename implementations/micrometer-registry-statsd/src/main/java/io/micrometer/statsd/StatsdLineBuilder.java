@@ -88,7 +88,7 @@ class StatsdLineBuilder {
     }
 
     String count(long amount) {
-        return count(amount, Statistic.Count);
+        return count(amount, Statistic.COUNT);
     }
 
     String count(long amount, Statistic stat) {
@@ -96,7 +96,7 @@ class StatsdLineBuilder {
     }
 
     String gauge(double amount) {
-        return gauge(amount, Statistic.Value);
+        return gauge(amount, Statistic.VALUE);
     }
 
     String gauge(double amount, Statistic stat) {

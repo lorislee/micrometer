@@ -57,7 +57,7 @@ public abstract class PropertyMeterFilter implements MeterFilter {
 
     @Override
     public HistogramConfig configure(Meter.Id id, HistogramConfig histogramConfig) {
-        if (!id.getType().equals(Meter.Type.Timer) && !id.getType().equals(Meter.Type.DistributionSummary))
+        if (!id.getType().equals(Meter.Type.TIMER) && !id.getType().equals(Meter.Type.DISTRIBUTION_SUMMARY))
             return histogramConfig;
         HistogramConfig.Builder builder = HistogramConfig.builder();
         Boolean percentileHistogram = getMostSpecific(id.getName(), "percentileHistogram", Boolean.class);
@@ -74,7 +74,7 @@ public abstract class PropertyMeterFilter implements MeterFilter {
         if (histogramExpiry != null) {
             builder.histogramExpiry(histogramExpiry);
         }
-        if (id.getType().equals(Meter.Type.Timer)) {
+        if (id.getType().equals(Meter.Type.TIMER)) {
             Duration max = getMostSpecific(id.getName(), "maximumExpectedValue", Duration.class);
             if (max != null) {
                 builder.maximumExpectedValue(max.toNanos());
@@ -91,7 +91,7 @@ public abstract class PropertyMeterFilter implements MeterFilter {
                 }
                 builder.sla(slaNanos);
             }
-        } else if (id.getType().equals(Meter.Type.DistributionSummary)) {
+        } else if (id.getType().equals(Meter.Type.DISTRIBUTION_SUMMARY)) {
             Long max = getMostSpecific(id.getName(), "maximumExpectedValue", Long.class);
             if (max != null) {
                 builder.maximumExpectedValue(max);

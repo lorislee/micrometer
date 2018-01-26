@@ -36,12 +36,12 @@ public interface Gauge extends Meter {
 
     @Override
     default Iterable<Measurement> measure() {
-        return Collections.singletonList(new Measurement(this::value, Statistic.Value));
+        return Collections.singletonList(new Measurement(this::value, Statistic.VALUE));
     }
 
     @Override
     default Type type() {
-        return Type.Gauge;
+        return Type.GAUGE;
     }
 
     static <T> Builder<T> builder(String name, @Nullable T obj, ToDoubleFunction<T> f) {
@@ -100,7 +100,7 @@ public interface Gauge extends Meter {
         }
 
         public Gauge register(MeterRegistry registry) {
-            return registry.gauge(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.Gauge), this.obj, this.f);
+            return registry.gauge(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.GAUGE), this.obj, this.f);
         }
 
     }

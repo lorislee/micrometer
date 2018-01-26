@@ -86,7 +86,7 @@ public interface TimeGauge extends Gauge {
         }
 
         public TimeGauge register(MeterRegistry registry) {
-            return registry.more().timeGauge(new Meter.Id(this.name, this.tags, null, this.description, Type.Gauge),
+            return registry.more().timeGauge(new Meter.Id(this.name, this.tags, null, this.description, Type.GAUGE),
                     this.obj, this.fUnits, this.f);
         }
 

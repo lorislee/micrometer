@@ -73,8 +73,8 @@ public interface DistributionSummary extends Meter {
     @Override
     default Iterable<Measurement> measure() {
         return Arrays.asList(
-            new Measurement(() -> (double) count(), Statistic.Count),
-            new Measurement(this::totalAmount, Statistic.Total)
+            new Measurement(() -> (double) count(), Statistic.COUNT),
+            new Measurement(this::totalAmount, Statistic.TOTAL)
         );
     }
 
@@ -190,7 +190,7 @@ public interface DistributionSummary extends Meter {
         }
 
         public DistributionSummary register(MeterRegistry registry) {
-            return registry.summary(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.DistributionSummary), this.histogramConfigBuilder.build());
+            return registry.summary(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.DISTRIBUTION_SUMMARY), this.histogramConfigBuilder.build());
         }
 
     }

@@ -123,9 +123,9 @@ public interface Timer extends Meter {
     @Override
     default Iterable<Measurement> measure() {
         return Arrays.asList(
-            new Measurement(() -> (double) count(), Statistic.Count),
-            new Measurement(() -> totalTime(baseTimeUnit()), Statistic.TotalTime),
-            new Measurement(() -> max(baseTimeUnit()), Statistic.Max)
+            new Measurement(() -> (double) count(), Statistic.COUNT),
+            new Measurement(() -> totalTime(baseTimeUnit()), Statistic.TOTAL_TIME),
+            new Measurement(() -> max(baseTimeUnit()), Statistic.MAX)
         );
     }
 
@@ -133,7 +133,7 @@ public interface Timer extends Meter {
 
     @Override
     default Type type() {
-        return Type.Timer;
+        return Type.TIMER;
     }
 
     static Sample start(MeterRegistry registry) {
@@ -310,7 +310,7 @@ public interface Timer extends Meter {
 
         public Timer register(MeterRegistry registry) {
             // the base unit for a timer will be determined by the monitoring system implementation
-            return registry.timer(new Meter.Id(this.name, this.tags, null, this.description, Type.Timer),
+            return registry.timer(new Meter.Id(this.name, this.tags, null, this.description, Type.TIMER),
                     this.histogramConfigBuilder.build(),
                     this.pauseDetector == null ? registry.config().pauseDetector() : this.pauseDetector);
         }

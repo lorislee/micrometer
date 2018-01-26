@@ -276,14 +276,14 @@ public class PrometheusMeterRegistry extends MeterRegistry {
     protected Meter newMeter(Meter.Id id, Meter.Type type, Iterable<Measurement> measurements) {
         Collector.Type promType = Collector.Type.UNTYPED;
         switch (type) {
-            case Counter:
+            case COUNTER:
                 promType = Collector.Type.COUNTER;
                 break;
-            case Gauge:
+            case GAUGE:
                 promType = Collector.Type.GAUGE;
                 break;
-            case DistributionSummary:
-            case Timer:
+            case DISTRIBUTION_SUMMARY:
+            case TIMER:
                 promType = Collector.Type.SUMMARY;
                 break;
         }
@@ -302,17 +302,17 @@ public class PrometheusMeterRegistry extends MeterRegistry {
 
                     String name = conventionName;
                     switch (m.getStatistic()) {
-                        case Total:
-                        case TotalTime:
+                        case TOTAL:
+                        case TOTAL_TIME:
                             name += "_sum";
                             break;
-                        case Max:
+                        case MAX:
                             name += "_max";
                             break;
-                        case ActiveTasks:
+                        case ACTIVE_TASKS:
                             name += "_active_count";
                             break;
-                        case Duration:
+                        case DURATION:
                             name += "_duration_sum";
                             break;
                     }

@@ -137,14 +137,14 @@ public interface LongTaskTimer extends Meter {
     @Override
     default Iterable<Measurement> measure() {
         return Arrays.asList(
-            new Measurement(() -> (double) activeTasks(), Statistic.ActiveTasks),
-            new Measurement(() -> duration(TimeUnit.NANOSECONDS), Statistic.Duration)
+            new Measurement(() -> (double) activeTasks(), Statistic.ACTIVE_TASKS),
+            new Measurement(() -> duration(TimeUnit.NANOSECONDS), Statistic.DURATION)
         );
     }
 
     @Override
     default Type type() {
-        return Type.LongTaskTimer;
+        return Type.LONG_TASK_TIMER;
     }
 
     static Builder builder(String name) {
@@ -212,7 +212,7 @@ public interface LongTaskTimer extends Meter {
         }
 
         public LongTaskTimer register(MeterRegistry registry) {
-            return registry.more().longTaskTimer(new Meter.Id(this.name, this.tags, null, this.description, Type.LongTaskTimer));
+            return registry.more().longTaskTimer(new Meter.Id(this.name, this.tags, null, this.description, Type.LONG_TASK_TIMER));
         }
 
     }

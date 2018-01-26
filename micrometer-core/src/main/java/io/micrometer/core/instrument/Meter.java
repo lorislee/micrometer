@@ -45,7 +45,7 @@ public interface Meter {
     Iterable<Measurement> measure();
 
     default Type type() {
-        return Type.Other;
+        return Type.OTHER;
     }
 
     static Builder builder(String name, Type type, Iterable<Measurement> measurements) {
@@ -59,12 +59,12 @@ public interface Meter {
      * increment-driven API.
      */
     enum Type {
-        Counter,
-        Gauge,
-        LongTaskTimer,
-        Timer,
-        DistributionSummary,
-        Other
+        COUNTER,
+        GAUGE,
+        LONG_TASK_TIMER,
+        TIMER,
+        DISTRIBUTION_SUMMARY,
+        OTHER
     }
 
     class Id {

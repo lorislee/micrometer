@@ -50,12 +50,12 @@ public interface Counter extends Meter {
 
     @Override
     default Iterable<Measurement> measure() {
-        return Collections.singletonList(new Measurement(this::count, Statistic.Count));
+        return Collections.singletonList(new Measurement(this::count, Statistic.COUNT));
     }
 
     @Override
     default Type type() {
-        return Type.Counter;
+        return Type.COUNTER;
     }
 
     static Builder builder(String name) {
@@ -122,7 +122,7 @@ public interface Counter extends Meter {
         }
 
         public Counter register(MeterRegistry registry) {
-            return registry.counter(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.Counter));
+            return registry.counter(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.COUNTER));
         }
 
     }

@@ -92,7 +92,7 @@ public class CumulativeFunctionTimer<T> implements FunctionTimer {
 
     @Override
 	public Type type() {
-        return Type.Timer;
+        return Type.TIMER;
     }
 
 }

@@ -24,38 +24,41 @@ public enum Statistic {
     /**
      * The sum of the amounts recorded.
      */
-    Total,
+    TOTAL,
 
     /**
      * The sum of the times recorded. Always reported in nanoseconds.
      */
-    TotalTime,
+    TOTAL_TIME,
 
     /**
      * Rate per second for calls.
      */
-    Count,
+    COUNT,
 
     /**
      * The maximum amount recorded. When this represents a time, it is always reported in nanoseconds.
      */
-    Max,
+    MAX,
 
     /**
      * Instantaneous value, such as those reported by gauges
      **/
-    Value,
+    VALUE,
 
-    Unknown,
+    /**
+     * Unknown statistics type
+     */
+    UNKNOWN,
 
     /**
      * Number of currently active tasks for a long task timer.
      */
-    ActiveTasks,
+    ACTIVE_TASKS,
 
     /**
      * Duration of a running task in a long task timer. Always reported in nanoseconds.
      */
-    Duration,
+    DURATION,
 
 }

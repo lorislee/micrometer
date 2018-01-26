@@ -104,7 +104,7 @@ public class StepFunctionTimer<T> implements FunctionTimer {
 
     @Override
 	public Type type() {
-        return Type.Timer;
+        return Type.TIMER;
     }
 
 }

@@ -37,12 +37,12 @@ public interface FunctionCounter extends Meter {
 
     @Override
     default Iterable<Measurement> measure() {
-        return Collections.singletonList(new Measurement(this::count, Statistic.Count));
+        return Collections.singletonList(new Measurement(this::count, Statistic.COUNT));
     }
 
     @Override
     default Meter.Type type() {
-        return Meter.Type.Counter;
+        return Meter.Type.COUNTER;
     }
 
     static <T> Builder<T> builder(String name, T obj, ToDoubleFunction<T> f) {
@@ -99,7 +99,7 @@ public interface FunctionCounter extends Meter {
         }
 
         public FunctionCounter register(MeterRegistry registry) {
-            return registry.more().counter(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.Counter), this.obj, this.f);
+            return registry.more().counter(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.COUNTER), this.obj, this.f);
         }
 
     }
