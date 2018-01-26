@@ -21,6 +21,13 @@ package io.micrometer.core.instrument;
  * @author Jon Schneider
  */
 public interface Tag {
+
+    /**
+     * Create a new {@link tag} with the specified value.
+     * @param key the tag key
+     * @param value the tag value
+     * @return a new {@link Tag} instance
+     */
     static Tag of(String key, String value) {
         return new ImmutableTag(key, value);
     }
