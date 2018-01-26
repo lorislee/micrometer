@@ -45,36 +45,39 @@ abstract class TimeWindowHistogramBase<T, U> {
         AtomicIntegerFieldUpdater.newUpdater(TimeWindowHistogramBase.class, "rotating");
 
     private final Clock clock;
+
     private final HistogramConfig histogramConfig;
 
     private final T[] ringBuffer;
+
     private final long durationBetweenRotatesMillis;
+
     @Nullable
     private U accumulatedHistogram;
+
     private volatile boolean accumulatedHistogramStale;
+
     private int currentBucket;
+
     private volatile long lastRotateTimestampMillis;
+
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private volatile int rotating; // 0 - not rotating, 1 - rotating
 
     TimeWindowHistogramBase(Clock clock, HistogramConfig histogramConfig, Class<T> bucketType) {
         this.clock = clock;
         this.histogramConfig = validateHistogramConfig(histogramConfig);
-
         final int ageBuckets = histogramConfig.getHistogramBufferLength();
         if (ageBuckets <= 0) {
             rejectHistogramConfig("histogramBufferLength (" + ageBuckets + ") must be greater than 0.");
         }
-
         //noinspection unchecked
         ringBuffer = (T[]) Array.newInstance(bucketType, ageBuckets);
-
         durationBetweenRotatesMillis = histogramConfig.getHistogramExpiry().toMillis() / ageBuckets;
         if (durationBetweenRotatesMillis <= 0) {
             rejectHistogramConfig("histogramExpiry (" + histogramConfig.getHistogramExpiry().toMillis() +
                 "ms) / histogramBufferLength (" + ageBuckets + ") must be greater than 0.");
         }
-
         currentBucket = 0;
         lastRotateTimestampMillis = clock.wallTime();
     }
@@ -87,7 +90,6 @@ abstract class TimeWindowHistogramBase<T, U> {
                     "Found " + p);
             }
         }
-
         final long minimumExpectedValue = histogramConfig.getMinimumExpectedValue();
         final long maximumExpectedValue = histogramConfig.getMaximumExpectedValue();
         if (minimumExpectedValue <= 0) {
@@ -104,7 +106,6 @@ abstract class TimeWindowHistogramBase<T, U> {
                     "Found " + sla);
             }
         }
-
         return histogramConfig;
     }
 
@@ -160,7 +161,6 @@ abstract class TimeWindowHistogramBase<T, U> {
     public final HistogramSnapshot takeSnapshot(long count, double total, double max,
                                                 boolean supportsAggregablePercentiles) {
         rotate();
-
         final ValueAtPercentile[] values;
         final CountAtValue[] counts;
         synchronized (this) {
@@ -168,7 +168,6 @@ abstract class TimeWindowHistogramBase<T, U> {
             values = takeValueSnapshot();
             counts = takeCountSnapshot(supportsAggregablePercentiles);
         }
-
         return HistogramSnapshot.of(count, total, max, values, counts);
     }
 
@@ -184,7 +183,6 @@ abstract class TimeWindowHistogramBase<T, U> {
         if (monitoredPercentiles.length == 0) {
             return null;
         }
-
         final ValueAtPercentile[] values = new ValueAtPercentile[monitoredPercentiles.length];
         for (int i = 0; i < monitoredPercentiles.length; i++) {
             final double p = monitoredPercentiles[i];
@@ -197,12 +195,10 @@ abstract class TimeWindowHistogramBase<T, U> {
         if (!histogramConfig.isPublishingHistogram()) {
             return null;
         }
-
         final Set<Long> monitoredValues = histogramConfig.getHistogramBuckets(supportsAggregablePercentiles);
         if (monitoredValues.isEmpty()) {
             return null;
         }
-
         final CountAtValue[] counts = new CountAtValue[monitoredValues.size()];
         final Iterator<Long> iterator = monitoredValues.iterator();
         for (int i = 0; i < counts.length; i++) {
@@ -244,12 +240,10 @@ abstract class TimeWindowHistogramBase<T, U> {
             // Need to wait more for next rotation.
             return;
         }
-
         if (!rotatingUpdater.compareAndSet(this, 0, 1)) {
             // Being rotated by other thread already.
             return;
         }
-
         try {
             synchronized (this) {
                 do {
@@ -268,4 +262,5 @@ abstract class TimeWindowHistogramBase<T, U> {
             rotating = 0;
         }
     }
+
 }

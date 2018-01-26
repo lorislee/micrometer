@@ -20,6 +20,7 @@ import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.HistogramSnapshot;
 
 public class NoopDistributionSummary extends NoopMeter implements DistributionSummary {
+
     public NoopDistributionSummary(Id id) {
         super(id);
     }
@@ -57,4 +58,5 @@ public class NoopDistributionSummary extends NoopMeter implements DistributionSu
     public HistogramSnapshot takeSnapshot(boolean supportsAggregablePercentiles) {
         return HistogramSnapshot.empty();
     }
+
 }

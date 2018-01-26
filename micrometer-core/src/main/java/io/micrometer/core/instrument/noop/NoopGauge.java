@@ -19,6 +19,7 @@ package io.micrometer.core.instrument.noop;
 import io.micrometer.core.instrument.Gauge;
 
 public class NoopGauge extends NoopMeter implements Gauge {
+
     public NoopGauge(Id id) {
         super(id);
     }
@@ -27,4 +28,5 @@ public class NoopGauge extends NoopMeter implements Gauge {
     public double value() {
         return 0;
     }
+
 }

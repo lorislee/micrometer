@@ -37,9 +37,13 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class DropwizardMeterRegistry extends MeterRegistry {
+
     private final MetricRegistry registry;
+
     private final HierarchicalNameMapper nameMapper;
+
     private final DropwizardClock dropwizardClock;
+
     private final DropwizardConfig dropwizardConfig;
 
     public DropwizardMeterRegistry(DropwizardConfig config, MetricRegistry registry, HierarchicalNameMapper nameMapper, Clock clock) {
@@ -76,7 +80,6 @@ public class DropwizardMeterRegistry extends MeterRegistry {
     @Override
     protected Timer newTimer(Meter.Id id, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
         DropwizardTimer timer = new DropwizardTimer(id, registry.timer(hierarchicalName(id)), clock, histogramConfig, pauseDetector);
-
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 String formattedPercentile = DoubleFormat.toString(percentile * 100) + "percentile";
@@ -84,21 +87,18 @@ public class DropwizardMeterRegistry extends MeterRegistry {
                     timer, t -> t.percentile(percentile, getBaseTimeUnit()));
             }
         }
-
         if (histogramConfig.isPublishingHistogram()) {
             for (Long bucket : histogramConfig.getHistogramBuckets(false)) {
                 more().counter(getConventionName(id), Tags.concat(getConventionTags(id), "bucket", Long.toString(bucket)),
                     timer, t -> t.histogramCountAtValue(bucket));
             }
         }
-
         return timer;
     }
 
     @Override
     protected DistributionSummary newDistributionSummary(Meter.Id id, HistogramConfig histogramConfig) {
         DropwizardDistributionSummary summary = new DropwizardDistributionSummary(id, clock, registry.histogram(hierarchicalName(id)), histogramConfig);
-
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 String formattedPercentile = DoubleFormat.toString(percentile * 100) + "percentile";
@@ -106,14 +106,12 @@ public class DropwizardMeterRegistry extends MeterRegistry {
                     summary, s -> summary.percentile(percentile));
             }
         }
-
         if (histogramConfig.isPublishingHistogram()) {
             for (Long bucket : histogramConfig.getHistogramBuckets(false)) {
                 more().counter(getConventionName(id), Tags.concat(getConventionTags(id), "bucket", Long.toString(bucket)),
                     summary, s -> s.histogramCountAtValue(bucket));
             }
         }
-
         return summary;
     }
 
@@ -162,4 +160,5 @@ public class DropwizardMeterRegistry extends MeterRegistry {
             .build()
             .merge(HistogramConfig.DEFAULT);
     }
+
 }

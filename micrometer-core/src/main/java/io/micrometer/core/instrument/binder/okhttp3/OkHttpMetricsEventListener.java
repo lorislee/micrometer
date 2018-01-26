@@ -43,12 +43,17 @@ import java.util.function.Function;
 @NonNullApi
 @NonNullFields
 public class OkHttpMetricsEventListener extends EventListener {
-    public static final String URI_PATTERN = "URI_PATTERN";
+
+	public static final String URI_PATTERN = "URI_PATTERN";
 
     private final String requestsMetricName;
+
     private final Function<Request, String> urlMapper;
+
     private final Iterable<Tag> extraTags;
+
     private final MeterRegistry registry;
+
     private final ConcurrentMap<Call, CallState> callState = new ConcurrentHashMap<>();
 
     OkHttpMetricsEventListener(MeterRegistry registry, String requestsMetricName, Function<Request, String> urlMapper, Iterable<Tag> extraTags) {
@@ -96,14 +101,12 @@ public class OkHttpMetricsEventListener extends EventListener {
     private void time(CallState state) {
         String uri = state.response == null ? "UNKNOWN" :
             (state.response.code() == 404 || state.response.code() == 301 ? "NOT_FOUND" : urlMapper.apply(state.request));
-
         Iterable<Tag> tags = Tags.concat(extraTags, Tags.zip(
             "method", state.request != null ? state.request.method() : "UNKNOWN",
             "uri", uri,
             "status", getStatusMessage(state.response, state.exception),
             "host", state.request != null ? state.request.url().host() : "UNKNOWN"
         ));
-
         Timer.builder(this.requestsMetricName)
             .tags(tags)
             .description("Timer of OkHttp operation")
@@ -115,32 +118,39 @@ public class OkHttpMetricsEventListener extends EventListener {
         if (exception != null) {
             return "IO_ERROR";
         }
-
         if (response == null) {
             return "CLIENT_ERROR";
         }
-
         return Integer.toString(response.code());
     }
 
     private static class CallState {
-        final long startTime;
-        @Nullable
+
+    	final long startTime;
+
+    	@Nullable
         Request request;
-        @Nullable
+
+    	@Nullable
         Response response;
-        @Nullable
+
+    	@Nullable
         IOException exception;
 
         CallState(long startTime) {
             this.startTime = startTime;
         }
+
     }
 
     public static class Builder {
+
         private MeterRegistry registry;
+
         private String name;
+
         private Function<Request, String> uriMapper = (request) -> Optional.ofNullable(request.header(URI_PATTERN)).orElse("none");
+
         private Iterable<Tag> tags = Collections.emptyList();
 
         Builder(MeterRegistry registry, String name) {
@@ -161,5 +171,7 @@ public class OkHttpMetricsEventListener extends EventListener {
         public OkHttpMetricsEventListener build() {
             return new OkHttpMetricsEventListener(registry, name, uriMapper, tags);
         }
+
     }
+
 }

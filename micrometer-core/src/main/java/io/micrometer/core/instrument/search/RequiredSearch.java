@@ -31,8 +31,11 @@ import static io.micrometer.core.instrument.Tags.zip;
  * Search that requires the search terms are satisfiable, or an {@link MeterNotFoundException} is thrown.
  */
 public class RequiredSearch {
+
     private final MeterRegistry registry;
+
     private final String name;
+
     private final List<Tag> tags = new ArrayList<>();
 
     public RequiredSearch(MeterRegistry registry, String name) {
@@ -94,18 +97,15 @@ public class RequiredSearch {
             .filter(clazz::isInstance)
             .findAny()
             .map(clazz::cast);
-
         if (meter.isPresent()) {
             return meter.get();
         }
-
         throw new MeterNotFoundException(name, tags, clazz);
     }
 
     public Collection<Meter> meters() {
         Stream<Meter> meterStream =
             registry.getMeters().stream().filter(m -> m.getId().getName().equals(name));
-
         if (!tags.isEmpty()) {
             meterStream = meterStream.filter(m -> {
                 final List<Tag> idTags = new ArrayList<>();
@@ -113,7 +113,7 @@ public class RequiredSearch {
                 return idTags.containsAll(tags);
             });
         }
-
         return meterStream.collect(Collectors.toList());
     }
+
 }

@@ -38,12 +38,16 @@ import static java.util.Objects.requireNonNull;
 @NonNullApi
 @NonNullFields
 public class ProcessorMetrics implements MeterBinder {
-    private final Iterable<Tag> tags;
-    @Nullable
+
+	private final Iterable<Tag> tags;
+
+	@Nullable
     private OperatingSystemMXBean operatingSystemBean;
-    @Nullable
+
+	@Nullable
     private Method systemCpuUsage;
-    @Nullable
+
+	@Nullable
     private Method processCpuUsage;
 
     public ProcessorMetrics() {
@@ -64,7 +68,6 @@ public class ProcessorMetrics implements MeterBinder {
             .tags(tags)
             .description("The number of processors available to the Java virtual machine")
             .register(registry);
-
         if (operatingSystemBean != null && operatingSystemBean.getSystemLoadAverage() >= 0) {
             Gauge.builder("system.load.average.1m", operatingSystemBean, OperatingSystemMXBean::getSystemLoadAverage)
                 .tags(tags)
@@ -72,14 +75,12 @@ public class ProcessorMetrics implements MeterBinder {
                     "of runnable entities running on the available processors averaged over a period of time")
                 .register(registry);
         }
-
         if (systemCpuUsage != null) {
             Gauge.builder("system.cpu.usage", operatingSystemBean, x -> invoke(x, systemCpuUsage))
                 .tags(tags)
                 .description("The \"recent cpu usage\" for the whole system")
                 .register(registry);
         }
-
         if (processCpuUsage != null) {
             Gauge.builder("process.cpu.usage", operatingSystemBean, x -> invoke(x, processCpuUsage))
                 .tags(tags)
@@ -109,4 +110,5 @@ public class ProcessorMetrics implements MeterBinder {
             return null;
         }
     }
+
 }

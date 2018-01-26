@@ -29,6 +29,7 @@ import java.time.Duration;
  * @author Jon Schneider
  */
 public abstract class PropertyMeterFilter implements MeterFilter {
+
     @Nullable
     public abstract <V> V get(String k, Class<V> vClass);
 
@@ -40,11 +41,9 @@ public abstract class PropertyMeterFilter implements MeterFilter {
         else if (k.isEmpty()) {
             return null;
         }
-
         int lastSep = k.lastIndexOf('.');
         if (lastSep == -1)
             return getMostSpecific("", suffix, vClass);
-
         return getMostSpecific(k.substring(0, lastSep), suffix, vClass);
     }
 
@@ -60,38 +59,30 @@ public abstract class PropertyMeterFilter implements MeterFilter {
     public HistogramConfig configure(Meter.Id id, HistogramConfig histogramConfig) {
         if (!id.getType().equals(Meter.Type.Timer) && !id.getType().equals(Meter.Type.DistributionSummary))
             return histogramConfig;
-
         HistogramConfig.Builder builder = HistogramConfig.builder();
-
         Boolean percentileHistogram = getMostSpecific(id.getName(), "percentileHistogram", Boolean.class);
         if (percentileHistogram != null)
             builder.percentilesHistogram(percentileHistogram);
-
         double[] percentiles = getMostSpecific(id.getName(), "percentiles", double[].class);
         if (percentiles != null)
             builder.percentiles(percentiles);
-
         Integer histogramBufferLength = getMostSpecific(id.getName(), "histogramBufferLength", Integer.class);
         if (histogramBufferLength != null) {
             builder.histogramBufferLength(histogramBufferLength);
         }
-
         Duration histogramExpiry = getMostSpecific(id.getName(), "histogramExpiry", Duration.class);
         if (histogramExpiry != null) {
             builder.histogramExpiry(histogramExpiry);
         }
-
         if (id.getType().equals(Meter.Type.Timer)) {
             Duration max = getMostSpecific(id.getName(), "maximumExpectedValue", Duration.class);
             if (max != null) {
                 builder.maximumExpectedValue(max.toNanos());
             }
-
             Duration min = getMostSpecific(id.getName(), "minimumExpectedValue", Duration.class);
             if (min != null) {
                 builder.minimumExpectedValue(min.toNanos());
             }
-
             Duration[] sla = getMostSpecific(id.getName(), "sla", Duration[].class);
             if (sla != null) {
                 long[] slaNanos = new long[sla.length];
@@ -105,17 +96,15 @@ public abstract class PropertyMeterFilter implements MeterFilter {
             if (max != null) {
                 builder.maximumExpectedValue(max);
             }
-
             Long min = getMostSpecific(id.getName(), "minimumExpectedValue", Long.class);
             if (min != null) {
                 builder.minimumExpectedValue(min);
             }
-
             long[] sla = getMostSpecific(id.getName(), "sla", long[].class);
             if (sla != null)
                 builder.sla(sla);
         }
-
         return builder.build().merge(histogramConfig);
     }
+
 }

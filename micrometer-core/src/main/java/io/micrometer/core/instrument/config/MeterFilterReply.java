@@ -17,5 +17,11 @@
 package io.micrometer.core.instrument.config;
 
 public enum MeterFilterReply {
-    DENY, NEUTRAL, ACCEPT
+
+	DENY,
+
+	NEUTRAL,
+
+	ACCEPT
+
 }

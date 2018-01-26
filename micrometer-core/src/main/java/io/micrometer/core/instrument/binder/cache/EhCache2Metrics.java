@@ -29,8 +29,11 @@ import net.sf.ehcache.statistics.StatisticsGateway;
 @NonNullApi
 @NonNullFields
 public class EhCache2Metrics implements MeterBinder {
+
     private final String name;
+
     private final Iterable<Tag> tags;
+
     private final StatisticsGateway stats;
 
     public EhCache2Metrics(Ehcache cache, String name, Iterable<Tag> tags) {
@@ -41,7 +44,6 @@ public class EhCache2Metrics implements MeterBinder {
 
     /**
      * Record metrics on a JCache cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -55,7 +57,6 @@ public class EhCache2Metrics implements MeterBinder {
 
     /**
      * Record metrics on a JCache cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -181,4 +182,5 @@ public class EhCache2Metrics implements MeterBinder {
             .description("Successful recovery transaction")
             .register(registry);
     }
+
 }

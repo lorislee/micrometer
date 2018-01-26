@@ -26,8 +26,11 @@ import io.micrometer.core.instrument.util.TimeDecayingMax;
 import java.util.Arrays;
 
 public class StepDistributionSummary extends AbstractDistributionSummary {
+
     private final StepLong count;
+
     private final StepDouble total;
+
     private final TimeDecayingMax max;
 
     @SuppressWarnings("ConstantConditions")
@@ -68,4 +71,5 @@ public class StepDistributionSummary extends AbstractDistributionSummary {
             new Measurement(this::max, Statistic.Max)
         );
     }
+
 }

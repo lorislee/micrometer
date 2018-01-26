@@ -47,4 +47,5 @@ public class HystrixMetricsBinder implements MeterBinder {
         HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
         HystrixPlugins.getInstance().registerCommandExecutionHook(commandExecutionHook);
     }
+
 }

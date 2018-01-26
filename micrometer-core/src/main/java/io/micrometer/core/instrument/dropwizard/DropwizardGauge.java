@@ -25,7 +25,8 @@ import io.micrometer.core.instrument.util.MeterEquivalence;
  * @author Jon Schneider
  */
 public class DropwizardGauge extends AbstractMeter implements Gauge {
-    private final com.codahale.metrics.Gauge<Double> impl;
+
+	private final com.codahale.metrics.Gauge<Double> impl;
 
     DropwizardGauge(Meter.Id id, com.codahale.metrics.Gauge<Double> impl) {
         super(id);
@@ -47,4 +48,5 @@ public class DropwizardGauge extends AbstractMeter implements Gauge {
     public int hashCode() {
         return MeterEquivalence.hashCode(this);
     }
+
 }

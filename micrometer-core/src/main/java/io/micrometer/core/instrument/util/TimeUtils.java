@@ -28,12 +28,19 @@ import java.util.concurrent.TimeUnit;
  * @author Jon Schneider
  */
 public final class TimeUtils {
+
     private static final long C0 = 1L;
+
     private static final long C1 = C0 * 1000L;
+
     private static final long C2 = C1 * 1000L;
+
     private static final long C3 = C2 * 1000L;
+
     private static final long C4 = C3 * 60L;
+
     private static final long C5 = C4 * 60L;
+
     private static final long C6 = C5 * 24L;
 
     private TimeUtils() {
@@ -216,4 +223,5 @@ public final class TimeUtils {
         }
         throw new DateTimeParseException("Unable to parse " + time + " into duration", timeLower, 0);
     }
+
 }

@@ -35,7 +35,9 @@ import java.util.concurrent.TimeUnit;
 @NonNullApi
 @NonNullFields
 public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublisherCommand {
-    private static final Logger LOG = LoggerFactory.getLogger(MicrometerMetricsPublisherCommand.class);
+
+	private static final Logger LOG = LoggerFactory.getLogger(MicrometerMetricsPublisherCommand.class);
+
     private static final List<HystrixEventType> executionEvents = Arrays.asList(
         HystrixEventType.EMIT,
         HystrixEventType.SUCCESS,
@@ -45,6 +47,7 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
         HystrixEventType.SHORT_CIRCUITED,
         HystrixEventType.THREAD_POOL_REJECTED,
         HystrixEventType.SEMAPHORE_REJECTED);
+
     private static final List<HystrixEventType> fallbackEvents = Arrays.asList(
         HystrixEventType.FALLBACK_EMIT,
         HystrixEventType.FALLBACK_SUCCESS,
@@ -53,24 +56,39 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
         HystrixEventType.FALLBACK_MISSING);
 
     private static final String NAME_HYSTRIX_CIRCUIT_BREAKER_OPEN = "hystrix.circuit.breaker.open";
+
     private static final String NAME_HYSTRIX_COMMAND_OTHER = "hystrix.command.other";
+
     private static final String NAME_HYSTRIX_EXECUTION = "hystrix.execution";
+
     private static final String NAME_HYSTRIX_FALLBACK = "hystrix.fallback";
+
     private static final String NAME_HYSTRIX_ERRORS = "hystrix.errors";
+
     private static final String NAME_HYSTRIX_REQUESTS = "hystrix.requests";
+
     private static final String NAME_HYSTRIX_LATENCY_EXECUTION = "hystrix.latency.execution";
+
     private static final String NAME_HYSTRIX_LATENCY_TOTAL = "hystrix.latency.total";
+
     private static final String NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_CURRENT = "hystrix.threadpool.concurrent.execution.current";
+
     private static final String NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_ROLLING_MAX = "hystrix.threadpool.concurrent.execution.rolling.max";
 
     private static final String DESCRIPTION_HYSTRIX_COMMAND_OTHER = "Other execution results. See https://github.com/Netflix/Hystrix/wiki/Metrics-and-Monitoring#other-command-event-types-comnetflixhystrixhystrixeventtype for type definitions";
+
     private static final String DESCRIPTION_HYSTRIX_EXECUTION = "Execution results. See https://github.com/Netflix/Hystrix/wiki/Metrics-and-Monitoring#command-execution-event-types-comnetflixhystrixhystrixeventtype for type definitions";
+
     private static final String DESCRIPTION_HYSTRIX_FALLBACK = "Fallback execution results. See https://github.com/Netflix/Hystrix/wiki/Metrics-and-Monitoring#command-fallback-event-types-comnetflixhystrixhystrixeventtype for type definitions";
 
     private final MeterRegistry meterRegistry;
+
     private final HystrixCommandMetrics metrics;
+
     private final HystrixCircuitBreaker circuitBreaker;
+
     private final Iterable<Tag> tags;
+
     private final HystrixCommandKey commandKey;
 
     public MicrometerMetricsPublisherCommand(MeterRegistry meterRegistry, HystrixCommandKey commandKey, HystrixCommandGroupKey commandGroupKey, HystrixCommandMetrics metrics, HystrixCircuitBreaker circuitBreaker, HystrixCommandProperties properties) {
@@ -78,9 +96,7 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
         this.metrics = metrics;
         this.circuitBreaker = circuitBreaker;
         this.commandKey = commandKey;
-
         tags = Tags.zip("group", commandGroupKey.name(), "key", commandKey.name());
-
         //Initialize commands at zero
         Counter.builder(NAME_HYSTRIX_ERRORS).tags(tags).register(meterRegistry);
         Counter.builder(NAME_HYSTRIX_REQUESTS).tags(tags).register(meterRegistry);
@@ -96,7 +112,6 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
     public void initialize() {
         Gauge.builder(NAME_HYSTRIX_CIRCUIT_BREAKER_OPEN, circuitBreaker, c -> c.isOpen() ? 1 : 0)
             .tags(tags).register(meterRegistry);
-
         HystrixCommandCompletionStream.getInstance(commandKey)
             .observe()
             .subscribe(hystrixCommandCompletion -> {

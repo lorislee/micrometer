@@ -40,4 +40,5 @@ import java.lang.annotation.*;
 @Nonnull
 @TypeQualifierDefault({ElementType.METHOD, ElementType.PARAMETER})
 public @interface NonNullApi {
+
 }

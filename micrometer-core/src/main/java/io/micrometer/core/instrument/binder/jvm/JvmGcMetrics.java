@@ -42,8 +42,11 @@ import static java.util.Collections.emptyList;
  */
 @NonNullApi
 enum GcGenerationAge {
+
     OLD,
+
     YOUNG,
+
     UNKNOWN;
 
     private static Map<String, GcGenerationAge> knownCollectors = new HashMap<String, GcGenerationAge>() {{
@@ -61,22 +64,25 @@ enum GcGenerationAge {
         GcGenerationAge t = knownCollectors.get(name);
         return (t == null) ? UNKNOWN : t;
     }
+
 }
 
 /**
  * Record metrics that report a number of statistics related to garbage
  * collection emanating from the MXBean and also adds information about GC causes.
- *
  * @see GarbageCollectorMXBean
  */
 @NonNullApi
 @NonNullFields
 public class JvmGcMetrics implements MeterBinder {
-    @Nullable
+
+	@Nullable
     private String youngGenPoolName;
-    @Nullable
+
+	@Nullable
     private String oldGenPoolName;
-    private Iterable<Tag> tags;
+
+	private Iterable<Tag> tags;
 
     public JvmGcMetrics() {
         this(emptyList());
@@ -197,4 +203,5 @@ public class JvmGcMetrics implements MeterBinder {
     private boolean isYoungGenPool(String name) {
         return name.endsWith("Eden Space");
     }
+
 }

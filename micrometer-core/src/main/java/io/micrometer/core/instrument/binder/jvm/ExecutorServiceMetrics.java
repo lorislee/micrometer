@@ -43,10 +43,13 @@ import static java.util.Arrays.asList;
 @NonNullApi
 @NonNullFields
 public class ExecutorServiceMetrics implements MeterBinder {
-    @Nullable
+
+	@Nullable
     private final ExecutorService executorService;
-    private final String name;
-    private final Iterable<Tag> tags;
+
+	private final String name;
+
+	private final Iterable<Tag> tags;
 
     public ExecutorServiceMetrics(@Nullable ExecutorService executorService, String name, Iterable<Tag> tags) {
         this.name = name;
@@ -56,7 +59,6 @@ public class ExecutorServiceMetrics implements MeterBinder {
 
     /**
      * Record metrics on the use of an {@link Executor}.
-     *
      * @param registry The registry to bind metrics to.
      * @param executor The executor to instrument.
      * @param name     The name prefix of the metrics.
@@ -72,7 +74,6 @@ public class ExecutorServiceMetrics implements MeterBinder {
 
     /**
      * Record metrics on the use of an {@link Executor}.
-     *
      * @param registry The registry to bind metrics to.
      * @param executor The executor to instrument.
      * @param name     The name prefix of the metrics.
@@ -85,7 +86,6 @@ public class ExecutorServiceMetrics implements MeterBinder {
 
     /**
      * Record metrics on the use of an {@link ExecutorService}.
-     *
      * @param registry The registry to bind metrics to.
      * @param executor The executor to instrument.
      * @param name     The name prefix of the metrics.
@@ -99,7 +99,6 @@ public class ExecutorServiceMetrics implements MeterBinder {
 
     /**
      * Record metrics on the use of an {@link ExecutorService}.
-     *
      * @param registry The registry to bind metrics to.
      * @param executor The executor to instrument.
      * @param name     The name prefix of the metrics.
@@ -115,9 +114,7 @@ public class ExecutorServiceMetrics implements MeterBinder {
         if (executorService == null) {
             return;
         }
-
         String className = executorService.getClass().getName();
-
         if (executorService instanceof ThreadPoolExecutor) {
             monitor(registry, (ThreadPoolExecutor) executorService);
         } else if (className.equals("java.util.concurrent.Executors$DelegatedScheduledExecutorService")) {
@@ -149,7 +146,6 @@ public class ExecutorServiceMetrics implements MeterBinder {
         if (tp == null) {
             return;
         }
-
         FunctionCounter.builder(name + ".completed", tp, ThreadPoolExecutor::getCompletedTaskCount)
             .tags(tags)
             .description("The approximate total number of tasks that have completed execution")
@@ -195,4 +191,5 @@ public class ExecutorServiceMetrics implements MeterBinder {
             .description("An estimate of the number of worker threads that are not blocked waiting to join tasks or for other managed synchronization threads")
             .register(registry);
     }
+
 }

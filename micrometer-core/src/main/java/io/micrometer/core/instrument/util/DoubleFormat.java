@@ -22,6 +22,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class DoubleFormat {
+
     /**
      * Because NumberFormat is not thread-safe we cannot share instances across threads. Use a ThreadLocal to
      * create one pre thread as this seems to offer a significant performance improvement over creating one per-thread:
@@ -29,15 +30,14 @@ public class DoubleFormat {
      * https://github.com/indeedeng/java-dogstatsd-client/issues/4
      */
     private static final ThreadLocal<NumberFormat> NUMBER_FORMATTERS = new ThreadLocal<NumberFormat>() {
+
         @Override
         protected NumberFormat initialValue() {
-
             // Always create the formatter for the US locale in order to avoid this bug:
             // https://github.com/indeedeng/java-dogstatsd-client/issues/3
             final NumberFormat numberFormatter = NumberFormat.getInstance(Locale.US);
             numberFormatter.setGroupingUsed(false);
             numberFormatter.setMaximumFractionDigits(6);
-
             // we need to specify a value for Double.NaN that is recognized by dogStatsD
             if (numberFormatter instanceof DecimalFormat) { // better safe than a runtime error
                 final DecimalFormat decimalFormat = (DecimalFormat) numberFormatter;
@@ -45,7 +45,6 @@ public class DoubleFormat {
                 symbols.setNaN("NaN");
                 decimalFormat.setDecimalFormatSymbols(symbols);
             }
-
             return numberFormatter;
         }
     };
@@ -53,4 +52,5 @@ public class DoubleFormat {
     public static String toString(double d) {
         return NUMBER_FORMATTERS.get().format(d);
     }
+
 }

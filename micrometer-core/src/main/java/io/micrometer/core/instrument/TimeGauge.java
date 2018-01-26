@@ -28,6 +28,7 @@ import java.util.function.ToDoubleFunction;
  * @author Jon Schneider
  */
 public interface TimeGauge extends Gauge {
+
     static <T> Builder<T> builder(String name, T obj, TimeUnit fUnits, ToDoubleFunction<T> f) {
         return new Builder<>(name, obj, fUnits, f);
     }
@@ -39,11 +40,17 @@ public interface TimeGauge extends Gauge {
     }
 
     class Builder<T> {
+
         private final String name;
+
         private final T obj;
+
         private final TimeUnit fUnits;
+
         private final ToDoubleFunction<T> f;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
 
@@ -81,5 +88,7 @@ public interface TimeGauge extends Gauge {
             return registry.more().timeGauge(new Meter.Id(name, tags, null, description, Type.Gauge),
                 obj, fUnits, f);
         }
+
     }
+
 }

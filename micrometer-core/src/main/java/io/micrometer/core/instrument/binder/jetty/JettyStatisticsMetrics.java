@@ -29,6 +29,7 @@ import java.util.function.ToLongFunction;
 @NonNullApi
 @NonNullFields
 public class JettyStatisticsMetrics implements MeterBinder {
+
     private final StatisticsHandler statisticsHandler;
 
     private Iterable<Tag> tags;
@@ -117,4 +118,5 @@ public class JettyStatisticsMetrics implements MeterBinder {
             .tags("status", status)
             .register(reg);
     }
+
 }

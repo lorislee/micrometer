@@ -31,6 +31,7 @@ import static java.util.stream.StreamSupport.stream;
  * @author Maciej Walkowiak
  */
 public final class Tags {
+
     private Tags() {
     }
 
@@ -63,4 +64,5 @@ public final class Tags {
     public static Iterable<Tag> of(String tagKey, String tagValue) {
         return Collections.singletonList(Tag.of(tagKey, tagValue));
     }
+
 }

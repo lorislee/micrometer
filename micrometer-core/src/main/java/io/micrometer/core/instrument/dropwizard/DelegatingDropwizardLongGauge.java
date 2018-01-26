@@ -25,6 +25,7 @@ import java.util.function.Supplier;
  * delegates to a double supplier that can be changed after registration.
  */
 class DelegatingDropwizardLongGauge implements Gauge<Long> {
+
     private Supplier<Long> delegate = () -> 0L;
 
     public void setDelegate(Supplier<Long> delegate) {
@@ -35,4 +36,5 @@ class DelegatingDropwizardLongGauge implements Gauge<Long> {
     public Long getValue() {
         return delegate.get();
     }
+
 }

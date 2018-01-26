@@ -29,7 +29,9 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class Metrics {
+
     public static final CompositeMeterRegistry globalRegistry = new CompositeMeterRegistry();
+
     private static final More more = new More();
 
     public static void addRegistry(MeterRegistry registry) {
@@ -49,7 +51,6 @@ public class Metrics {
 
     /**
      * Tracks a monotonically increasing value.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -66,7 +67,6 @@ public class Metrics {
 
     /**
      * Measures the sample distribution of events.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -83,7 +83,6 @@ public class Metrics {
 
     /**
      * Measures the time taken for short tasks.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -108,7 +107,6 @@ public class Metrics {
      * a thread pool with the same id would produce a value that is the overall number
      * of active threads. For other behaviors, manage it on the user side and avoid multiple
      * registrations.
-     *
      * @param name Name of the gauge being registered.
      * @param tags Sequence of dimensions for breaking down the name.
      * @param obj  Object used to compute a value.
@@ -123,7 +121,6 @@ public class Metrics {
 
     /**
      * Register a gauge that reports the value of the {@link java.lang.Number}.
-     *
      * @param name   Name of the gauge being registered.
      * @param tags   Sequence of dimensions for breaking down the name.
      * @param number Thread-safe implementation of {@link Number} used to access the value.
@@ -137,7 +134,6 @@ public class Metrics {
 
     /**
      * Register a gauge that reports the value of the {@link java.lang.Number}.
-     *
      * @param name   Name of the gauge being registered.
      * @param number Thread-safe implementation of {@link Number} used to access the value.
      * @return The number that was passed in so the registration can be done as part of an assignment
@@ -150,7 +146,6 @@ public class Metrics {
 
     /**
      * Register a gauge that reports the value of the object.
-     *
      * @param name Name of the gauge being registered.
      * @param obj  Object used to compute a value.
      * @param f    Function that is applied on the value for the number.
@@ -168,7 +163,6 @@ public class Metrics {
      * The collection implementation used should be thread safe. Note that calling
      * {@link java.util.Collection#size()} can be expensive for some collection implementations
      * and should be considered before registering.
-     *
      * @param name       Name of the gauge being registered.
      * @param tags       Sequence of dimensions for breaking down the name.
      * @param collection Thread-safe implementation of {@link Collection} used to access the value.
@@ -186,7 +180,6 @@ public class Metrics {
      * The collection implementation used should be thread safe. Note that calling
      * {@link java.util.Map#size()} can be expensive for some collection implementations
      * and should be considered before registering.
-     *
      * @param name Name of the gauge being registered.
      * @param tags Sequence of dimensions for breaking down the name.
      * @param map  Thread-safe implementation of {@link Map} used to access the value.
@@ -199,6 +192,7 @@ public class Metrics {
     }
 
     static class More {
+
         /**
          * Measures the time taken for long tasks.
          */
@@ -244,5 +238,7 @@ public class Metrics {
                                        TimeUnit totalTimeFunctionUnits) {
             return globalRegistry.more().timer(name, tags, obj, countFunction, totalTimeFunction, totalTimeFunctionUnits);
         }
+
     }
+
 }

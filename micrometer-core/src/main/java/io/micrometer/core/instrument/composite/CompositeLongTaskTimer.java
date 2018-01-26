@@ -29,7 +29,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 class CompositeLongTaskTimer extends AbstractCompositeMeter<LongTaskTimer> implements LongTaskTimer {
+
     private final AtomicLong nextTask = new AtomicLong(0L);
+
     private final ConcurrentMap<Long, Collection<Sample>> timings = new ConcurrentHashMap<>();
 
     CompositeLongTaskTimer(Meter.Id id) {
@@ -86,4 +88,5 @@ class CompositeLongTaskTimer extends AbstractCompositeMeter<LongTaskTimer> imple
             .description(getId().getDescription())
             .register(registry);
     }
+
 }

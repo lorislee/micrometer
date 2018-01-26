@@ -23,6 +23,7 @@ import io.micrometer.core.lang.Nullable;
  * @author Jon Schneider
  */
 public final class MeterEquivalence {
+
     private MeterEquivalence() {
     }
 
@@ -38,4 +39,5 @@ public final class MeterEquivalence {
     public static int hashCode(Meter m) {
         return m.getId().hashCode();
     }
+
 }

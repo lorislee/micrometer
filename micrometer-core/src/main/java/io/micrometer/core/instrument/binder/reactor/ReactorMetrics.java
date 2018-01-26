@@ -32,6 +32,7 @@ import static java.util.stream.Collectors.toList;
  * @author Jon Schneider
  */
 public class ReactorMetrics {
+
     private static final Predicate<Scannable> POINTCUT_FILTER =
         s -> !(s instanceof Fuseable.ScalarCallable);
 
@@ -54,4 +55,5 @@ public class ReactorMetrics {
             );
         }));
     }
+
 }

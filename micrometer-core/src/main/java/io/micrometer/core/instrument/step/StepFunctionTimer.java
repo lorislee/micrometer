@@ -31,17 +31,25 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class StepFunctionTimer<T> implements FunctionTimer {
+
     private final Id id;
+
     private final WeakReference<T> ref;
+
     private final ToLongFunction<T> countFunction;
+
     private final ToDoubleFunction<T> totalTimeFunction;
+
     private final TimeUnit totalTimeFunctionUnits;
+
     private final TimeUnit baseTimeUnit;
 
     private volatile long lastCount = 0;
+
     private volatile double lastTime = 0.0;
 
     private StepLong count;
+
     private StepDouble total;
 
     public StepFunctionTimer(Id id, Clock clock, long stepMillis, T obj, ToLongFunction<T> countFunction,
@@ -95,4 +103,5 @@ public class StepFunctionTimer<T> implements FunctionTimer {
     public Type type() {
         return Type.Timer;
     }
+
 }

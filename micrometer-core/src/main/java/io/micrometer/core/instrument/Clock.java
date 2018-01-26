@@ -19,7 +19,9 @@ package io.micrometer.core.instrument;
 import io.micrometer.core.instrument.step.StepLong;
 
 public interface Clock {
+
     Clock SYSTEM = new Clock() {
+
         @Override
         public long wallTime() {
             return System.currentTimeMillis();
@@ -29,6 +31,7 @@ public interface Clock {
         public long monotonicTime() {
             return System.nanoTime();
         }
+
     };
 
     /**
@@ -36,7 +39,6 @@ public interface Clock {
      * System.currentTimeMillis. Should not be used to determine durations. Used
      * for timestamping metrics being pushed to a monitoring system or for determination
      * of step boundaries (e.g. {@link StepLong}.
-     *
      * @return Wall time in milliseconds
      */
     long wallTime();
@@ -46,8 +48,8 @@ public interface Clock {
      * another snapshot to determine the elapsed time for an operation. The difference between two
      * samples will have a unit of nanoseconds. The returned value is typically equivalent to
      * System.nanoTime.
-     *
      * @return Monotonic time in nanoseconds
      */
     long monotonicTime();
+
 }

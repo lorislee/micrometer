@@ -81,4 +81,5 @@ public class TimeWindowHistogram extends TimeWindowHistogramBase<DoubleRecorder,
     double countAtValue(DoubleHistogram accumulatedHistogram, long value) {
         return accumulatedHistogram.getCountBetweenValues(0, value);
     }
+
 }

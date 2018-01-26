@@ -45,8 +45,10 @@ import static java.util.stream.StreamSupport.stream;
  */
 @Incubating(since = "1.0.0-rc.3")
 public interface MeterFilter {
+
     static MeterFilter commonTags(Iterable<Tag> tags) {
         return new MeterFilter() {
+
             @Override
             public Meter.Id map(Meter.Id id) {
                 List<Tag> allTags = new ArrayList<>();
@@ -54,11 +56,13 @@ public interface MeterFilter {
                 tags.forEach(allTags::add);
                 return new Meter.Id(id.getName(), allTags, id.getBaseUnit(), id.getDescription(), id.getType());
             }
+
         };
     }
 
     static MeterFilter renameTag(String metricPrefix, String fromTagKey, String toTagKey) {
         return new MeterFilter() {
+
             @Override
             public Meter.Id map(Meter.Id id) {
                 if (!id.getName().startsWith(metricPrefix))
@@ -73,11 +77,13 @@ public interface MeterFilter {
 
                 return new Meter.Id(id.getName(), tags, id.getBaseUnit(), id.getDescription(), id.getType());
             }
+
         };
     }
 
     static MeterFilter ignoreTags(String... tagKeys) {
         return new MeterFilter() {
+
             @Override
             public Meter.Id map(Meter.Id id) {
                 List<Tag> tags = stream(id.getTags().spliterator(), false)
@@ -91,6 +97,7 @@ public interface MeterFilter {
 
                 return new Meter.Id(id.getName(), tags, id.getBaseUnit(), id.getDescription(), id.getType());
             }
+
         };
     }
 
@@ -102,6 +109,7 @@ public interface MeterFilter {
      */
     static MeterFilter replaceTagValues(String tagKey, Function<String, String> replacement, String... exceptions) {
         return new MeterFilter() {
+
             @Override
             public Meter.Id map(Meter.Id id) {
                 List<Tag> tags = stream(id.getTags().spliterator(), false)
@@ -118,24 +126,29 @@ public interface MeterFilter {
 
                 return new Meter.Id(id.getName(), tags, id.getBaseUnit(), id.getDescription(), id.getType());
             }
+
         };
     }
 
     static MeterFilter accept(Predicate<Meter.Id> iff) {
         return new MeterFilter() {
+
             @Override
             public MeterFilterReply accept(Meter.Id id) {
                 return iff.test(id) ? MeterFilterReply.ACCEPT : MeterFilterReply.NEUTRAL;
             }
+
         };
     }
 
     static MeterFilter deny(Predicate<Meter.Id> iff) {
         return new MeterFilter() {
+
             @Override
             public MeterFilterReply accept(Meter.Id id) {
                 return iff.test(id) ? MeterFilterReply.DENY : MeterFilterReply.NEUTRAL;
             }
+
         };
     }
 
@@ -154,11 +167,11 @@ public interface MeterFilter {
      * While this filter doesn't discriminate between your most critical and less useful metrics in
      * deciding what to drop (all the metrics you intend to use should fit below this threshold),
      * it can effectively cap your risk of an accidentally high-cardiality metric costing too much.
-     *
      * @param maximumTimeSeries The total number of unique name/tag permutations allowed before filtering kicks in.
      */
     static MeterFilter maximumAllowableMetrics(int maximumTimeSeries) {
         return new MeterFilter() {
+
             private final Set<Meter.Id> ids = ConcurrentHashMap.newKeySet();
 
             @Override
@@ -169,12 +182,12 @@ public interface MeterFilter {
                 ids.add(id);
                 return ids.size() > maximumTimeSeries ? MeterFilterReply.DENY : MeterFilterReply.NEUTRAL;
             }
+
         };
     }
 
     /**
      * Places an upper bound on
-     *
      * @param meterName
      * @param tagKey
      * @param maximumTagValues
@@ -184,6 +197,7 @@ public interface MeterFilter {
     static MeterFilter maximumAllowableTags(String meterName, String tagKey, int maximumTagValues,
                                             MeterFilter onMaxReached) {
         return new MeterFilter() {
+
             private final Set<String> observedTagValues = new ConcurrentSkipListSet<>();
 
             @Override
@@ -207,6 +221,7 @@ public interface MeterFilter {
                 }
                 return config;
             }
+
         };
     }
 
@@ -241,4 +256,5 @@ public interface MeterFilter {
     default HistogramConfig configure(Meter.Id id, HistogramConfig config) {
         return config;
     }
+
 }

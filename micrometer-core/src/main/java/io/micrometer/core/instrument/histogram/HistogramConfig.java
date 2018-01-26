@@ -26,6 +26,7 @@ import java.util.TreeSet;
 
 @Incubating(since = "1.0.0-rc.3")
 public class HistogramConfig implements Mergeable<HistogramConfig> {
+
     public static final HistogramConfig DEFAULT = builder()
         .percentilesHistogram(false)
         .percentiles()
@@ -35,19 +36,27 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
         .histogramExpiry(Duration.ofMinutes(2))
         .histogramBufferLength(5)
         .build();
+
     public static final HistogramConfig NONE = builder().build();
+
     @Nullable
     private Boolean percentileHistogram;
+
     @Nullable
     private double[] percentiles;
+
     @Nullable
     private long[] sla;
+
     @Nullable
     private Long minimumExpectedValue;
+
     @Nullable
     private Long maximumExpectedValue;
+
     @Nullable
     private Duration histogramExpiry;
+
     @Nullable
     private Integer histogramBufferLength;
 
@@ -74,19 +83,16 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
 
     public NavigableSet<Long> getHistogramBuckets(boolean supportsAggregablePercentiles) {
         NavigableSet<Long> buckets = new TreeSet<>();
-
         if (percentileHistogram != null && percentileHistogram && supportsAggregablePercentiles) {
             buckets.addAll(PercentileHistogramBuckets.buckets(this));
             buckets.add(minimumExpectedValue);
             buckets.add(maximumExpectedValue);
         }
-
         if (sla != null) {
             for (long slaBoundary : sla) {
                 buckets.add(slaBoundary);
             }
         }
-
         return buckets;
     }
 
@@ -126,6 +132,7 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
     }
 
     public static class Builder {
+
         private final HistogramConfig config = new HistogramConfig();
 
         public Builder percentilesHistogram(@Nullable Boolean enabled) {
@@ -166,5 +173,7 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
         public HistogramConfig build() {
             return config;
         }
+
     }
+
 }

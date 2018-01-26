@@ -88,4 +88,5 @@ class CompositeDistributionSummary extends AbstractCompositeMeter<DistributionSu
             .sla(histogramConfig.getSlaBoundaries())
             .register(registry);
     }
+
 }

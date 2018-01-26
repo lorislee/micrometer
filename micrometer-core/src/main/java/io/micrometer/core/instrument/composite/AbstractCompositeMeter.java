@@ -67,12 +67,10 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
             if (firstMeter != null) {
                 return firstMeter;
             }
-
             firstMeter = findFirstChild();
             if (firstMeter == null) {
                 break;
             }
-
             if (firstMeterUpdater.compareAndSet(this, null, firstMeter)) {
                 return firstMeter;
             }
@@ -93,8 +91,7 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
         if (children.isEmpty()) {
             return null;
         }
-
-        final Iterator<Entry> i = children.iterator();
+        Iterator<Entry> i = children.iterator();
         return i.hasNext() ? i.next().meter() : null;
     }
 
@@ -103,14 +100,13 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
         if (newMeter == null) {
             return;
         }
-
         children.add(new Entry(registry, newMeter));
         firstMeterUpdater.compareAndSet(this, null, newMeter);
     }
 
     public final void remove(MeterRegistry registry) {
         // Not very efficient, but this operation is expected to be used rarely.
-        final AtomicReference<T> firstMeterHolder = new AtomicReference<>();
+        AtomicReference<T> firstMeterHolder = new AtomicReference<>();
         children.removeIf(e -> {
             if (e.registry() == registry) {
                 firstMeterHolder.compareAndSet(null, e.meter());
@@ -119,15 +115,16 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
                 return false;
             }
         });
-
-        final T removedMeter = firstMeterHolder.get();
+        T removedMeter = firstMeterHolder.get();
         if (removedMeter != null) {
             firstMeterUpdater.compareAndSet(this, removedMeter, null);
         }
     }
 
     private static final class Entry {
+
         private final MeterRegistry registry;
+
         private final Meter meter;
 
         Entry(MeterRegistry registry, Meter meter) {
@@ -143,5 +140,7 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
         <U> U meter() {
             return (U) meter;
         }
+
     }
+
 }

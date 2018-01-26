@@ -29,6 +29,7 @@ import java.util.function.ToDoubleFunction;
  * @author Jon Schneider
  */
 public interface FunctionCounter extends Meter {
+
     static <T> Builder<T> builder(String name, T obj, ToDoubleFunction<T> f) {
         return new Builder<>(name, obj, f);
     }
@@ -49,12 +50,18 @@ public interface FunctionCounter extends Meter {
     }
 
     class Builder<T> {
+
         private final String name;
+
         private final T obj;
+
         private final ToDoubleFunction<T> f;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
+
         @Nullable
         private String baseUnit;
 
@@ -94,5 +101,7 @@ public interface FunctionCounter extends Meter {
         public FunctionCounter register(MeterRegistry registry) {
             return registry.more().counter(new Meter.Id(name, tags, baseUnit, description, Type.Counter), obj, f);
         }
+
     }
+
 }

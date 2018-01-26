@@ -28,10 +28,15 @@ import java.util.concurrent.atomic.DoubleAdder;
  * @author Jon Schneider
  */
 public class StepDouble {
+
     private final Clock clock;
+
     private final long stepMillis;
+
     private final DoubleAdder current = new DoubleAdder();
+
     private final AtomicLong lastInitPos;
+
     private volatile double previous = 0.0;
 
     public StepDouble(Clock clock, long stepMillis) {
@@ -63,4 +68,5 @@ public class StepDouble {
         rollCount(clock.wallTime());
         return previous;
     }
+
 }

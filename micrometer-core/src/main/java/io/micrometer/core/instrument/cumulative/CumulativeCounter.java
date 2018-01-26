@@ -22,6 +22,7 @@ import io.micrometer.core.instrument.Counter;
 import java.util.concurrent.atomic.DoubleAdder;
 
 public class CumulativeCounter extends AbstractMeter implements Counter {
+
     private final DoubleAdder value;
 
     /**
@@ -41,4 +42,5 @@ public class CumulativeCounter extends AbstractMeter implements Counter {
     public double count() {
         return value.sum();
     }
+
 }

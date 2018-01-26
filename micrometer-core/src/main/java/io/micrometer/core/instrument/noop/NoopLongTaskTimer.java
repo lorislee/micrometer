@@ -21,6 +21,7 @@ import io.micrometer.core.instrument.LongTaskTimer;
 import java.util.concurrent.TimeUnit;
 
 public class NoopLongTaskTimer extends NoopMeter implements LongTaskTimer {
+
     public NoopLongTaskTimer(Id id) {
         super(id);
     }
@@ -49,4 +50,5 @@ public class NoopLongTaskTimer extends NoopMeter implements LongTaskTimer {
     public int activeTasks() {
         return 0;
     }
+
 }

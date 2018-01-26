@@ -38,7 +38,8 @@ import static java.util.Collections.emptyList;
 @NonNullApi
 @NonNullFields
 public class LogbackMetrics implements MeterBinder {
-    private final Iterable<Tag> tags;
+
+	private final Iterable<Tag> tags;
 
     public LogbackMetrics() {
         this(emptyList());
@@ -53,15 +54,21 @@ public class LogbackMetrics implements MeterBinder {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.addTurboFilter(new MetricsTurboFilter(registry, tags));
     }
+
 }
 
 @NonNullApi
 @NonNullFields
 class MetricsTurboFilter extends TurboFilter {
+
     private final Counter errorCounter;
+
     private final Counter warnCounter;
+
     private final Counter infoCounter;
+
     private final Counter debugCounter;
+
     private final Counter traceCounter;
 
     MetricsTurboFilter(MeterRegistry registry, Iterable<Tag> tags) {
@@ -113,7 +120,7 @@ class MetricsTurboFilter extends TurboFilter {
                     break;
             }
         }
-
         return FilterReply.NEUTRAL;
     }
+
 }

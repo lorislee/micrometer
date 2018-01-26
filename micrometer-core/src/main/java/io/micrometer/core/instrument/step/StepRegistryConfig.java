@@ -27,6 +27,7 @@ import java.time.Duration;
  * @author Jon Schneider
  */
 public interface StepRegistryConfig extends MeterRegistryConfig {
+
     /**
      * Returns the step size (reporting frequency) to use. The default is 10 seconds.
      */
@@ -79,4 +80,5 @@ public interface StepRegistryConfig extends MeterRegistryConfig {
         String v = get(prefix() + ".batchSize");
         return v == null ? 10000 : Integer.parseInt(v);
     }
+
 }

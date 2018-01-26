@@ -29,10 +29,15 @@ import java.util.function.ToDoubleFunction;
  * @author Jon Schneider
  */
 public class DropwizardFunctionCounter<T> extends AbstractMeter implements FunctionCounter {
+
     private final WeakReference<T> ref;
+
     private final ToDoubleFunction<T> f;
+
     private final AtomicLong last = new AtomicLong(0);
+
     private final DropwizardRate rate;
+
     private final Meter dropwizardMeter;
 
     DropwizardFunctionCounter(Id id, Clock clock,
@@ -42,6 +47,7 @@ public class DropwizardFunctionCounter<T> extends AbstractMeter implements Funct
         this.f = f;
         this.rate = new DropwizardRate(clock);
         this.dropwizardMeter = new Meter(new DropwizardClock(clock)) {
+
             @Override
             public double getFifteenMinuteRate() {
                 count();
@@ -64,6 +70,7 @@ public class DropwizardFunctionCounter<T> extends AbstractMeter implements Funct
             public long getCount() {
                 return (long) count();
             }
+
         };
     }
 
@@ -83,4 +90,5 @@ public class DropwizardFunctionCounter<T> extends AbstractMeter implements Funct
             return newCount;
         });
     }
+
 }

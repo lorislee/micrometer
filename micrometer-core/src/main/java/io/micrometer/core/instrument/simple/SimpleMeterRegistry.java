@@ -40,7 +40,9 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class SimpleMeterRegistry extends MeterRegistry {
+
     private final DecimalFormat percentileFormat = new DecimalFormat("#.####");
+
     private final SimpleConfig config;
 
     public SimpleMeterRegistry() {
@@ -57,7 +59,6 @@ public class SimpleMeterRegistry extends MeterRegistry {
         HistogramConfig merged = histogramConfig.merge(HistogramConfig.builder()
             .histogramExpiry(config.step())
             .build());
-
         DistributionSummary summary;
         switch (config.mode()) {
             case Cumulative:
@@ -68,21 +69,18 @@ public class SimpleMeterRegistry extends MeterRegistry {
                 summary = new StepDistributionSummary(id, clock, merged);
                 break;
         }
-
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", percentileFormat.format(percentile)),
                     summary, s -> summary.percentile(percentile));
             }
         }
-
         if (histogramConfig.isPublishingHistogram()) {
             for (Long bucket : histogramConfig.getHistogramBuckets(false)) {
                 more().counter(getConventionName(id), Tags.concat(getConventionTags(id), "bucket", Long.toString(bucket)),
                     summary, s -> s.histogramCountAtValue(bucket));
             }
         }
-
         return summary;
     }
 
@@ -107,14 +105,12 @@ public class SimpleMeterRegistry extends MeterRegistry {
                 timer = new StepTimer(id, clock, merged, pauseDetector, getBaseTimeUnit());
                 break;
         }
-
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", percentileFormat.format(percentile)),
                     timer, t -> t.percentile(percentile, getBaseTimeUnit()));
             }
         }
-
         if (histogramConfig.isPublishingHistogram()) {
             for (Long bucket : histogramConfig.getHistogramBuckets(false)) {
                 more().counter(getConventionName(id), Tags.concat(getConventionTags(id), "bucket",
@@ -122,7 +118,6 @@ public class SimpleMeterRegistry extends MeterRegistry {
                     timer, t -> t.histogramCountAtValue(bucket));
             }
         }
-
         return timer;
     }
 
@@ -169,4 +164,5 @@ public class SimpleMeterRegistry extends MeterRegistry {
             .build()
             .merge(HistogramConfig.DEFAULT);
     }
+
 }

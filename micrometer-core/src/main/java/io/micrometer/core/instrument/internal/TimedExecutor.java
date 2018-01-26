@@ -26,7 +26,9 @@ import java.util.concurrent.Executor;
  * An {@link Executor} that is timed
  */
 public class TimedExecutor implements Executor {
+
     private final Executor delegate;
+
     private final Timer timer;
 
     public TimedExecutor(MeterRegistry registry, Executor delegate, String name, Iterable<Tag> tags) {

@@ -28,8 +28,11 @@ import java.util.concurrent.TimeUnit;
 @NonNullApi
 @NonNullFields
 public class HazelcastCacheMetrics implements MeterBinder {
+
     private final IMap<?, ?> cache;
+
     private final String name;
+
     private final Iterable<Tag> tags;
 
     public HazelcastCacheMetrics(IMap<?, ?> cache, String name, Iterable<Tag> tags) {
@@ -40,7 +43,6 @@ public class HazelcastCacheMetrics implements MeterBinder {
 
     /**
      * Record metrics on a Hazelcast cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -54,7 +56,6 @@ public class HazelcastCacheMetrics implements MeterBinder {
 
     /**
      * Record metrics on a Hazelcast cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -161,4 +162,5 @@ public class HazelcastCacheMetrics implements MeterBinder {
             .description("Cache removals")
             .register(registry);
     }
+
 }

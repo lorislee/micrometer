@@ -49,17 +49,26 @@ import static java.util.Collections.emptyList;
  * @author Jon Schneider
  */
 public abstract class MeterRegistry {
+
     protected final Clock clock;
+
     private final Object meterMapLock = new Object();
+
     private final List<MeterFilter> filters = new CopyOnWriteArrayList<>();
+
     private final List<Consumer<Meter>> meterAddedListeners = new CopyOnWriteArrayList<>();
+
     private final Config config = new Config();
+
     private final More more = new More();
+
     private volatile Map<Id, Meter> meterMap = Collections.emptyMap();
+
     private PauseDetector pauseDetector = new ClockDriftPauseDetector(
         Duration.ofMillis(100),
         Duration.ofMillis(100)
     );
+
     /**
      * We'll use snake case as a general-purpose default for registries because it is the most
      * likely to result in a portable name. Camel casing is also perfectly acceptable. '-' and '.'
@@ -88,9 +97,9 @@ public abstract class MeterRegistry {
     protected <T> TimeGauge newTimeGauge(Meter.Id id, T obj, TimeUnit fUnit, ToDoubleFunction<T> f) {
         Meter.Id withUnit = id.withBaseUnit(getBaseTimeUnitStr());
         Gauge gauge = newGauge(withUnit, obj, obj2 -> TimeUtils.convert(f.applyAsDouble(obj2), fUnit, getBaseTimeUnit()));
-
         return new TimeGauge() {
-            @Override
+
+        	@Override
             public Id getId() {
                 return id;
             }
@@ -104,6 +113,7 @@ public abstract class MeterRegistry {
             public TimeUnit baseTimeUnit() {
                 return getBaseTimeUnit();
             }
+
         };
     }
 
@@ -162,7 +172,6 @@ public abstract class MeterRegistry {
 
     /**
      * Register a custom meter type.
-     *
      * @param id           Id of the meter being registered.
      * @param type         Meter type, which may be used by naming conventions to normalize the name.
      * @param measurements A sequence of measurements describing how to sample the meter.
@@ -204,7 +213,6 @@ public abstract class MeterRegistry {
 
     /**
      * Tracks a monotonically increasing value.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -221,7 +229,6 @@ public abstract class MeterRegistry {
 
     /**
      * Measures the sample distribution of events.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -238,7 +245,6 @@ public abstract class MeterRegistry {
 
     /**
      * Measures the time taken for short tasks and the count of these tasks.
-     *
      * @param name The base metric name
      * @param tags MUST be an even number of arguments representing key/value pairs of tags.
      */
@@ -263,7 +269,6 @@ public abstract class MeterRegistry {
      * a thread pool with the same id would produce a value that is the overall number
      * of active threads. For other behaviors, manage it on the user side and avoid multiple
      * registrations.
-     *
      * @param name Name of the gauge being registered.
      * @param tags Sequence of dimensions for breaking down the name.
      * @param obj  Object used to compute a value.
@@ -279,7 +284,6 @@ public abstract class MeterRegistry {
 
     /**
      * Register a gauge that reports the value of the {@link Number}.
-     *
      * @param name   Name of the gauge being registered.
      * @param tags   Sequence of dimensions for breaking down the name.
      * @param number Thread-safe implementation of {@link Number} used to access the value.
@@ -293,7 +297,6 @@ public abstract class MeterRegistry {
 
     /**
      * Register a gauge that reports the value of the {@link Number}.
-     *
      * @param name   Name of the gauge being registered.
      * @param number Thread-safe implementation of {@link Number} used to access the value.
      * @return The number that was passed in so the registration can be done as part of an assignment
@@ -306,7 +309,6 @@ public abstract class MeterRegistry {
 
     /**
      * Register a gauge that reports the value of the object.
-     *
      * @param name Name of the gauge being registered.
      * @param obj  Object used to compute a value.
      * @param f    Function that is applied on the value for the number.
@@ -324,7 +326,6 @@ public abstract class MeterRegistry {
      * The collection implementation used should be thread safe. Note that calling
      * {@link Collection#size()} can be expensive for some collection implementations
      * and should be considered before registering.
-     *
      * @param name       Name of the gauge being registered.
      * @param tags       Sequence of dimensions for breaking down the name.
      * @param collection Thread-safe implementation of {@link Collection} used to access the value.
@@ -342,7 +343,6 @@ public abstract class MeterRegistry {
      * The collection implementation used should be thread safe. Note that calling
      * {@link Map#size()} can be expensive for some collection implementations
      * and should be considered before registering.
-     *
      * @param name Name of the gauge being registered.
      * @param tags Sequence of dimensions for breaking down the name.
      * @param map  Thread-safe implementation of {@link Map} used to access the value.
@@ -366,12 +366,10 @@ public abstract class MeterRegistry {
         for (MeterFilter filter : filters) {
             mappedId = filter.map(mappedId);
         }
-
         if (!accept(id)) {
             //noinspection unchecked
             return noopBuilder.apply(id);
         }
-
         if (config != null) {
             for (MeterFilter filter : filters) {
                 HistogramConfig filteredConfig = filter.configure(mappedId, config);
@@ -380,13 +378,10 @@ public abstract class MeterRegistry {
                 }
             }
         }
-
         Meter m = getOrCreateMeter(config, builder, mappedId);
-
         if (!meterClass.isInstance(m)) {
             throw new IllegalArgumentException("There is already a registered meter of a different type with the same name");
         }
-
         //noinspection unchecked
         return (M) m;
     }
@@ -395,7 +390,6 @@ public abstract class MeterRegistry {
                                    BiFunction<Id, /*Nullable Generic*/ HistogramConfig, Meter> builder,
                                    Id mappedId) {
         Meter m = meterMap.get(mappedId);
-
         if (m == null) {
             synchronized (meterMapLock) {
                 m = meterMap.get(mappedId);
@@ -414,10 +408,8 @@ public abstract class MeterRegistry {
 
     private void register(Id id, Meter meter) {
         HashMap<Id, Meter> newMeterMap = new HashMap<>();
-
         newMeterMap.putAll(meterMap);
         newMeterMap.put(id, meter);
-
         meterMap = Collections.unmodifiableMap(newMeterMap);
     }
 
@@ -430,7 +422,6 @@ public abstract class MeterRegistry {
                     return true;
             }
         }
-
         return true;
     }
 
@@ -438,6 +429,7 @@ public abstract class MeterRegistry {
      * Access to configuration options for this registry.
      */
     public class Config {
+
         /**
          * Append a list of common tags to apply to all metrics reported to the monitoring system.
          */
@@ -499,10 +491,12 @@ public abstract class MeterRegistry {
         public PauseDetector pauseDetector() {
             return pauseDetector;
         }
+
     }
 
     public class More {
-        /**
+
+    	/**
          * Measures the time taken for long tasks.
          */
         public LongTaskTimer longTaskTimer(String name, String... tags) {
@@ -578,5 +572,7 @@ public abstract class MeterRegistry {
         <T> TimeGauge timeGauge(Meter.Id id, T obj, TimeUnit fUnit, ToDoubleFunction<T> f) {
             return registerMeterIfNecessary(TimeGauge.class, id, id2 -> newTimeGauge(id2, obj, fUnit, f), NoopTimeGauge::new);
         }
+
     }
+
 }

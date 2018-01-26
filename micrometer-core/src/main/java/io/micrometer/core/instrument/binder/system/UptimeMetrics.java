@@ -39,6 +39,7 @@ import static java.util.Collections.emptyList;
 public class UptimeMetrics implements MeterBinder {
 
     private final RuntimeMXBean runtimeMXBean;
+
     private final Iterable<Tag> tags;
 
     public UptimeMetrics() {
@@ -67,4 +68,5 @@ public class UptimeMetrics implements MeterBinder {
             .description("The start time of the Java virtual machine")
             .register(registry);
     }
+
 }

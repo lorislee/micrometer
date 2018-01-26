@@ -23,7 +23,9 @@ import reactor.core.CoreSubscriber;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ReactorMetricsSubscriber<T> extends AtomicBoolean implements Subscription, CoreSubscriber<T> {
+
     private final String name;
+
     private final Iterable<Tag> tags;
 
     public ReactorMetricsSubscriber(String name, Iterable<Tag> tags) {
@@ -33,31 +35,26 @@ public class ReactorMetricsSubscriber<T> extends AtomicBoolean implements Subscr
 
     @Override
     public void onNext(T t) {
-
     }
 
     @Override
     public void onError(Throwable t) {
-
     }
 
     @Override
     public void onComplete() {
-
     }
 
     @Override
     public void request(long n) {
-
     }
 
     @Override
     public void cancel() {
-
     }
 
     @Override
     public void onSubscribe(Subscription s) {
-
     }
+
 }

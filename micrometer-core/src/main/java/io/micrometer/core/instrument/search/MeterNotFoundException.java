@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MeterNotFoundException extends RuntimeException {
+
     public MeterNotFoundException(String meterName, List<Tag> tags, Class<? extends Meter> meterType) {
         super("Unable to locate a meter named '" + meterName + "'" + tagDetail(tags) + " of type " + meterType.getCanonicalName());
     }
@@ -34,4 +35,5 @@ public class MeterNotFoundException extends RuntimeException {
         }
         return tagDetail;
     }
+
 }

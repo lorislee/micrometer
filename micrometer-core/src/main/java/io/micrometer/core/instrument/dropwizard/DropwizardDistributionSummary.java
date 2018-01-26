@@ -29,8 +29,11 @@ import java.util.concurrent.atomic.DoubleAdder;
  * @author Jon Schneider
  */
 public class DropwizardDistributionSummary extends AbstractDistributionSummary {
+
     private final com.codahale.metrics.Histogram impl;
+
     private final DoubleAdder totalAmount = new DoubleAdder();
+
     private final TimeDecayingMax max;
 
     DropwizardDistributionSummary(Id id, Clock clock, com.codahale.metrics.Histogram impl, HistogramConfig histogramConfig) {
@@ -73,4 +76,5 @@ public class DropwizardDistributionSummary extends AbstractDistributionSummary {
     public int hashCode() {
         return MeterEquivalence.hashCode(this);
     }
+
 }

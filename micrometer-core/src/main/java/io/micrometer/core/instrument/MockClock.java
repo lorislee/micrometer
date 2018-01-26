@@ -20,7 +20,8 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class MockClock implements Clock {
-    // has to be non-zero to prevent divide-by-zeroes and other weird math results based on the clock
+
+	// has to be non-zero to prevent divide-by-zeroes and other weird math results based on the clock
     private long timeNanos = 1;
 
     public static MockClock clock(MeterRegistry registry) {
@@ -49,4 +50,5 @@ public class MockClock implements Clock {
     public long addSeconds(long amount) {
         return add(amount, TimeUnit.SECONDS);
     }
+
 }

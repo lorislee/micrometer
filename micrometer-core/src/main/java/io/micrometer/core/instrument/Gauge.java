@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.function.ToDoubleFunction;
 
 public interface Gauge extends Meter {
+
     static <T> Builder<T> builder(String name, @Nullable T obj, ToDoubleFunction<T> f) {
         return new Builder<>(name, obj, f);
     }
@@ -45,13 +46,19 @@ public interface Gauge extends Meter {
     }
 
     class Builder<T> {
+
         private final String name;
+
         @Nullable
         private final T obj;
+
         private final ToDoubleFunction<T> f;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
+
         @Nullable
         private String baseUnit;
 
@@ -92,5 +99,7 @@ public interface Gauge extends Meter {
         public Gauge register(MeterRegistry registry) {
             return registry.gauge(new Meter.Id(name, tags, baseUnit, description, Type.Gauge), obj, f);
         }
+
     }
+
 }

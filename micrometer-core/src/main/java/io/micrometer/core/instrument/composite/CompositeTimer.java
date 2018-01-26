@@ -30,8 +30,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
+
     private final Clock clock;
+
     private final HistogramConfig histogramConfig;
+
     private final PauseDetector pauseDetector;
 
     CompositeTimer(Id id, Clock clock, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
@@ -128,7 +131,6 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
     @Override
     Timer registerNewMeter(MeterRegistry registry) {
         final long[] slaNanos = histogramConfig.getSlaBoundaries();
-
         Duration[] sla = null;
         if (slaNanos != null) {
             sla = new Duration[slaNanos.length];
@@ -136,7 +138,6 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
                 sla[i] = Duration.ofNanos(slaNanos[i]);
             }
         }
-
         return Timer.builder(getId().getName())
             .tags(getId().getTags())
             .description(getId().getDescription())
@@ -150,4 +151,5 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
             .pauseDetector(pauseDetector)
             .register(registry);
     }
+
 }

@@ -30,8 +30,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Jon Schneider
  */
 public class CumulativeTimer extends AbstractTimer {
+
     private final AtomicLong count;
+
     private final AtomicLong total;
+
     private final TimeDecayingMax max;
 
     /**
@@ -66,4 +69,5 @@ public class CumulativeTimer extends AbstractTimer {
     public double max(TimeUnit unit) {
         return max.poll(unit);
     }
+
 }

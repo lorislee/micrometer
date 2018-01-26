@@ -39,9 +39,12 @@ import java.util.function.BiConsumer;
 @NonNullApi
 @NonNullFields
 public class TomcatMetrics implements MeterBinder {
+
     @Nullable
     private final Manager manager;
+
     private final MBeanServer mBeanServer;
+
     private final Iterable<Tag> tags;
 
     public TomcatMetrics(@Nullable Manager manager, Iterable<Tag> tags) {
@@ -76,32 +79,25 @@ public class TomcatMetrics implements MeterBinder {
         registerServletMetrics(reg);
         registerCacheMetrics(reg);
         registerThreadPoolMetrics(reg);
-
         if (manager == null) {
             // If the binder is created but unable to find the session manager don't register those metrics
             return;
         }
-
         Gauge.builder("tomcat.sessions.active.max", manager, Manager::getMaxActive)
             .tags(tags)
             .register(reg);
-
         Gauge.builder("tomcat.sessions.active.current", manager, Manager::getActiveSessions)
             .tags(tags)
             .register(reg);
-
         FunctionCounter.builder("tomcat.sessions.created", manager, Manager::getSessionCounter)
             .tags(tags)
             .register(reg);
-
         FunctionCounter.builder("tomcat.sessions.expired", manager, Manager::getExpiredSessions)
             .tags(tags)
             .register(reg);
-
         FunctionCounter.builder("tomcat.sessions.rejected", manager, Manager::getRejectedSessions)
             .tags(tags)
             .register(reg);
-
         TimeGauge.builder("tomcat.sessions.alive.max", manager, TimeUnit.SECONDS, Manager::getSessionMaxAliveTime)
             .tags(tags)
             .register(reg);
@@ -167,24 +163,20 @@ public class TomcatMetrics implements MeterBinder {
                 .tags(allTags)
                 .baseUnit("bytes")
                 .register(reg);
-
             FunctionCounter.builder("tomcat.global.received", mBeanServer,
                 s -> safeDouble(() -> s.getAttribute(name, "bytesReceived")))
                 .tags(allTags)
                 .baseUnit("bytes")
                 .register(reg);
-
             FunctionCounter.builder("tomcat.global.error", mBeanServer,
                 s -> safeDouble(() -> s.getAttribute(name, "errorCount")))
                 .tags(allTags)
                 .register(reg);
-
             FunctionTimer.builder("tomcat.global.request", mBeanServer,
                 s -> safeLong(() -> s.getAttribute(name, "requestCount")),
                 s -> safeDouble(() -> s.getAttribute(name, "processingTime")), TimeUnit.MILLISECONDS)
                 .tags(allTags)
                 .register(reg);
-
             TimeGauge.builder("tomcat.global.request.max", mBeanServer, TimeUnit.MILLISECONDS,
                 s -> safeDouble(() -> s.getAttribute(name, "maxTime")))
                 .tags(allTags)
@@ -258,4 +250,5 @@ public class TomcatMetrics implements MeterBinder {
             return Collections.emptyList();
         }
     }
+
 }

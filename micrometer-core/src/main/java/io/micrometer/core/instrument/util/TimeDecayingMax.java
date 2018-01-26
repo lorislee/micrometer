@@ -26,14 +26,21 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Incubating(since = "1.0.0-rc.6")
 public class TimeDecayingMax {
+
     @SuppressWarnings("rawtypes")
     private static final AtomicIntegerFieldUpdater<TimeDecayingMax> rotatingUpdater =
         AtomicIntegerFieldUpdater.newUpdater(TimeDecayingMax.class, "rotating");
+
     private final Clock clock;
+
     private final long durationBetweenRotatesMillis;
+
     private AtomicLong[] ringBuffer;
+
     private int currentBucket;
+
     private volatile long lastRotateTimestampMillis;
+
     @SuppressWarnings({"unused", "FieldCanBeLocal"})
     private volatile int rotating = 0; // 0 - not rotating, 1 - rotating
 
@@ -47,7 +54,6 @@ public class TimeDecayingMax {
         this.durationBetweenRotatesMillis = rotateFrequencyMillis;
         this.lastRotateTimestampMillis = clock.wallTime();
         this.currentBucket = 0;
-
         this.ringBuffer = new AtomicLong[bufferLength];
         for (int i = 0; i < bufferLength; i++) {
             this.ringBuffer[i] = new AtomicLong();
@@ -104,12 +110,10 @@ public class TimeDecayingMax {
             // Need to wait more for next rotation.
             return;
         }
-
         if (!rotatingUpdater.compareAndSet(this, 0, 1)) {
             // Being rotated by other thread already.
             return;
         }
-
         try {
             synchronized (this) {
                 do {
@@ -125,4 +129,5 @@ public class TimeDecayingMax {
             rotating = 0;
         }
     }
+
 }

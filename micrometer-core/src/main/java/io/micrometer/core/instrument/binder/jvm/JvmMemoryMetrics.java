@@ -41,6 +41,7 @@ import static java.util.Collections.emptyList;
 @NonNullApi
 @NonNullFields
 public class JvmMemoryMetrics implements MeterBinder {
+
     private final Iterable<Tag> tags;
 
     public JvmMemoryMetrics() {
@@ -97,4 +98,5 @@ public class JvmMemoryMetrics implements MeterBinder {
                 .register(registry);
         }
     }
+
 }

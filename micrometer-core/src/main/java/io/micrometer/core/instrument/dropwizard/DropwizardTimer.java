@@ -28,9 +28,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DropwizardTimer extends AbstractTimer {
-    private final Timer impl;
-    private final AtomicLong totalTime = new AtomicLong(0);
-    private final TimeDecayingMax max;
+
+	private final Timer impl;
+
+	private final AtomicLong totalTime = new AtomicLong(0);
+
+	private final TimeDecayingMax max;
 
     DropwizardTimer(Id id, Timer impl, Clock clock, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
         super(id, clock, histogramConfig, pauseDetector, TimeUnit.MILLISECONDS);
@@ -63,4 +66,5 @@ public class DropwizardTimer extends AbstractTimer {
     public double max(TimeUnit unit) {
         return max.poll(unit);
     }
+
 }

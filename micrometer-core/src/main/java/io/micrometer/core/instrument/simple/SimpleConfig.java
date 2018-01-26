@@ -21,6 +21,7 @@ import io.micrometer.core.instrument.step.StepRegistryConfig;
 import java.time.Duration;
 
 public interface SimpleConfig extends StepRegistryConfig {
+
     SimpleConfig DEFAULT = k -> null;
 
     @Override
@@ -46,4 +47,5 @@ public interface SimpleConfig extends StepRegistryConfig {
         }
         throw new IllegalArgumentException("Counting mode must be one of 'cumulative' or 'step' (check property " + prefix() + ".mode)");
     }
+
 }

@@ -23,7 +23,9 @@ import java.util.concurrent.TimeUnit;
 public final class ValueAtPercentile {
 
     private final double percentile;
+
     private final double value;
+
     private ValueAtPercentile(double percentile, double value) {
         this.percentile = percentile;
         this.value = value;
@@ -49,4 +51,5 @@ public final class ValueAtPercentile {
     public String toString() {
         return "(" + value + " at " + percentile * 100 + "%)";
     }
+
 }

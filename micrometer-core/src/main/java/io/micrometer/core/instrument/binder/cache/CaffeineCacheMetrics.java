@@ -43,13 +43,15 @@ import java.util.concurrent.TimeUnit;
 @NonNullApi
 @NonNullFields
 public class CaffeineCacheMetrics implements MeterBinder {
+
     private final String name;
+
     private final Iterable<Tag> tags;
+
     private final Cache<?, ?> cache;
 
     /**
      * Creates a new {@link CaffeineCacheMetrics} instance.
-     *
      * @param cache The cache to be instrumented. You must call {@link Caffeine#recordStats()} prior to building the cache
      *              for metrics to be recorded.
      * @param name  The metric name prefix
@@ -64,7 +66,6 @@ public class CaffeineCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Caffeine cache. You must call {@link Caffeine#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -78,7 +79,6 @@ public class CaffeineCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Caffeine cache. You must call {@link Caffeine#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -94,7 +94,6 @@ public class CaffeineCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Caffeine cache. You must call {@link Caffeine#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -108,7 +107,6 @@ public class CaffeineCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Caffeine cache. You must call {@link Caffeine#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -167,5 +165,7 @@ public class CaffeineCacheMetrics implements MeterBinder {
                     "because no value was found or an exception was thrown while loading")
                 .register(registry);
         }
+
     }
+
 }

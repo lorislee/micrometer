@@ -27,7 +27,9 @@ import java.util.function.ToDoubleFunction;
 class CompositeTimeGauge<T> extends AbstractCompositeMeter<TimeGauge> implements TimeGauge {
 
     private final WeakReference<T> ref;
+
     private final ToDoubleFunction<T> f;
+
     private final TimeUnit fUnit;
 
     CompositeTimeGauge(Id id, T obj, TimeUnit fUnit, ToDoubleFunction<T> f) {
@@ -58,10 +60,10 @@ class CompositeTimeGauge<T> extends AbstractCompositeMeter<TimeGauge> implements
         if (obj == null) {
             return null;
         }
-
         return TimeGauge.builder(getId().getName(), obj, fUnit, f)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .register(registry);
     }
+
 }

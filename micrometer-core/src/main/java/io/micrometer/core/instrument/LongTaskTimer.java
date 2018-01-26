@@ -28,24 +28,22 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface LongTaskTimer extends Meter {
+
     static Builder builder(String name) {
         return new Builder(name);
     }
 
     /**
      * Create a timer builder from a {@link Timed} annotation.
-     *
      * @param timed The annotation instance to base a new timer on.
      */
     static Builder builder(Timed timed) {
         if (!timed.longTask()) {
             throw new IllegalArgumentException("Cannot build a long task timer from a @Timed annotation that is not marked as a long task");
         }
-
         if (timed.value().isEmpty()) {
             throw new IllegalArgumentException("Long tasks instrumented with @Timed require the value attribute to be non-empty");
         }
-
         return new Builder(timed.value())
             .tags(timed.extraTags())
             .description(timed.description().isEmpty() ? null : timed.description());
@@ -53,7 +51,6 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Executes the callable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      * @return The return value of `f`.
      */
@@ -68,7 +65,6 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Executes the callable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      * @return The return value of `f`.
      */
@@ -83,7 +79,6 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Executes the runnable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time with a reference to the
      *          timer id useful for looking up current duration.
      */
@@ -98,7 +93,6 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Executes the runnable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      */
     default void record(Runnable f) {
@@ -112,14 +106,12 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Start keeping time for a task.
-     *
      * @return A task id that can be used to look up how long the task has been running.
      */
     Sample start();
 
     /**
      * Mark a given task as completed.
-     *
      * @param task Id for the task to stop. This should be the value returned from {@link #start()}.
      * @return Duration for the task in nanoseconds. A -1 value will be returned for an unknown task.
      */
@@ -127,7 +119,6 @@ public interface LongTaskTimer extends Meter {
 
     /**
      * Returns the current duration for an active task.
-     *
      * @param task Id for the task to stop. This should be the value returned from {@link #start()}.
      * @param unit The time unit to scale the returned value to.
      * @return Duration for the task in nanoseconds. A -1 value will be returned for an unknown task.
@@ -158,7 +149,9 @@ public interface LongTaskTimer extends Meter {
     }
 
     class Sample {
+
         private final LongTaskTimer timer;
+
         private final long task;
 
         public Sample(LongTaskTimer timer, long task) {
@@ -168,7 +161,6 @@ public interface LongTaskTimer extends Meter {
 
         /**
          * Records the duration of the operation
-         *
          * @return The duration that was stop in nanoseconds
          */
         public long stop() {
@@ -178,11 +170,15 @@ public interface LongTaskTimer extends Meter {
         public double duration(TimeUnit unit) {
             return timer.duration(task, unit);
         }
+
     }
 
     class Builder {
+
         private final String name;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
 
@@ -215,5 +211,7 @@ public interface LongTaskTimer extends Meter {
         public LongTaskTimer register(MeterRegistry registry) {
             return registry.more().longTaskTimer(new Meter.Id(name, tags, null, description, Type.LongTaskTimer));
         }
+
     }
+
 }

@@ -26,6 +26,7 @@ import io.micrometer.core.instrument.Counter;
  * the life of the process.
  */
 public class StepCounter extends AbstractMeter implements Counter {
+
     private final StepDouble value;
 
     /**
@@ -45,4 +46,5 @@ public class StepCounter extends AbstractMeter implements Counter {
     public double count() {
         return value.poll();
     }
+
 }

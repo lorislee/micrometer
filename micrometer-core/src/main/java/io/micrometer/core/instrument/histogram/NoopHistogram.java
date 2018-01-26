@@ -22,6 +22,7 @@ import org.HdrHistogram.Histogram;
 final class NoopHistogram extends Histogram {
 
     static final NoopHistogram INSTANCE = new NoopHistogram();
+
     private static final long serialVersionUID = 82886959971723882L;
 
     private NoopHistogram() {
@@ -123,4 +124,5 @@ final class NoopHistogram extends Histogram {
     @Override
     public void setTag(String tag) {
     }
+
 }

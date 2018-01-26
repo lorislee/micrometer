@@ -35,6 +35,7 @@ import java.util.function.Supplier;
  * under a minute.
  */
 public interface Timer extends Meter {
+
     static Sample start(MeterRegistry registry) {
         return new Sample(registry.config().clock());
     }
@@ -49,7 +50,6 @@ public interface Timer extends Meter {
 
     /**
      * Create a timer builder from a {@link Timed} annotation.
-     *
      * @param timed       The annotation instance to base a new timer on.
      * @param defaultName A default name to use in the event that the value attribute is empty.
      */
@@ -69,7 +69,6 @@ public interface Timer extends Meter {
 
     /**
      * Updates the statistics kept by the counter with the specified amount.
-     *
      * @param amount Duration of a single event being measured by this timer. If the amount is less than 0
      *               the value will be dropped.
      * @param unit   Time unit for the amount being recorded.
@@ -78,7 +77,6 @@ public interface Timer extends Meter {
 
     /**
      * Updates the statistics kept by the counter with the specified amount.
-     *
      * @param duration Duration of a single event being measured by this timer.
      */
     default void record(Duration duration) {
@@ -87,7 +85,6 @@ public interface Timer extends Meter {
 
     /**
      * Executes the Supplier `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      * @return The return value of `f`.
      */
@@ -95,7 +92,6 @@ public interface Timer extends Meter {
 
     /**
      * Executes the callable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      * @return The return value of `f`.
      */
@@ -103,14 +99,12 @@ public interface Timer extends Meter {
 
     /**
      * Executes the runnable `f` and records the time taken.
-     *
      * @param f Function to execute and measure the execution time.
      */
     void record(Runnable f);
 
     /**
      * Wrap a {@link Runnable} so that it is timed when invoked.
-     *
      * @param f The Runnable to time when it is invoked.
      * @return The wrapped Runnable.
      */
@@ -120,7 +114,6 @@ public interface Timer extends Meter {
 
     /**
      * Wrap a {@link Callable} so that it is timed when invoked.
-     *
      * @param f The Callable to time when it is invoked.
      * @return The wrapped Callable.
      */
@@ -173,7 +166,9 @@ public interface Timer extends Meter {
     }
 
     class Sample {
+
         private final long startTime;
+
         private final Clock clock;
 
         Sample(Clock clock) {
@@ -183,7 +178,6 @@ public interface Timer extends Meter {
 
         /**
          * Records the duration of the operation
-         *
          * @return The total duration of the sample in nanoseconds
          */
         public long stop(Timer timer) {
@@ -191,14 +185,20 @@ public interface Timer extends Meter {
             timer.record(durationNs, TimeUnit.NANOSECONDS);
             return durationNs;
         }
+
     }
 
     class Builder {
+
         private final String name;
+
         private final List<Tag> tags = new ArrayList<>();
+
         private final HistogramConfig.Builder histogramConfigBuilder;
+
         @Nullable
         private String description;
+
         @Nullable
         private PauseDetector pauseDetector;
 
@@ -224,7 +224,6 @@ public interface Timer extends Meter {
          * is computed locally, and so can't be aggregated with percentiles computed across other
          * dimensions (e.g. in a different instance). Use {@link #publishPercentileHistogram()}
          * to publish a histogram that can be used to generate aggregable percentile approximations.
-         *
          * @param percentiles Percentiles to compute and publish. The 95th percentile should be expressed as {@code 95.0}
          */
         public Builder publishPercentiles(@Nullable double... percentiles) {
@@ -255,7 +254,6 @@ public interface Timer extends Meter {
          * Publish at a minimum a histogram containing your defined SLA boundaries. When used in conjunction with
          * {@link Builder#publishPercentileHistogram()}, the boundaries defined here are included alongside
          * other buckets used to generate aggregable percentile approximations.
-         *
          * @param sla Publish SLA boundaries in the set of histogram buckets shipped to the monitoring system.
          */
         public Builder sla(@Nullable Duration... sla) {
@@ -313,5 +311,7 @@ public interface Timer extends Meter {
             return registry.timer(new Meter.Id(name, tags, null, description, Type.Timer), histogramConfigBuilder.build(),
                 pauseDetector == null ? registry.config().pauseDetector() : pauseDetector);
         }
+
     }
+
 }

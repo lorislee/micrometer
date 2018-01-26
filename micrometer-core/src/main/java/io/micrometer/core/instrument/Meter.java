@@ -29,6 +29,7 @@ import static java.util.stream.StreamSupport.stream;
  * A counter, gauge, timer, or distribution summary that results collects one or more metrics.
  */
 public interface Meter {
+
     static Builder builder(String name, Type type, Iterable<Measurement> measurements) {
         return new Builder(name, type, measurements);
     }
@@ -65,25 +66,27 @@ public interface Meter {
     }
 
     class Id {
+
         private final String name;
+
         private final List<Tag> tags;
+
         @Nullable
         private final String description;
+
         @Nullable
         private String baseUnit;
+
         private Type type;
 
         public Id(String name, Iterable<Tag> tags, @Nullable String baseUnit, @Nullable String description, Type type) {
             this.name = name;
-
             this.tags = Collections.unmodifiableList(stream(tags.spliterator(), false)
                 .sorted(Comparator.comparing(Tag::getKey))
                 .distinct()
                 .collect(Collectors.toList()));
-
             this.baseUnit = baseUnit;
             this.description = description;
-
             this.type = type;
         }
 
@@ -163,18 +166,25 @@ public interface Meter {
         public Type getType() {
             return type;
         }
+
     }
 
     /**
      * Builder for custom meter types
      */
     class Builder {
+
         private final String name;
+
         private final Type type;
+
         private final Iterable<Measurement> measurements;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
+
         @Nullable
         private String baseUnit;
 
@@ -209,5 +219,7 @@ public interface Meter {
         public Meter register(MeterRegistry registry) {
             return registry.register(new Meter.Id(name, tags, baseUnit, description, type), type, measurements);
         }
+
     }
+
 }

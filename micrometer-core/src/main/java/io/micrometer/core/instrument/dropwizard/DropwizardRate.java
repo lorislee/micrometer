@@ -27,12 +27,15 @@ import java.util.concurrent.atomic.AtomicLong;
  * and {@link io.micrometer.core.instrument.FunctionCounter}.
  */
 class DropwizardRate {
-    private static final long TICK_INTERVAL = TimeUnit.SECONDS.toNanos(5);
+
+	private static final long TICK_INTERVAL = TimeUnit.SECONDS.toNanos(5);
 
     private final AtomicLong lastTime;
 
     private final EWMA m1Rate = EWMA.oneMinuteEWMA();
+
     private final EWMA m5Rate = EWMA.fiveMinuteEWMA();
+
     private final EWMA m15Rate = EWMA.fifteenMinuteEWMA();
 
     private final Clock clock;
@@ -49,7 +52,6 @@ class DropwizardRate {
         final long oldTime = lastTime.get();
         final long currentTime = clock.monotonicTime();
         final long age = currentTime - oldTime;
-
         if (age > TICK_INTERVAL) {
             final long newIntervalStartTick = currentTime - age % TICK_INTERVAL;
             if (lastTime.compareAndSet(oldTime, newIntervalStartTick)) {
@@ -103,4 +105,5 @@ class DropwizardRate {
         tickIfNecessary(0);
         return m5Rate.getRate(TimeUnit.SECONDS);
     }
+
 }

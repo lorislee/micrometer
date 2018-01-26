@@ -27,5 +27,7 @@ import io.micrometer.core.lang.NonNull;
  * that is recommended for a production ready app.
  */
 public interface MeterBinder {
+
     void bindTo(@NonNull MeterRegistry registry);
+
 }

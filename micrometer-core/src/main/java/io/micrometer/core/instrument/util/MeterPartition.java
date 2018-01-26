@@ -28,8 +28,11 @@ import java.util.List;
  * @author Jon Schneider
  */
 public class MeterPartition extends AbstractList<List<Meter>> {
+
     private final List<Meter> list;
+
     private final int partitionSize;
+
     private final int partitionCount;
 
     public MeterPartition(MeterRegistry registry, int partitionSize) {
@@ -58,4 +61,5 @@ public class MeterPartition extends AbstractList<List<Meter>> {
     public boolean isEmpty() {
         return list.isEmpty();
     }
+
 }

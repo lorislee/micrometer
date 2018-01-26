@@ -40,4 +40,5 @@ import java.lang.annotation.*;
 @Nonnull
 @TypeQualifierDefault(ElementType.FIELD)
 public @interface NonNullFields {
+
 }

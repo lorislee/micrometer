@@ -22,6 +22,7 @@ package io.micrometer.core.instrument;
  * @author Jon Schneider
  */
 public interface Tag {
+
     static Tag of(String key, String value) {
         return new ImmutableTag(key, value);
     }
@@ -29,4 +30,5 @@ public interface Tag {
     String getKey();
 
     String getValue();
+
 }

@@ -32,9 +32,13 @@ import java.util.concurrent.TimeUnit;
 @NonNullApi
 @NonNullFields
 public class GuavaCacheMetrics implements MeterBinder {
+
     private final String name;
+
     private final Iterable<Tag> tags;
+
     private final Cache<?, ?> cache;
+
     public GuavaCacheMetrics(Cache<?, ?> cache, String name, Iterable<Tag> tags) {
         this.name = name;
         this.tags = tags;
@@ -44,7 +48,6 @@ public class GuavaCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Guava cache. You must call {@link CacheBuilder#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -59,7 +62,6 @@ public class GuavaCacheMetrics implements MeterBinder {
     /**
      * Record metrics on a Guava cache. You must call {@link CacheBuilder#recordStats()} prior to building the cache
      * for metrics to be recorded.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -112,4 +114,5 @@ public class GuavaCacheMetrics implements MeterBinder {
                 .register(registry);
         }
     }
+
 }

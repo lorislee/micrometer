@@ -23,6 +23,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Timed {
+
     String value() default "";
 
     String[] extraTags() default {};
@@ -34,4 +35,5 @@ public @interface Timed {
     boolean histogram() default false;
 
     String description() default "";
+
 }

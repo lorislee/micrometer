@@ -41,6 +41,7 @@ import java.util.function.ToDoubleFunction;
 public class HibernateMetrics implements MeterBinder {
 
     private final Iterable<Tag> tags;
+
     @Nullable
     private final Statistics stats;
 
@@ -61,7 +62,6 @@ public class HibernateMetrics implements MeterBinder {
         if (this.stats == null) {
             return;
         }
-
         FunctionCounter.builder(name, stats, f)
             .tags(tags)
             .tags(extraTags)
@@ -163,14 +163,13 @@ public class HibernateMetrics implements MeterBinder {
     }
 
     private boolean hasStatisticsEnabled(EntityManagerFactory emf) {
-        final Statistics stats = getStatistics(emf);
+        Statistics stats = getStatistics(emf);
         return (stats != null && stats.isStatisticsEnabled());
     }
 
     /**
      * Get the {@code Statistics} object from the underlying {@code SessionFactory}. If it isn't hibernate that is
      * used return {@code null}.
-     *
      * @param emf an {@code EntityManagerFactory}
      * @return the {@code Statistics} from the underlying {@code SessionFactory} or {@code null}.
      */

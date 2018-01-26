@@ -50,4 +50,5 @@ class CompositeCounter extends AbstractCompositeMeter<Counter> implements Counte
             .baseUnit(getId().getBaseUnit())
             .register(registry);
     }
+
 }

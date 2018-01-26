@@ -27,9 +27,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public abstract class AbstractTimer extends AbstractMeter implements Timer {
+
     protected final Clock clock;
+
     protected final TimeWindowLatencyHistogram histogram;
+
     private final HistogramConfig histogramConfig;
+
     private final TimeUnit baseTimeUnit;
 
     protected AbstractTimer(Id id, Clock clock, HistogramConfig histogramConfig, PauseDetector pauseDetector, TimeUnit baseTimeUnit) {
@@ -118,4 +122,5 @@ public abstract class AbstractTimer extends AbstractMeter implements Timer {
     public HistogramConfig statsConfig() {
         return histogramConfig;
     }
+
 }

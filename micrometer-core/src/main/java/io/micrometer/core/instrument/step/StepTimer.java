@@ -29,8 +29,11 @@ import java.util.concurrent.TimeUnit;
  * @author Jon Schneider
  */
 public class StepTimer extends AbstractTimer {
+
     private final StepLong count;
+
     private final StepLong total;
+
     private final TimeDecayingMax max;
 
     /**

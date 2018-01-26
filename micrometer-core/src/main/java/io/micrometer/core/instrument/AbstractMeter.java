@@ -17,7 +17,8 @@
 package io.micrometer.core.instrument;
 
 public abstract class AbstractMeter implements Meter {
-    private final Meter.Id id;
+
+	private final Meter.Id id;
 
     public AbstractMeter(Id id) {
         this.id = id;
@@ -27,4 +28,5 @@ public abstract class AbstractMeter implements Meter {
     public Id getId() {
         return id;
     }
+
 }

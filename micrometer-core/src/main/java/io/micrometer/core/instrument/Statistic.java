@@ -17,6 +17,7 @@
 package io.micrometer.core.instrument;
 
 public enum Statistic {
+
     /**
      * The sum of the amounts recorded.
      */
@@ -53,4 +54,5 @@ public enum Statistic {
      * Duration of a running task in a long task timer. Always reported in nanoseconds.
      */
     Duration,
+
 }

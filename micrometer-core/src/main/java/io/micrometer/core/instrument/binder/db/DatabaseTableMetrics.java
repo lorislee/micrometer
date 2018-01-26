@@ -35,14 +35,19 @@ import java.sql.SQLException;
 @NonNullApi
 @NonNullFields
 public class DatabaseTableMetrics implements MeterBinder {
-    private final String query;
-    private final String tableName;
-    private final String name;
-    private final Iterable<Tag> tags;
-    private final DataSource dataSource;
-    /**
+
+	private final String query;
+
+	private final String tableName;
+
+	private final String name;
+
+	private final Iterable<Tag> tags;
+
+	private final DataSource dataSource;
+
+	/**
      * Record the row count for an individual database table.
-     *
      * @param dataSource The data source to use to run the row count query.
      * @param tableName  The name of the table to report table size for.
      * @param name       The name prefix of the metrics.
@@ -51,9 +56,9 @@ public class DatabaseTableMetrics implements MeterBinder {
     public DatabaseTableMetrics(DataSource dataSource, String tableName, String name, Iterable<Tag> tags) {
         this(dataSource, "SELECT COUNT(1) FROM " + tableName, tableName, name, tags);
     }
+
     /**
      * Record the result based on a query.
-     *
      * @param dataSource The data source to use to run the row count query.
      * @param query      The query to be run against the table. The first column of the result will be the metric and
      *                   it should return a single row.
@@ -71,7 +76,6 @@ public class DatabaseTableMetrics implements MeterBinder {
 
     /**
      * Record the row count for an individual database table.
-     *
      * @param registry  The registry to bind metrics to.
      * @param ds        The data source to use to run the row count query.
      * @param tableName The name of the table to report table size for.
@@ -84,7 +88,6 @@ public class DatabaseTableMetrics implements MeterBinder {
 
     /**
      * Record the row count for an individual database table.
-     *
      * @param registry  The registry to bind metrics to.
      * @param ds        The data source to use to run the row count query.
      * @param tableName The name of the table to report table size for.
@@ -108,4 +111,5 @@ public class DatabaseTableMetrics implements MeterBinder {
             }
         });
     }
+
 }

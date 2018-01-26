@@ -26,7 +26,9 @@ import java.lang.ref.WeakReference;
 import java.util.function.ToDoubleFunction;
 
 class CompositeGauge<T> extends AbstractCompositeMeter<Gauge> implements Gauge {
+
     private final WeakReference<T> ref;
+
     private final ToDoubleFunction<T> f;
 
     CompositeGauge(Meter.Id id, @Nullable T obj, ToDoubleFunction<T> f) {
@@ -51,11 +53,11 @@ class CompositeGauge<T> extends AbstractCompositeMeter<Gauge> implements Gauge {
         if (obj == null) {
             return null;
         }
-
         return Gauge.builder(getId().getName(), obj, f)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .baseUnit(getId().getBaseUnit())
             .register(registry);
     }
+
 }

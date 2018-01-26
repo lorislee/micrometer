@@ -19,6 +19,7 @@ package io.micrometer.core.instrument.noop;
 import io.micrometer.core.instrument.Counter;
 
 public class NoopCounter extends NoopMeter implements Counter {
+
     public NoopCounter(Id id) {
         super(id);
     }
@@ -31,4 +32,5 @@ public class NoopCounter extends NoopMeter implements Counter {
     public double count() {
         return 0;
     }
+
 }

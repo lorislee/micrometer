@@ -24,6 +24,7 @@ import java.util.TreeSet;
  * percentile approximations such as Prometheus' {@code histogram_quantiles} or Atlas' {@code :percentiles}.
  */
 public class PercentileHistogramBuckets {
+
     // Number of positions of base-2 digits to shift when iterating over the long space.
     private static final int DIGITS = 2;
 
@@ -51,7 +52,6 @@ public class PercentileHistogramBuckets {
         PERCENTILE_BUCKETS.add(1L);
         PERCENTILE_BUCKETS.add(2L);
         PERCENTILE_BUCKETS.add(3L);
-
         int exp = DIGITS;
         while (exp < 64) {
             long current = 1L << exp;
@@ -76,4 +76,5 @@ public class PercentileHistogramBuckets {
         return PERCENTILE_BUCKETS.subSet(histogramConfig.getMinimumExpectedValue(), true,
             histogramConfig.getMaximumExpectedValue(), true);
     }
+
 }

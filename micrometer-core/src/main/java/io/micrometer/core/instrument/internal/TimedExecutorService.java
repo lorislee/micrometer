@@ -32,7 +32,9 @@ import static java.util.stream.Collectors.toList;
  * @author Jon Schneider
  */
 public class TimedExecutorService implements ExecutorService {
+
     private final ExecutorService delegate;
+
     private final Timer timer;
 
     public TimedExecutorService(MeterRegistry registry, ExecutorService delegate, String name, Iterable<Tag> tags) {
@@ -108,4 +110,5 @@ public class TimedExecutorService implements ExecutorService {
     private <T> Collection<? extends Callable<T>> wrapAll(Collection<? extends Callable<T>> tasks) {
         return tasks.stream().map(timer::wrap).collect(toList());
     }
+
 }

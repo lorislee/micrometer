@@ -17,4 +17,5 @@
 package io.micrometer.core.instrument.histogram.pause;
 
 public class NoPauseDetector implements PauseDetector {
+
 }

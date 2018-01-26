@@ -31,6 +31,7 @@ import static java.util.Collections.emptyList;
 @NonNullApi
 @NonNullFields
 public class JvmThreadMetrics implements MeterBinder {
+
     private final Iterable<Tag> tags;
 
     public JvmThreadMetrics() {
@@ -60,4 +61,5 @@ public class JvmThreadMetrics implements MeterBinder {
             .description("The current number of live threads including both daemon and non-daemon threads")
             .register(registry);
     }
+
 }

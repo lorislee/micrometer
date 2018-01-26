@@ -35,4 +35,5 @@ public class NoopTimeGauge extends NoopMeter implements TimeGauge {
     public double value() {
         return 0;
     }
+
 }

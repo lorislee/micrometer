@@ -37,7 +37,9 @@ import java.util.concurrent.atomic.DoubleAdder;
 public class CumulativeDistributionSummary extends AbstractDistributionSummary {
 
     private final AtomicLong count;
+
     private final DoubleAdder total;
+
     private final TimeDecayingMax max;
 
     public CumulativeDistributionSummary(Id id, Clock clock, HistogramConfig histogramConfig) {
@@ -77,4 +79,5 @@ public class CumulativeDistributionSummary extends AbstractDistributionSummary {
             new Measurement(this::max, Statistic.Max)
         );
     }
+
 }

@@ -35,7 +35,6 @@ public final class MathUtils {
         }
         int div = p / q;
         int rem = p - q * div; // equal to p % q
-
         if (rem == 0) {
             return div;
         }
@@ -44,7 +43,6 @@ public final class MathUtils {
          * Normal Java division rounds towards 0, consistently with RoundingMode.DOWN. We just have to
          * deal with the cases where rounding towards 0 is wrong, which typically depends on the sign of
          * p / q.
-         *
          * signum is 1 if p and q are both nonnegative or both negative, and -1 otherwise.
          */
         int signum = 1 | ((p ^ q) >> (Integer.SIZE - 1));

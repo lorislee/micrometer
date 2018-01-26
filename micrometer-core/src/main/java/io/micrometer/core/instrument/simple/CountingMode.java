@@ -17,6 +17,7 @@
 package io.micrometer.core.instrument.simple;
 
 public enum CountingMode {
+
     /**
      * Counts and totals are monotonically increasing.
      */
@@ -26,4 +27,5 @@ public enum CountingMode {
      * Rate normalize counts and totals.
      */
     Step
+
 }

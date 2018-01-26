@@ -36,9 +36,13 @@ import java.util.List;
 @NonNullApi
 @NonNullFields
 public class JCacheMetrics implements MeterBinder {
+
     private final String name;
+
     private final Iterable<Tag> tags;
+
     private ObjectName objectName;
+
     public JCacheMetrics(Cache<?, ?> cache, String name, Iterable<Tag> tags) {
         try {
             String cacheManagerUri = cache.getCacheManager().getURI().toString()
@@ -56,7 +60,6 @@ public class JCacheMetrics implements MeterBinder {
 
     /**
      * Record metrics on a JCache cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -70,7 +73,6 @@ public class JCacheMetrics implements MeterBinder {
 
     /**
      * Record metrics on a JCache cache.
-     *
      * @param registry The registry to bind metrics to.
      * @param cache    The cache to instrument.
      * @param name     The name prefix of the metrics.
@@ -115,10 +117,28 @@ public class JCacheMetrics implements MeterBinder {
      * Defining cache statistics parameters as constants.
      */
     private enum CacheStatistics {
-        CacheHits, CacheHitPercentage,
-        CacheMisses, CacheMissPercentage,
-        CacheGets, CachePuts, CacheRemovals, CacheEvictions,
-        AverageGetTime, AveragePutTime, AverageRemoveTime;
+
+        CacheHits,
+
+        CacheHitPercentage,
+
+        CacheMisses,
+
+        CacheMissPercentage,
+
+        CacheGets,
+
+        CachePuts,
+
+        CacheRemovals,
+
+        CacheEvictions,
+
+        AverageGetTime,
+
+        AveragePutTime,
+
+        AverageRemoveTime;
 
         public long get(ObjectName objectName) {
             try {
@@ -138,5 +158,7 @@ public class JCacheMetrics implements MeterBinder {
             // didn't find the MBean in any servers
             return 0;
         }
+
     }
+
 }

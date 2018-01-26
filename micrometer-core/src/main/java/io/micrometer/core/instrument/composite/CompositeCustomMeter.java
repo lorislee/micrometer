@@ -22,6 +22,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.internal.DefaultMeter;
 
 class CompositeCustomMeter extends DefaultMeter implements CompositeMeter {
+
     CompositeCustomMeter(Id id, Type type, Iterable<Measurement> measurements) {
         super(id, type, measurements);
     }
@@ -39,4 +40,5 @@ class CompositeCustomMeter extends DefaultMeter implements CompositeMeter {
     public void remove(MeterRegistry registry) {
         // do nothing
     }
+
 }

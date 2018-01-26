@@ -28,8 +28,11 @@ import java.util.stream.Stream;
 import static io.micrometer.core.instrument.Tags.zip;
 
 public class Search {
+
     private final MeterRegistry registry;
+
     private final String name;
+
     private final List<Tag> tags = new ArrayList<>();
 
     public Search(MeterRegistry registry, String name) {
@@ -118,4 +121,5 @@ public class Search {
 
         return meterStream.collect(Collectors.toList());
     }
+
 }

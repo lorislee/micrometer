@@ -29,8 +29,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DefaultLongTaskTimer extends AbstractMeter implements LongTaskTimer {
+
     private final ConcurrentMap<Long, Long> tasks = new ConcurrentHashMap<>();
+
     private final AtomicLong nextTask = new AtomicLong(0L);
+
     private final Clock clock;
 
     public DefaultLongTaskTimer(Meter.Id id, Clock clock) {
@@ -87,4 +90,5 @@ public class DefaultLongTaskTimer extends AbstractMeter implements LongTaskTimer
     public int hashCode() {
         return MeterEquivalence.hashCode(this);
     }
+
 }

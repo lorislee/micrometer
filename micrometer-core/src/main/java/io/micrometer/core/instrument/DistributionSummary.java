@@ -79,12 +79,17 @@ public interface DistributionSummary extends Meter {
     }
 
     class Builder {
+
         private final String name;
+
         private final List<Tag> tags = new ArrayList<>();
+
         @Nullable
         private String description;
+
         @Nullable
         private String baseUnit;
+
         private HistogramConfig.Builder histogramConfigBuilder = HistogramConfig.builder();
 
         private Builder(String name) {
@@ -123,7 +128,6 @@ public interface DistributionSummary extends Meter {
          * is computed locally, and so can't be aggregated with percentiles computed across other
          * dimensions (e.g. in a different instance). Use {@link #publishPercentileHistogram()}
          * to publish a histogram that can be used to generate aggregable percentile approximations.
-         *
          * @param percentiles Percentiles to compute and publish. The 95th percentile should be expressed as {@code 95.0}
          */
         public Builder publishPercentiles(@Nullable double... percentiles) {
@@ -154,7 +158,6 @@ public interface DistributionSummary extends Meter {
          * Publish at a minimum a histogram containing your defined SLA boundaries. When used in conjunction with
          * {@link Builder#publishPercentileHistogram()}, the boundaries defined here are included alongside
          * other buckets used to generate aggregable percentile approximations.
-         *
          * @param sla Publish SLA boundaries in the set of histogram buckets shipped to the monitoring system.
          */
         public Builder sla(@Nullable long... sla) {
@@ -185,6 +188,7 @@ public interface DistributionSummary extends Meter {
         public DistributionSummary register(MeterRegistry registry) {
             return registry.summary(new Meter.Id(name, tags, baseUnit, description, Type.DistributionSummary), histogramConfigBuilder.build());
         }
+
     }
 
 }

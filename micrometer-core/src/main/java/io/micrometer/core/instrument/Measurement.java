@@ -25,7 +25,9 @@ import java.util.function.Supplier;
  * @author Jon Schneider
  */
 public class Measurement {
+
     private final Supplier<Double> f;
+
     private final Statistic statistic;
 
     public Measurement(Supplier<Double> f, Statistic statistic) {
@@ -51,4 +53,5 @@ public class Measurement {
             ", value=" + getValue() +
             '}';
     }
+
 }

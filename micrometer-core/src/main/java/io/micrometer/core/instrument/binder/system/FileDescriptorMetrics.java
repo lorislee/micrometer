@@ -41,9 +41,12 @@ import static java.util.Collections.emptyList;
 public class FileDescriptorMetrics implements MeterBinder {
 
     private final OperatingSystemMXBean osBean;
+
     private final Iterable<Tag> tags;
+
     @Nullable
     private final Method openFdsMethod;
+
     @Nullable
     private final Method maxFdsMethod;
 
@@ -59,7 +62,6 @@ public class FileDescriptorMetrics implements MeterBinder {
     FileDescriptorMetrics(OperatingSystemMXBean osBean, Iterable<Tag> tags) {
         this.osBean = osBean;
         this.tags = tags;
-
         this.openFdsMethod = detectMethod("getOpenFileDescriptorCount");
         this.maxFdsMethod = detectMethod("getMaxFileDescriptorCount");
     }
@@ -72,7 +74,6 @@ public class FileDescriptorMetrics implements MeterBinder {
                 .description("The open file descriptor count")
                 .register(registry);
         }
-
         if (maxFdsMethod != null) {
             Gauge.builder("process.max.fds", osBean, x -> invoke(maxFdsMethod))
                 .tags(tags)
@@ -99,4 +100,5 @@ public class FileDescriptorMetrics implements MeterBinder {
             return null;
         }
     }
+
 }

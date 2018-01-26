@@ -22,10 +22,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
 public class StepLong {
+
     private final Clock clock;
+
     private final long stepMillis;
+
     private final LongAdder current = new LongAdder();
+
     private final AtomicLong lastInitPos;
+
     private volatile double previous = 0.0;
 
     public StepLong(Clock clock, long stepMillis) {
@@ -57,4 +62,5 @@ public class StepLong {
         rollCount(clock.wallTime());
         return previous;
     }
+
 }

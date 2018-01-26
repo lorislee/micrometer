@@ -31,14 +31,21 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class CumulativeFunctionTimer<T> implements FunctionTimer {
+
     private final Meter.Id id;
+
     private final WeakReference<T> ref;
+
     private final ToLongFunction<T> countFunction;
+
     private final ToDoubleFunction<T> totalTimeFunction;
+
     private final TimeUnit totalTimeFunctionUnits;
+
     private final TimeUnit baseTimeUnit;
 
     private volatile long lastCount = 0;
+
     private volatile double lastTime = 0.0;
 
     public CumulativeFunctionTimer(Id id, T obj, ToLongFunction<T> countFunction, ToDoubleFunction<T> totalTimeFunction,
@@ -84,4 +91,5 @@ public class CumulativeFunctionTimer<T> implements FunctionTimer {
     public Type type() {
         return Type.Timer;
     }
+
 }

@@ -22,7 +22,9 @@ import io.micrometer.core.instrument.util.MeterEquivalence;
 import io.micrometer.core.lang.Nullable;
 
 public abstract class AbstractDistributionSummary extends AbstractMeter implements DistributionSummary {
+
     private final TimeWindowHistogram histogram;
+
     private final HistogramConfig histogramConfig;
 
     protected AbstractDistributionSummary(Id id, Clock clock, HistogramConfig histogramConfig) {
@@ -70,4 +72,5 @@ public abstract class AbstractDistributionSummary extends AbstractMeter implemen
     public HistogramConfig statsConfig() {
         return histogramConfig;
     }
+
 }

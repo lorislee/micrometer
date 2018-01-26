@@ -37,7 +37,9 @@ import java.util.function.ToLongFunction;
  * @author Jon Schneider
  */
 public class CompositeMeterRegistry extends MeterRegistry {
+
     private final Set<MeterRegistry> registries = ConcurrentHashMap.newKeySet();
+
     private final Set<MeterRegistry> unmodifiableRegistries = Collections.unmodifiableSet(registries);
 
     public CompositeMeterRegistry() {
@@ -123,4 +125,5 @@ public class CompositeMeterRegistry extends MeterRegistry {
     public Set<MeterRegistry> getRegistries() {
         return unmodifiableRegistries;
     }
+
 }

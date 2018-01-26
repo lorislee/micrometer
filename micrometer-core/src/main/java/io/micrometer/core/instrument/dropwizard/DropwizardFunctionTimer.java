@@ -32,15 +32,23 @@ import java.util.function.ToDoubleFunction;
 import java.util.function.ToLongFunction;
 
 public class DropwizardFunctionTimer<T> extends AbstractMeter implements FunctionTimer {
-    private final WeakReference<T> ref;
-    private final ToLongFunction<T> countFunction;
-    private final ToDoubleFunction<T> totalTimeFunction;
-    private final TimeUnit totalTimeFunctionUnits;
+
+	private final WeakReference<T> ref;
+
+	private final ToLongFunction<T> countFunction;
+
+	private final ToDoubleFunction<T> totalTimeFunction;
+
+	private final TimeUnit totalTimeFunctionUnits;
 
     private final AtomicLong lastCount = new AtomicLong(0);
+
     private final DropwizardRate rate;
+
     private final Timer dropwizardMeter;
+
     private final TimeUnit registryBaseTimeUnit;
+
     private volatile double lastTime = 0.0;
 
     DropwizardFunctionTimer(Meter.Id id, Clock clock,
@@ -56,6 +64,7 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
         this.rate = new DropwizardRate(clock);
         this.registryBaseTimeUnit = registryBaseTimeUnit;
         this.dropwizardMeter = new Timer(null, new DropwizardClock(clock)) {
+
             @Override
             public double getFifteenMinuteRate() {
                 count();
@@ -82,6 +91,7 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
             @Override
             public Snapshot getSnapshot() {
                 return new Snapshot() {
+
                     @Override
                     public double getValue(double quantile) {
                         return quantile == 0.5 ? getMean() : 0;
@@ -120,8 +130,10 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
                     @Override
                     public void dump(OutputStream output) {
                     }
+
                 };
             }
+
         };
     }
 
@@ -156,4 +168,5 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
     public TimeUnit baseTimeUnit() {
         return registryBaseTimeUnit;
     }
+
 }

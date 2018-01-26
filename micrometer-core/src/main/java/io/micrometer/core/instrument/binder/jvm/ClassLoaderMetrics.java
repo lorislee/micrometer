@@ -32,6 +32,7 @@ import static java.util.Collections.emptyList;
 @NonNullApi
 @NonNullFields
 public class ClassLoaderMetrics implements MeterBinder {
+
     private final Iterable<Tag> tags;
 
     public ClassLoaderMetrics() {
@@ -56,4 +57,5 @@ public class ClassLoaderMetrics implements MeterBinder {
             .description("The total number of classes unloaded since the Java virtual machine has started execution")
             .register(registry);
     }
+
 }

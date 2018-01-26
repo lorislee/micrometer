@@ -26,7 +26,9 @@ import java.lang.ref.WeakReference;
 import java.util.function.ToDoubleFunction;
 
 public class DefaultGauge<T> extends AbstractMeter implements Gauge {
+
     private final WeakReference<T> ref;
+
     private final ToDoubleFunction<T> value;
 
     public DefaultGauge(Meter.Id id, @Nullable T obj, ToDoubleFunction<T> value) {
@@ -51,4 +53,5 @@ public class DefaultGauge<T> extends AbstractMeter implements Gauge {
     public int hashCode() {
         return MeterEquivalence.hashCode(this);
     }
+
 }
