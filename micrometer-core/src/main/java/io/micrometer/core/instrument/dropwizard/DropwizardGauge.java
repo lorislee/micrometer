@@ -35,7 +35,7 @@ public class DropwizardGauge extends AbstractMeter implements Gauge {
 
     @Override
     public double value() {
-        return impl.getValue();
+        return this.impl.getValue();
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

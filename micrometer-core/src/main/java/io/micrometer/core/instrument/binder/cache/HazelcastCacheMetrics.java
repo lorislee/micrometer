@@ -70,38 +70,38 @@ public class HazelcastCacheMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        Gauge.builder(name + ".requests", cache, cache -> cache.getLocalMapStats().getHits())
-            .tags(tags).tags("result", "hit")
+        Gauge.builder(this.name + ".requests", this.cache, cache -> cache.getLocalMapStats().getHits())
+            .tags(this.tags).tags("result", "hit")
             .description("The number of times cache lookup methods have returned a cached value")
             .register(registry);
 
-        Gauge.builder(name + ".requests", cache,
+        Gauge.builder(this.name + ".requests", this.cache,
             cache -> {
                 LocalMapStats stats = cache.getLocalMapStats();
                 return stats.getGetOperationCount() - stats.getHits();
             })
-            .tags(tags).tags("result", "miss")
+            .tags(this.tags).tags("result", "miss")
             .description("The number of times cache lookup methods have not returned a value")
             .register(registry);
 
-        Gauge.builder(name + ".entries", cache, cache -> cache.getLocalMapStats().getBackupEntryCount())
-            .tags(tags).tags("ownership", "backup")
+        Gauge.builder(this.name + ".entries", this.cache, cache -> cache.getLocalMapStats().getBackupEntryCount())
+            .tags(this.tags).tags("ownership", "backup")
             .description("The number of backup entries held by this member")
             .register(registry);
 
-        Gauge.builder(name + ".entries", cache, cache -> cache.getLocalMapStats().getOwnedEntryCount())
-            .tags(tags).tags("ownership", "owned")
+        Gauge.builder(this.name + ".entries", this.cache, cache -> cache.getLocalMapStats().getOwnedEntryCount())
+            .tags(this.tags).tags("ownership", "owned")
             .description("The number of owned entries held by this member")
             .register(registry);
 
-        Gauge.builder(name + ".entry.memory", cache, cache -> cache.getLocalMapStats().getBackupEntryMemoryCost())
-            .tags(tags).tags("ownership", "backup")
+        Gauge.builder(this.name + ".entry.memory", this.cache, cache -> cache.getLocalMapStats().getBackupEntryMemoryCost())
+            .tags(this.tags).tags("ownership", "backup")
             .description("Memory cost of backup entries held by this member")
             .baseUnit("bytes")
             .register(registry);
 
-        Gauge.builder(name + ".entry.memory", cache, cache -> cache.getLocalMapStats().getOwnedEntryMemoryCost())
-            .tags(tags).tags("ownership", "owned")
+        Gauge.builder(this.name + ".entry.memory", this.cache, cache -> cache.getLocalMapStats().getOwnedEntryMemoryCost())
+            .tags(this.tags).tags("ownership", "owned")
             .description("Memory cost of owned entries held by this member")
             .baseUnit("bytes")
             .register(registry);
@@ -111,54 +111,54 @@ public class HazelcastCacheMetrics implements MeterBinder {
     }
 
     private void nearCacheMetrics(MeterRegistry registry) {
-        if (cache.getLocalMapStats().getNearCacheStats() != null) {
-            Gauge.builder(name + ".near.requests", cache, cache -> cache.getLocalMapStats().getNearCacheStats().getHits())
-                .tags(tags).tags("result", "hit")
+        if (this.cache.getLocalMapStats().getNearCacheStats() != null) {
+            Gauge.builder(this.name + ".near.requests", this.cache, cache -> cache.getLocalMapStats().getNearCacheStats().getHits())
+                .tags(this.tags).tags("result", "hit")
                 .description("The number of hits (reads) of near cache entries owned by this member")
                 .register(registry);
 
-            Gauge.builder(name + ".near.requests", cache, cache -> cache.getLocalMapStats().getNearCacheStats().getMisses())
-                .tags(tags).tags("result", "miss")
+            Gauge.builder(this.name + ".near.requests", this.cache, cache -> cache.getLocalMapStats().getNearCacheStats().getMisses())
+                .tags(this.tags).tags("result", "miss")
                 .description("The number of hits (reads) of near cache entries owned by this member")
                 .register(registry);
 
-            Gauge.builder(name + ".near.evictions", cache, cache -> cache.getLocalMapStats().getNearCacheStats().getEvictions())
-                .tags(tags)
+            Gauge.builder(this.name + ".near.evictions", this.cache, cache -> cache.getLocalMapStats().getNearCacheStats().getEvictions())
+                .tags(this.tags)
                 .description("The number of evictions of near cache entries owned by this member")
                 .register(registry);
 
-            Gauge.builder(name + ".near.persistences", cache, cache -> cache.getLocalMapStats().getNearCacheStats().getPersistenceCount())
-                .tags(tags)
+            Gauge.builder(this.name + ".near.persistences", this.cache, cache -> cache.getLocalMapStats().getNearCacheStats().getPersistenceCount())
+                .tags(this.tags)
                 .description("The number of Near Cache key persistences (when the pre-load feature is enabled)")
                 .register(registry);
         }
     }
 
     private void timings(MeterRegistry registry) {
-        FunctionTimer.builder(name + ".gets",
-            cache,
+        FunctionTimer.builder(this.name + ".gets",
+            this.cache,
             cache -> cache.getLocalMapStats().getGetOperationCount(),
             cache -> cache.getLocalMapStats().getTotalGetLatency(), TimeUnit.NANOSECONDS
         )
-            .tags(tags)
+            .tags(this.tags)
             .description("Cache gets")
             .register(registry);
 
-        FunctionTimer.builder(name + ".puts",
-            cache,
+        FunctionTimer.builder(this.name + ".puts",
+            this.cache,
             cache -> cache.getLocalMapStats().getPutOperationCount(),
             cache -> cache.getLocalMapStats().getTotalPutLatency(), TimeUnit.NANOSECONDS
         )
-            .tags(tags)
+            .tags(this.tags)
             .description("Cache puts")
             .register(registry);
 
-        FunctionTimer.builder(name + ".removals",
-            cache,
+        FunctionTimer.builder(this.name + ".removals",
+            this.cache,
             cache -> cache.getLocalMapStats().getRemoveOperationCount(),
             cache -> cache.getLocalMapStats().getTotalRemoveLatency(), TimeUnit.NANOSECONDS
         )
-            .tags(tags)
+            .tags(this.tags)
             .description("Cache removals")
             .register(registry);
     }

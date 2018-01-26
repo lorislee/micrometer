@@ -71,33 +71,33 @@ public class EhCache2Metrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        Gauge.builder(name + ".size", stats, StatisticsGateway::getSize)
-            .tags(tags).tags("where", "local")
+        Gauge.builder(this.name + ".size", this.stats, StatisticsGateway::getSize)
+            .tags(this.tags).tags("where", "local")
             .description("The number of entries held locally in this cache")
             .register(registry);
 
-        Gauge.builder(name + ".size", stats, StatisticsGateway::getRemoteSize)
-            .tags(tags).tags("where", "remote")
+        Gauge.builder(this.name + ".size", this.stats, StatisticsGateway::getRemoteSize)
+            .tags(this.tags).tags("where", "remote")
             .description("The number of entries held remotely in this cache")
             .register(registry);
 
-        FunctionCounter.builder(name + ".evictions", stats, StatisticsGateway::cacheEvictedCount)
-            .tags(tags)
+        FunctionCounter.builder(this.name + ".evictions", this.stats, StatisticsGateway::cacheEvictedCount)
+            .tags(this.tags)
             .description("Cache evictions")
             .register(registry);
 
-        FunctionCounter.builder(name + ".removals", stats, StatisticsGateway::cacheRemoveCount)
-            .tags(tags)
+        FunctionCounter.builder(this.name + ".removals", this.stats, StatisticsGateway::cacheRemoveCount)
+            .tags(this.tags)
             .description("Cache removals")
             .register(registry);
 
-        FunctionCounter.builder(name + ".puts", stats, StatisticsGateway::cachePutAddedCount)
-            .tags(tags).tags("result", "added")
+        FunctionCounter.builder(this.name + ".puts", this.stats, StatisticsGateway::cachePutAddedCount)
+            .tags(this.tags).tags("result", "added")
             .description("Cache puts resulting in a new key/value pair")
             .register(registry);
 
-        FunctionCounter.builder(name + ".puts", stats, StatisticsGateway::cachePutAddedCount)
-            .tags(tags).tags("result", "updated")
+        FunctionCounter.builder(this.name + ".puts", this.stats, StatisticsGateway::cachePutAddedCount)
+            .tags(this.tags).tags("result", "updated")
             .description("Cache puts resulting in an updated value")
             .register(registry);
 
@@ -106,79 +106,79 @@ public class EhCache2Metrics implements MeterBinder {
         rollbackTransactionMetrics(registry);
         recoveryTransactionMetrics(registry);
 
-        Gauge.builder(name + ".local.offheap.size", stats, StatisticsGateway::getLocalOffHeapSize)
-            .tags(tags)
+        Gauge.builder(this.name + ".local.offheap.size", this.stats, StatisticsGateway::getLocalOffHeapSize)
+            .tags(this.tags)
             .description("Local off-heap size")
             .baseUnit("bytes")
             .register(registry);
 
-        Gauge.builder(name + ".local.heap.size", stats, StatisticsGateway::getLocalHeapSizeInBytes)
-            .tags(tags)
+        Gauge.builder(this.name + ".local.heap.size", this.stats, StatisticsGateway::getLocalHeapSizeInBytes)
+            .tags(this.tags)
             .description("Local heap size")
             .baseUnit("bytes")
             .register(registry);
 
-        Gauge.builder(name + ".local.disk.size", stats, StatisticsGateway::getLocalDiskSizeInBytes)
-            .tags(tags)
+        Gauge.builder(this.name + ".local.disk.size", this.stats, StatisticsGateway::getLocalDiskSizeInBytes)
+            .tags(this.tags)
             .description("Local disk size")
             .baseUnit("bytes")
             .register(registry);
     }
 
     private void requestMetrics(MeterRegistry registry) {
-        FunctionCounter.builder(name + ".requests", stats, StatisticsGateway::cacheMissExpiredCount)
-            .tags(tags).tags("result", "miss", "reason", "expired")
+        FunctionCounter.builder(this.name + ".requests", this.stats, StatisticsGateway::cacheMissExpiredCount)
+            .tags(this.tags).tags("result", "miss", "reason", "expired")
             .description("The number of times cache lookup methods have not returned a value, due to expiry")
             .register(registry);
 
-        FunctionCounter.builder(name + ".requests", stats, StatisticsGateway::cacheMissNotFoundCount)
-            .tags(tags).tags("result", "miss", "reason", "notFound")
+        FunctionCounter.builder(this.name + ".requests", this.stats, StatisticsGateway::cacheMissNotFoundCount)
+            .tags(this.tags).tags("result", "miss", "reason", "notFound")
             .description("The number of times cache lookup methods have not returned a value, because the key was not found")
             .register(registry);
 
-        FunctionCounter.builder(name + ".requests", stats, StatisticsGateway::cacheHitCount)
-            .tags(tags).tags("result", "hit")
+        FunctionCounter.builder(this.name + ".requests", this.stats, StatisticsGateway::cacheHitCount)
+            .tags(this.tags).tags("result", "hit")
             .description("The number of times cache lookup methods have returned a cached value.")
             .register(registry);
     }
 
     private void commitTransactionMetrics(MeterRegistry registry) {
-        FunctionCounter.builder(name + ".xa.commits", stats, StatisticsGateway::xaCommitReadOnlyCount)
-            .tags(tags).tags("result", "readOnly")
+        FunctionCounter.builder(this.name + ".xa.commits", this.stats, StatisticsGateway::xaCommitReadOnlyCount)
+            .tags(this.tags).tags("result", "readOnly")
             .description("Transaction commits that had a read-only result")
             .register(registry);
 
-        FunctionCounter.builder(name + ".xa.commits", stats, StatisticsGateway::xaCommitExceptionCount)
-            .tags(tags).tags("result", "exception")
+        FunctionCounter.builder(this.name + ".xa.commits", this.stats, StatisticsGateway::xaCommitExceptionCount)
+            .tags(this.tags).tags("result", "exception")
             .description("Transaction commits that failed")
             .register(registry);
 
-        FunctionCounter.builder(name + ".xa.commits", stats, StatisticsGateway::xaCommitCommittedCount)
-            .tags(tags).tags("result", "committed")
+        FunctionCounter.builder(this.name + ".xa.commits", this.stats, StatisticsGateway::xaCommitCommittedCount)
+            .tags(this.tags).tags("result", "committed")
             .description("Transaction commits that failed")
             .register(registry);
     }
 
     private void rollbackTransactionMetrics(MeterRegistry registry) {
-        FunctionCounter.builder(name + ".xa.rollbacks", stats, StatisticsGateway::xaRollbackExceptionCount)
-            .tags(tags).tags("result", "exception")
+        FunctionCounter.builder(this.name + ".xa.rollbacks", this.stats, StatisticsGateway::xaRollbackExceptionCount)
+            .tags(this.tags).tags("result", "exception")
             .description("Transaction rollbacks that failed")
             .register(registry);
 
-        FunctionCounter.builder(name + ".xa.rollbacks", stats, StatisticsGateway::xaRollbackSuccessCount)
-            .tags(tags).tags("result", "success")
+        FunctionCounter.builder(this.name + ".xa.rollbacks", this.stats, StatisticsGateway::xaRollbackSuccessCount)
+            .tags(this.tags).tags("result", "success")
             .description("Transaction rollbacks that failed")
             .register(registry);
     }
 
     private void recoveryTransactionMetrics(MeterRegistry registry) {
-        FunctionCounter.builder(name + ".xa.recoveries", stats, StatisticsGateway::xaRecoveryNothingCount)
-            .tags(tags).tags("result", "nothing")
+        FunctionCounter.builder(this.name + ".xa.recoveries", this.stats, StatisticsGateway::xaRecoveryNothingCount)
+            .tags(this.tags).tags("result", "nothing")
             .description("Recovery transactions that recovered nothing")
             .register(registry);
 
-        FunctionCounter.builder(name + ".xa.recoveries", stats, StatisticsGateway::xaRecoveryRecoveredCount)
-            .tags(tags).tags("result", "success")
+        FunctionCounter.builder(this.name + ".xa.recoveries", this.stats, StatisticsGateway::xaRecoveryRecoveredCount)
+            .tags(this.tags).tags("result", "success")
             .description("Successful recovery transaction")
             .register(registry);
     }

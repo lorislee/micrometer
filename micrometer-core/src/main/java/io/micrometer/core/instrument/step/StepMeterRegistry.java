@@ -53,16 +53,16 @@ public abstract class StepMeterRegistry extends MeterRegistry {
     }
 
     public void start(ThreadFactory threadFactory) {
-        if (publisher != null)
+        if (this.publisher != null)
             stop();
-        publisher = Executors.newSingleThreadScheduledExecutor(threadFactory)
-            .scheduleAtFixedRate(this::publish, config.step().toMillis(), config.step().toMillis(), TimeUnit.MILLISECONDS);
+        this.publisher = Executors.newSingleThreadScheduledExecutor(threadFactory)
+            .scheduleAtFixedRate(this::publish, this.config.step().toMillis(), this.config.step().toMillis(), TimeUnit.MILLISECONDS);
     }
 
     public void stop() {
-        if (publisher != null) {
-            publisher.cancel(false);
-            publisher = null;
+        if (this.publisher != null) {
+            this.publisher.cancel(false);
+            this.publisher = null;
         }
     }
 
@@ -75,32 +75,32 @@ public abstract class StepMeterRegistry extends MeterRegistry {
 
     @Override
     protected Counter newCounter(Meter.Id id) {
-        return new StepCounter(id, clock, config.step().toMillis());
+        return new StepCounter(id, this.clock, this.config.step().toMillis());
     }
 
     @Override
     protected LongTaskTimer newLongTaskTimer(Meter.Id id) {
-        return new DefaultLongTaskTimer(id, clock);
+        return new DefaultLongTaskTimer(id, this.clock);
     }
 
     @Override
     protected Timer newTimer(Meter.Id id, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
-        return new StepTimer(id, clock, histogramConfig, pauseDetector, getBaseTimeUnit());
+        return new StepTimer(id, this.clock, histogramConfig, pauseDetector, getBaseTimeUnit());
     }
 
     @Override
     protected DistributionSummary newDistributionSummary(Meter.Id id, HistogramConfig histogramConfig) {
-        return new StepDistributionSummary(id, clock, histogramConfig);
+        return new StepDistributionSummary(id, this.clock, histogramConfig);
     }
 
     @Override
     protected <T> FunctionTimer newFunctionTimer(Meter.Id id, T obj, ToLongFunction<T> countFunction, ToDoubleFunction<T> totalTimeFunction, TimeUnit totalTimeFunctionUnits) {
-        return new StepFunctionTimer<>(id, clock, config.step().toMillis(), obj, countFunction, totalTimeFunction, totalTimeFunctionUnits, getBaseTimeUnit());
+        return new StepFunctionTimer<>(id, this.clock, this.config.step().toMillis(), obj, countFunction, totalTimeFunction, totalTimeFunctionUnits, getBaseTimeUnit());
     }
 
     @Override
     protected <T> FunctionCounter newFunctionCounter(Meter.Id id, T obj, ToDoubleFunction<T> f) {
-        return new StepFunctionCounter<>(id, clock, config.step().toMillis(), obj, f);
+        return new StepFunctionCounter<>(id, this.clock, this.config.step().toMillis(), obj, f);
     }
 
     @Override
@@ -111,7 +111,7 @@ public abstract class StepMeterRegistry extends MeterRegistry {
     @Override
     protected HistogramConfig defaultHistogramConfig() {
         return HistogramConfig.builder()
-            .histogramExpiry(config.step())
+            .histogramExpiry(this.config.step())
             .build()
             .merge(HistogramConfig.DEFAULT);
     }

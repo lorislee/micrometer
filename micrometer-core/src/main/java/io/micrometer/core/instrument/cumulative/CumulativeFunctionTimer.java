@@ -61,26 +61,28 @@ public class CumulativeFunctionTimer<T> implements FunctionTimer {
     /**
      * The total number of occurrences of the timed event.
      */
-    public double count() {
-        T obj2 = ref.get();
-        return obj2 != null ? (lastCount = countFunction.applyAsLong(obj2)) : lastCount;
+    @Override
+	public double count() {
+        T obj2 = this.ref.get();
+        return obj2 != null ? (this.lastCount = this.countFunction.applyAsLong(obj2)) : this.lastCount;
     }
 
     /**
      * The total time of all occurrences of the timed event.
      */
-    public double totalTime(TimeUnit unit) {
-        T obj2 = ref.get();
+    @Override
+	public double totalTime(TimeUnit unit) {
+        T obj2 = this.ref.get();
         if (obj2 == null)
-            return lastTime;
-        return (lastTime = TimeUtils.convert(totalTimeFunction.applyAsDouble(obj2),
-            totalTimeFunctionUnits,
+            return this.lastTime;
+        return (this.lastTime = TimeUtils.convert(this.totalTimeFunction.applyAsDouble(obj2),
+            this.totalTimeFunctionUnits,
             unit));
     }
 
     @Override
     public Id getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -88,7 +90,8 @@ public class CumulativeFunctionTimer<T> implements FunctionTimer {
         return this.baseTimeUnit;
     }
 
-    public Type type() {
+    @Override
+	public Type type() {
         return Type.Timer;
     }
 

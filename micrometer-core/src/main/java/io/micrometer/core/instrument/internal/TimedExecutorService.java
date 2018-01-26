@@ -44,71 +44,71 @@ public class TimedExecutorService implements ExecutorService {
 
     @Override
     public void shutdown() {
-        delegate.shutdown();
+        this.delegate.shutdown();
     }
 
     @Override
     public List<Runnable> shutdownNow() {
-        return delegate.shutdownNow();
+        return this.delegate.shutdownNow();
     }
 
     @Override
     public boolean isShutdown() {
-        return delegate.isShutdown();
+        return this.delegate.isShutdown();
     }
 
     @Override
     public boolean isTerminated() {
-        return delegate.isTerminated();
+        return this.delegate.isTerminated();
     }
 
     @Override
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-        return delegate.awaitTermination(timeout, unit);
+        return this.delegate.awaitTermination(timeout, unit);
     }
 
     @Override
     public <T> Future<T> submit(Callable<T> task) {
-        return delegate.submit(timer.wrap(task));
+        return this.delegate.submit(this.timer.wrap(task));
     }
 
     @Override
     public <T> Future<T> submit(Runnable task, T result) {
-        return delegate.submit(() -> timer.record(task), result);
+        return this.delegate.submit(() -> this.timer.record(task), result);
     }
 
     @Override
     public Future<?> submit(Runnable task) {
-        return delegate.submit(() -> timer.record(task));
+        return this.delegate.submit(() -> this.timer.record(task));
     }
 
     @Override
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
-        return delegate.invokeAll(wrapAll(tasks));
+        return this.delegate.invokeAll(wrapAll(tasks));
     }
 
     @Override
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
-        return delegate.invokeAll(wrapAll(tasks), timeout, unit);
+        return this.delegate.invokeAll(wrapAll(tasks), timeout, unit);
     }
 
     @Override
     public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
-        return delegate.invokeAny(wrapAll(tasks));
+        return this.delegate.invokeAny(wrapAll(tasks));
     }
 
     @Override
     public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return delegate.invokeAny(wrapAll(tasks), timeout, unit);
+        return this.delegate.invokeAny(wrapAll(tasks), timeout, unit);
     }
 
     @Override
     public void execute(Runnable command) {
-        delegate.execute(timer.wrap(command));
+        this.delegate.execute(this.timer.wrap(command));
     }
 
     private <T> Collection<? extends Callable<T>> wrapAll(Collection<? extends Callable<T>> tasks) {
-        return tasks.stream().map(timer::wrap).collect(toList());
+        return tasks.stream().map(this.timer::wrap).collect(toList());
     }
 
 }

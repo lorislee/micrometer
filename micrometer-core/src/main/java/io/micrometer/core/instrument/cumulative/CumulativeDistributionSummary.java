@@ -51,24 +51,24 @@ public class CumulativeDistributionSummary extends AbstractDistributionSummary {
 
     @Override
     protected void recordNonNegative(double amount) {
-        count.incrementAndGet();
-        total.add(amount);
-        max.record(amount);
+        this.count.incrementAndGet();
+        this.total.add(amount);
+        this.max.record(amount);
     }
 
     @Override
     public long count() {
-        return count.get();
+        return this.count.get();
     }
 
     @Override
     public double totalAmount() {
-        return total.sum();
+        return this.total.sum();
     }
 
     @Override
     public double max() {
-        return max.poll();
+        return this.max.poll();
     }
 
     @Override

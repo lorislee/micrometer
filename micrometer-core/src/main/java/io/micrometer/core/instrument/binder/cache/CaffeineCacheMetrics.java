@@ -121,46 +121,46 @@ public class CaffeineCacheMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        Gauge.builder(name + ".estimated.size", cache, Cache::estimatedSize)
-            .tags(tags)
+        Gauge.builder(this.name + ".estimated.size", this.cache, Cache::estimatedSize)
+            .tags(this.tags)
             .description("The approximate number of entries in this cache")
             .register(registry);
 
-        FunctionCounter.builder(name + ".requests", cache, c -> c.stats().missCount())
-            .tags(tags).tags("result", "miss")
+        FunctionCounter.builder(this.name + ".requests", this.cache, c -> c.stats().missCount())
+            .tags(this.tags).tags("result", "miss")
             .description("the number of times cache lookup methods have returned an uncached (newly loaded) value, or null")
             .register(registry);
 
-        FunctionCounter.builder(name + ".requests", cache, c -> c.stats().hitCount())
-            .tags(tags).tags("result", "hit")
+        FunctionCounter.builder(this.name + ".requests", this.cache, c -> c.stats().hitCount())
+            .tags(this.tags).tags("result", "hit")
             .description("The number of times cache lookup methods have returned a cached value.")
             .register(registry);
 
-        FunctionCounter.builder(name + ".evictions", cache, c -> c.stats().evictionCount())
-            .tags(tags)
+        FunctionCounter.builder(this.name + ".evictions", this.cache, c -> c.stats().evictionCount())
+            .tags(this.tags)
             .description("cache evictions")
             .register(registry);
 
-        Gauge.builder(name + ".eviction.weight", cache, c -> c.stats().evictionWeight())
-            .tags(tags)
+        Gauge.builder(this.name + ".eviction.weight", this.cache, c -> c.stats().evictionWeight())
+            .tags(this.tags)
             .description("The sum of weights of evicted entries. This total does not include manual invalidations.")
             .register(registry);
 
-        if (cache instanceof LoadingCache) {
+        if (this.cache instanceof LoadingCache) {
             // dividing these gives you a measure of load latency
-            TimeGauge.builder(name + ".load.duration", cache, TimeUnit.NANOSECONDS, c -> c.stats().totalLoadTime())
-                .tags(tags)
+            TimeGauge.builder(this.name + ".load.duration", this.cache, TimeUnit.NANOSECONDS, c -> c.stats().totalLoadTime())
+                .tags(this.tags)
                 .description("The time the cache has spent loading new values")
                 .register(registry);
 
-            FunctionCounter.builder(name + ".load", cache, c -> c.stats().loadSuccessCount())
-                .tags(tags)
+            FunctionCounter.builder(this.name + ".load", this.cache, c -> c.stats().loadSuccessCount())
+                .tags(this.tags)
                 .tags("result", "success")
                 .description("The number of times cache lookup methods have successfully loaded a new value")
                 .register(registry);
 
-            FunctionCounter.builder(name + ".load", cache, c -> c.stats().loadFailureCount())
-                .tags(tags).tags("result", "failure")
+            FunctionCounter.builder(this.name + ".load", this.cache, c -> c.stats().loadFailureCount())
+                .tags(this.tags).tags("result", "failure")
                 .description("The number of times {@link Cache} lookup methods failed to load a new value, either " +
                     "because no value was found or an exception was thrown while loading")
                 .register(registry);

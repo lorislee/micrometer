@@ -56,33 +56,33 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
 
     @Override
     public <T> T record(Supplier<T> f) {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             return f.get();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
 
     @Override
     public <T> T recordCallable(Callable<T> f) throws Exception {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             return f.call();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
 
     @Override
     public void record(Runnable f) {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             f.run();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
@@ -130,7 +130,7 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
     @SuppressWarnings("ConstantConditions")
     @Override
     Timer registerNewMeter(MeterRegistry registry) {
-        final long[] slaNanos = histogramConfig.getSlaBoundaries();
+        final long[] slaNanos = this.histogramConfig.getSlaBoundaries();
         Duration[] sla = null;
         if (slaNanos != null) {
             sla = new Duration[slaNanos.length];
@@ -141,14 +141,14 @@ class CompositeTimer extends AbstractCompositeMeter<Timer> implements Timer {
         return Timer.builder(getId().getName())
             .tags(getId().getTags())
             .description(getId().getDescription())
-            .maximumExpectedValue(Duration.ofNanos(histogramConfig.getMaximumExpectedValue()))
-            .minimumExpectedValue(Duration.ofNanos(histogramConfig.getMinimumExpectedValue()))
-            .publishPercentiles(histogramConfig.getPercentiles())
-            .publishPercentileHistogram(histogramConfig.isPercentileHistogram())
-            .histogramBufferLength(histogramConfig.getHistogramBufferLength())
-            .histogramExpiry(histogramConfig.getHistogramExpiry())
+            .maximumExpectedValue(Duration.ofNanos(this.histogramConfig.getMaximumExpectedValue()))
+            .minimumExpectedValue(Duration.ofNanos(this.histogramConfig.getMinimumExpectedValue()))
+            .publishPercentiles(this.histogramConfig.getPercentiles())
+            .publishPercentileHistogram(this.histogramConfig.isPercentileHistogram())
+            .histogramBufferLength(this.histogramConfig.getHistogramBufferLength())
+            .histogramExpiry(this.histogramConfig.getHistogramExpiry())
             .sla(sla)
-            .pauseDetector(pauseDetector)
+            .pauseDetector(this.pauseDetector)
             .register(registry);
     }
 

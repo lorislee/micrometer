@@ -96,12 +96,12 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
         this.metrics = metrics;
         this.circuitBreaker = circuitBreaker;
         this.commandKey = commandKey;
-        tags = Tags.zip("group", commandGroupKey.name(), "key", commandKey.name());
+        this.tags = Tags.zip("group", commandGroupKey.name(), "key", commandKey.name());
         //Initialize commands at zero
-        Counter.builder(NAME_HYSTRIX_ERRORS).tags(tags).register(meterRegistry);
-        Counter.builder(NAME_HYSTRIX_REQUESTS).tags(tags).register(meterRegistry);
-        Timer.builder(NAME_HYSTRIX_LATENCY_EXECUTION).tags(tags).register(meterRegistry);
-        Timer.builder(NAME_HYSTRIX_LATENCY_TOTAL).tags(tags).register(meterRegistry);
+        Counter.builder(NAME_HYSTRIX_ERRORS).tags(this.tags).register(meterRegistry);
+        Counter.builder(NAME_HYSTRIX_REQUESTS).tags(this.tags).register(meterRegistry);
+        Timer.builder(NAME_HYSTRIX_LATENCY_EXECUTION).tags(this.tags).register(meterRegistry);
+        Timer.builder(NAME_HYSTRIX_LATENCY_TOTAL).tags(this.tags).register(meterRegistry);
         executionEvents.forEach(this::getExecutionCounter);
         fallbackEvents.forEach(this::getFallbackCounter);
         Arrays.stream(HystrixEventType.values()).filter(e -> !executionEvents.contains(e) && !fallbackEvents.contains(e))
@@ -110,9 +110,9 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
 
     @Override
     public void initialize() {
-        Gauge.builder(NAME_HYSTRIX_CIRCUIT_BREAKER_OPEN, circuitBreaker, c -> c.isOpen() ? 1 : 0)
-            .tags(tags).register(meterRegistry);
-        HystrixCommandCompletionStream.getInstance(commandKey)
+        Gauge.builder(NAME_HYSTRIX_CIRCUIT_BREAKER_OPEN, this.circuitBreaker, c -> c.isOpen() ? 1 : 0)
+            .tags(this.tags).register(this.meterRegistry);
+        HystrixCommandCompletionStream.getInstance(this.commandKey)
             .observe()
             .subscribe(hystrixCommandCompletion -> {
                     /*
@@ -127,8 +127,8 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
                 long totalLatency = hystrixCommandCompletion.getTotalLatency();
                 if (totalLatency >= 0) {
                     Timer.builder(NAME_HYSTRIX_LATENCY_TOTAL)
-                        .tags(tags)
-                        .register(meterRegistry)
+                        .tags(this.tags)
+                        .register(this.meterRegistry)
                         .record(totalLatency, TimeUnit.MILLISECONDS);
                 } else if (totalLatency < -1) {
                     LOG.warn("received negative totalLatency, event not counted. " +
@@ -138,8 +138,8 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
                 long executionLatency = hystrixCommandCompletion.getExecutionLatency();
                 if (executionLatency >= 0) {
                     Timer.builder(NAME_HYSTRIX_LATENCY_EXECUTION)
-                        .tags(tags)
-                        .register(meterRegistry)
+                        .tags(this.tags)
+                        .register(this.meterRegistry)
                         .record(executionLatency, TimeUnit.MILLISECONDS);
                 } else if (executionLatency < -1) {
                     LOG.warn("received negative executionLatency, event not counted. " +
@@ -156,13 +156,13 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
                             case THREAD_POOL_REJECTED:
                             case SEMAPHORE_REJECTED:
                                 Counter.builder(NAME_HYSTRIX_ERRORS)
-                                    .tags(tags)
-                                    .register(meterRegistry)
+                                    .tags(this.tags)
+                                    .register(this.meterRegistry)
                                     .increment(count);
                             case SUCCESS:
                                 Counter.builder(NAME_HYSTRIX_REQUESTS)
-                                    .tags(tags)
-                                    .register(meterRegistry)
+                                    .tags(this.tags)
+                                    .register(this.meterRegistry)
                                     .increment(count);
 
                                 break;
@@ -179,35 +179,35 @@ public class MicrometerMetricsPublisherCommand implements HystrixMetricsPublishe
                 }
             });
 
-        String threadPool = metrics.getThreadPoolKey().name();
-        Gauge.builder(NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_CURRENT, metrics, HystrixCommandMetrics::getCurrentConcurrentExecutionCount)
-            .tags(Tags.concat(tags, "threadpool", threadPool))
-            .register(meterRegistry);
-        Gauge.builder(NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_ROLLING_MAX, metrics, HystrixCommandMetrics::getRollingMaxConcurrentExecutions)
-            .tags(Tags.concat(tags, "threadpool", threadPool))
-            .register(meterRegistry);
+        String threadPool = this.metrics.getThreadPoolKey().name();
+        Gauge.builder(NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_CURRENT, this.metrics, HystrixCommandMetrics::getCurrentConcurrentExecutionCount)
+            .tags(Tags.concat(this.tags, "threadpool", threadPool))
+            .register(this.meterRegistry);
+        Gauge.builder(NAME_HYSTRIX_THREADPOOL_CONCURRENT_EXECUTION_ROLLING_MAX, this.metrics, HystrixCommandMetrics::getRollingMaxConcurrentExecutions)
+            .tags(Tags.concat(this.tags, "threadpool", threadPool))
+            .register(this.meterRegistry);
 
     }
 
     private Counter getOtherExecutionCounter(HystrixEventType hystrixEventType) {
         return Counter.builder(NAME_HYSTRIX_COMMAND_OTHER)
             .description(DESCRIPTION_HYSTRIX_COMMAND_OTHER)
-            .tags(Tags.concat(tags, "event", hystrixEventType.name().toLowerCase()))
-            .register(meterRegistry);
+            .tags(Tags.concat(this.tags, "event", hystrixEventType.name().toLowerCase()))
+            .register(this.meterRegistry);
     }
 
     private Counter getFallbackCounter(HystrixEventType hystrixEventType) {
         return Counter.builder(NAME_HYSTRIX_FALLBACK)
             .description(DESCRIPTION_HYSTRIX_FALLBACK)
-            .tags(Tags.concat(tags, "event", hystrixEventType.name().toLowerCase()))
-            .register(meterRegistry);
+            .tags(Tags.concat(this.tags, "event", hystrixEventType.name().toLowerCase()))
+            .register(this.meterRegistry);
     }
 
     private Counter getExecutionCounter(HystrixEventType hystrixEventType) {
         return Counter.builder(NAME_HYSTRIX_EXECUTION)
             .description(DESCRIPTION_HYSTRIX_EXECUTION)
-            .tags(Tags.concat(tags, "event", hystrixEventType.name().toLowerCase()))
-            .register(meterRegistry);
+            .tags(Tags.concat(this.tags, "event", hystrixEventType.name().toLowerCase()))
+            .register(this.meterRegistry);
     }
 
 }

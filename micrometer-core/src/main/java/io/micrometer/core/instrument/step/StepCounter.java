@@ -39,12 +39,12 @@ public class StepCounter extends AbstractMeter implements Counter {
 
     @Override
     public void increment(double amount) {
-        value.getCurrent().add(amount);
+        this.value.getCurrent().add(amount);
     }
 
     @Override
     public double count() {
-        return value.poll();
+        return this.value.poll();
     }
 
 }

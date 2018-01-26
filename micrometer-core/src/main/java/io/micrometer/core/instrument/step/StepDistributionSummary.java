@@ -43,24 +43,24 @@ public class StepDistributionSummary extends AbstractDistributionSummary {
 
     @Override
     protected void recordNonNegative(double amount) {
-        count.getCurrent().add(1);
-        total.getCurrent().add(amount);
-        max.record(amount);
+        this.count.getCurrent().add(1);
+        this.total.getCurrent().add(amount);
+        this.max.record(amount);
     }
 
     @Override
     public long count() {
-        return (long) count.poll();
+        return (long) this.count.poll();
     }
 
     @Override
     public double totalAmount() {
-        return total.poll();
+        return this.total.poll();
     }
 
     @Override
     public double max() {
-        return max.poll();
+        return this.max.poll();
     }
 
     @Override

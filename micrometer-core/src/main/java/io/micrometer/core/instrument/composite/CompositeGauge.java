@@ -33,7 +33,7 @@ class CompositeGauge<T> extends AbstractCompositeMeter<Gauge> implements Gauge {
 
     CompositeGauge(Meter.Id id, @Nullable T obj, ToDoubleFunction<T> f) {
         super(id);
-        ref = new WeakReference<>(obj);
+        this.ref = new WeakReference<>(obj);
         this.f = f;
     }
 
@@ -49,11 +49,11 @@ class CompositeGauge<T> extends AbstractCompositeMeter<Gauge> implements Gauge {
 
     @Override
     Gauge registerNewMeter(MeterRegistry registry) {
-        final T obj = ref.get();
+        final T obj = this.ref.get();
         if (obj == null) {
             return null;
         }
-        return Gauge.builder(getId().getName(), obj, f)
+        return Gauge.builder(getId().getName(), obj, this.f)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .baseUnit(getId().getBaseUnit())

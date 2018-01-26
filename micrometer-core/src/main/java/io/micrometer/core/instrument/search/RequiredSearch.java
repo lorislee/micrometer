@@ -100,17 +100,17 @@ public class RequiredSearch {
         if (meter.isPresent()) {
             return meter.get();
         }
-        throw new MeterNotFoundException(name, tags, clazz);
+        throw new MeterNotFoundException(this.name, this.tags, clazz);
     }
 
     public Collection<Meter> meters() {
         Stream<Meter> meterStream =
-            registry.getMeters().stream().filter(m -> m.getId().getName().equals(name));
-        if (!tags.isEmpty()) {
+            this.registry.getMeters().stream().filter(m -> m.getId().getName().equals(this.name));
+        if (!this.tags.isEmpty()) {
             meterStream = meterStream.filter(m -> {
                 final List<Tag> idTags = new ArrayList<>();
                 m.getId().getTags().forEach(idTags::add);
-                return idTags.containsAll(tags);
+                return idTags.containsAll(this.tags);
             });
         }
         return meterStream.collect(Collectors.toList());

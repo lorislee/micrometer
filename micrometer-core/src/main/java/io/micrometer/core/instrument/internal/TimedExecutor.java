@@ -38,7 +38,7 @@ public class TimedExecutor implements Executor {
 
     @Override
     public void execute(Runnable command) {
-        delegate.execute(timer.wrap(command));
+        this.delegate.execute(this.timer.wrap(command));
     }
 
 }

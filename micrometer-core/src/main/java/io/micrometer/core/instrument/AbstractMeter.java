@@ -26,7 +26,7 @@ public abstract class AbstractMeter implements Meter {
 
     @Override
     public Id getId() {
-        return id;
+        return this.id;
     }
 
 }

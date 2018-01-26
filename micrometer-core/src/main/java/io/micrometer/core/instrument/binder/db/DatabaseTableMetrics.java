@@ -100,9 +100,9 @@ public class DatabaseTableMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        registry.gauge(name, Tags.concat(tags, "table", tableName), dataSource, ds -> {
+        registry.gauge(this.name, Tags.concat(this.tags, "table", this.tableName), this.dataSource, ds -> {
             try (Connection conn = ds.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(query);
+                 PreparedStatement ps = conn.prepareStatement(this.query);
                  ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 return rs.getInt(1);

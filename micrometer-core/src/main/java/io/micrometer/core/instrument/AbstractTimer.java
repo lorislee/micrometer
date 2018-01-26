@@ -46,33 +46,33 @@ public abstract class AbstractTimer extends AbstractMeter implements Timer {
 
     @Override
     public <T> T recordCallable(Callable<T> f) throws Exception {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             return f.call();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
 
     @Override
     public <T> T record(Supplier<T> f) {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             return f.get();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
 
     @Override
     public void record(Runnable f) {
-        final long s = clock.monotonicTime();
+        final long s = this.clock.monotonicTime();
         try {
             f.run();
         } finally {
-            final long e = clock.monotonicTime();
+            final long e = this.clock.monotonicTime();
             record(e - s, TimeUnit.NANOSECONDS);
         }
     }
@@ -80,7 +80,7 @@ public abstract class AbstractTimer extends AbstractMeter implements Timer {
     @Override
     public final void record(long amount, TimeUnit unit) {
         if (amount >= 0) {
-            histogram.recordLong(TimeUnit.NANOSECONDS.convert(amount, unit));
+            this.histogram.recordLong(TimeUnit.NANOSECONDS.convert(amount, unit));
             recordNonNegative(amount, unit);
         }
     }
@@ -89,23 +89,23 @@ public abstract class AbstractTimer extends AbstractMeter implements Timer {
 
     @Override
     public double percentile(double percentile, TimeUnit unit) {
-        return histogram.percentile(percentile, unit);
+        return this.histogram.percentile(percentile, unit);
     }
 
     @Override
     public double histogramCountAtValue(long valueNanos) {
-        return histogram.histogramCountAtValue(valueNanos);
+        return this.histogram.histogramCountAtValue(valueNanos);
     }
 
     @Override
     public HistogramSnapshot takeSnapshot(boolean supportsAggregablePercentiles) {
-        return histogram.takeSnapshot(count(), totalTime(TimeUnit.NANOSECONDS), max(TimeUnit.NANOSECONDS),
+        return this.histogram.takeSnapshot(count(), totalTime(TimeUnit.NANOSECONDS), max(TimeUnit.NANOSECONDS),
             supportsAggregablePercentiles);
     }
 
     @Override
     public TimeUnit baseTimeUnit() {
-        return baseTimeUnit;
+        return this.baseTimeUnit;
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
@@ -120,7 +120,7 @@ public abstract class AbstractTimer extends AbstractMeter implements Timer {
     }
 
     public HistogramConfig statsConfig() {
-        return histogramConfig;
+        return this.histogramConfig;
     }
 
 }

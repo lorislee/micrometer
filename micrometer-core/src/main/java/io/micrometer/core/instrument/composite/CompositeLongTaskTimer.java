@@ -40,14 +40,14 @@ class CompositeLongTaskTimer extends AbstractCompositeMeter<LongTaskTimer> imple
 
     @Override
     public Sample start() {
-        long task = nextTask.getAndIncrement();
-        timings.put(task, childStream().map(LongTaskTimer::start).collect(Collectors.toList()));
+        long task = this.nextTask.getAndIncrement();
+        this.timings.put(task, childStream().map(LongTaskTimer::start).collect(Collectors.toList()));
         return new Sample(this, task);
     }
 
     @Override
     public long stop(long task) {
-        Collection<Sample> childMappings = timings.remove(task);
+        Collection<Sample> childMappings = this.timings.remove(task);
         long last = 0;
         if (childMappings != null) {
             for (Sample sample : childMappings) {
@@ -59,7 +59,7 @@ class CompositeLongTaskTimer extends AbstractCompositeMeter<LongTaskTimer> imple
 
     @Override
     public double duration(long task, TimeUnit unit) {
-        Collection<Sample> childSamples = timings.get(task);
+        Collection<Sample> childSamples = this.timings.get(task);
         if (childSamples != null) {
             return childSamples.stream().findFirst().map(c -> c.duration(unit)).orElse(-1.0);
         }

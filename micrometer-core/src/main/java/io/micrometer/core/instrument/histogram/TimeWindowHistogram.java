@@ -32,7 +32,7 @@ public class TimeWindowHistogram extends TimeWindowHistogramBase<DoubleRecorder,
 
     public TimeWindowHistogram(Clock clock, HistogramConfig histogramConfig) {
         super(clock, histogramConfig, DoubleRecorder.class);
-        intervalHistogram = new DoubleHistogram(NUM_SIGNIFICANT_VALUE_DIGITS);
+        this.intervalHistogram = new DoubleHistogram(NUM_SIGNIFICANT_VALUE_DIGITS);
         initRingBuffer();
     }
 
@@ -63,8 +63,8 @@ public class TimeWindowHistogram extends TimeWindowHistogramBase<DoubleRecorder,
 
     @Override
     void accumulate(DoubleRecorder sourceBucket, DoubleHistogram accumulatedHistogram) {
-        sourceBucket.getIntervalHistogramInto(intervalHistogram);
-        accumulatedHistogram.add(intervalHistogram);
+        sourceBucket.getIntervalHistogramInto(this.intervalHistogram);
+        accumulatedHistogram.add(this.intervalHistogram);
     }
 
     @Override

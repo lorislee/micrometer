@@ -38,7 +38,7 @@ public class MeterPartition extends AbstractList<List<Meter>> {
     public MeterPartition(MeterRegistry registry, int partitionSize) {
         this.list = registry.getMeters();
         this.partitionSize = partitionSize;
-        this.partitionCount = MathUtils.divideWithCeilingRoundingMode(list.size(), partitionSize);
+        this.partitionCount = MathUtils.divideWithCeilingRoundingMode(this.list.size(), partitionSize);
     }
 
     public static List<List<Meter>> partition(MeterRegistry registry, int partitionSize) {
@@ -47,9 +47,9 @@ public class MeterPartition extends AbstractList<List<Meter>> {
 
     @Override
     public List<Meter> get(int index) {
-        int start = index * partitionSize;
-        int end = Math.min(start + partitionSize, list.size());
-        return list.subList(start, end);
+        int start = index * this.partitionSize;
+        int end = Math.min(start + this.partitionSize, this.list.size());
+        return this.list.subList(start, end);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MeterPartition extends AbstractList<List<Meter>> {
 
     @Override
     public boolean isEmpty() {
-        return list.isEmpty();
+        return this.list.isEmpty();
     }
 
 }

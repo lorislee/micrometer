@@ -68,19 +68,19 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
             @Override
             public double getFifteenMinuteRate() {
                 count();
-                return rate.getFifteenMinuteRate();
+                return DropwizardFunctionTimer.this.rate.getFifteenMinuteRate();
             }
 
             @Override
             public double getFiveMinuteRate() {
                 count();
-                return rate.getFiveMinuteRate();
+                return DropwizardFunctionTimer.this.rate.getFiveMinuteRate();
             }
 
             @Override
             public double getOneMinuteRate() {
                 count();
-                return rate.getOneMinuteRate();
+                return DropwizardFunctionTimer.this.rate.getOneMinuteRate();
             }
 
             @Override
@@ -138,35 +138,35 @@ public class DropwizardFunctionTimer<T> extends AbstractMeter implements Functio
     }
 
     public Timer getDropwizardMeter() {
-        return dropwizardMeter;
+        return this.dropwizardMeter;
     }
 
     @Override
     public double count() {
-        T obj = ref.get();
+        T obj = this.ref.get();
         if (obj == null)
-            return lastCount.get();
-        return lastCount.updateAndGet(prev -> {
-            long newCount = countFunction.applyAsLong(obj);
+            return this.lastCount.get();
+        return this.lastCount.updateAndGet(prev -> {
+            long newCount = this.countFunction.applyAsLong(obj);
             long diff = newCount - prev;
-            rate.increment(diff);
+            this.rate.increment(diff);
             return newCount;
         });
     }
 
     @Override
     public double totalTime(TimeUnit unit) {
-        T obj2 = ref.get();
+        T obj2 = this.ref.get();
         if (obj2 == null)
-            return lastTime;
-        return (lastTime = TimeUtils.convert(totalTimeFunction.applyAsDouble(obj2),
-            totalTimeFunctionUnits,
+            return this.lastTime;
+        return (this.lastTime = TimeUtils.convert(this.totalTimeFunction.applyAsDouble(obj2),
+            this.totalTimeFunctionUnits,
             unit));
     }
 
     @Override
     public TimeUnit baseTimeUnit() {
-        return registryBaseTimeUnit;
+        return this.registryBaseTimeUnit;
     }
 
 }

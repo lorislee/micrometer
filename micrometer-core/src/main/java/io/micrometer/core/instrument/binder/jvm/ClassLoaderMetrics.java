@@ -48,12 +48,12 @@ public class ClassLoaderMetrics implements MeterBinder {
         ClassLoadingMXBean classLoadingBean = ManagementFactory.getClassLoadingMXBean();
 
         Gauge.builder("jvm.classes.loaded", classLoadingBean, ClassLoadingMXBean::getLoadedClassCount)
-            .tags(tags)
+            .tags(this.tags)
             .description("The number of classes that are currently loaded in the Java virtual machine")
             .register(registry);
 
         FunctionCounter.builder("jvm.classes.unloaded", classLoadingBean, ClassLoadingMXBean::getUnloadedClassCount)
-            .tags(tags)
+            .tags(this.tags)
             .description("The total number of classes unloaded since the Java virtual machine has started execution")
             .register(registry);
     }

@@ -67,32 +67,34 @@ public class StepFunctionTimer<T> implements FunctionTimer {
     /**
      * The total number of occurrences of the timed event.
      */
-    public double count() {
-        T obj2 = ref.get();
+    @Override
+	public double count() {
+        T obj2 = this.ref.get();
         if (obj2 != null) {
-            long prevLast = lastCount;
-            lastCount = countFunction.applyAsLong(obj2);
-            count.getCurrent().add(lastCount - prevLast);
+            long prevLast = this.lastCount;
+            this.lastCount = this.countFunction.applyAsLong(obj2);
+            this.count.getCurrent().add(this.lastCount - prevLast);
         }
-        return count.poll();
+        return this.count.poll();
     }
 
     /**
      * The total time of all occurrences of the timed event.
      */
-    public double totalTime(TimeUnit unit) {
-        T obj2 = ref.get();
+    @Override
+	public double totalTime(TimeUnit unit) {
+        T obj2 = this.ref.get();
         if (obj2 != null) {
-            double prevLast = lastTime;
-            lastTime = TimeUtils.convert(totalTimeFunction.applyAsDouble(obj2), totalTimeFunctionUnits, unit);
-            total.getCurrent().add(lastTime - prevLast);
+            double prevLast = this.lastTime;
+            this.lastTime = TimeUtils.convert(this.totalTimeFunction.applyAsDouble(obj2), this.totalTimeFunctionUnits, unit);
+            this.total.getCurrent().add(this.lastTime - prevLast);
         }
-        return total.poll();
+        return this.total.poll();
     }
 
     @Override
     public Id getId() {
-        return id;
+        return this.id;
     }
 
     @Override
@@ -100,7 +102,8 @@ public class StepFunctionTimer<T> implements FunctionTimer {
         return this.baseTimeUnit;
     }
 
-    public Type type() {
+    @Override
+	public Type type() {
         return Type.Timer;
     }
 

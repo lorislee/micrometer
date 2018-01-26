@@ -43,17 +43,17 @@ public class DefaultLongTaskTimer extends AbstractMeter implements LongTaskTimer
 
     @Override
     public Sample start() {
-        long task = nextTask.getAndIncrement();
-        tasks.put(task, clock.monotonicTime());
+        long task = this.nextTask.getAndIncrement();
+        this.tasks.put(task, this.clock.monotonicTime());
         return new Sample(this, task);
     }
 
     @Override
     public long stop(long task) {
-        Long startTime = tasks.get(task);
+        Long startTime = this.tasks.get(task);
         if (startTime != null) {
-            tasks.remove(task);
-            return clock.monotonicTime() - startTime;
+            this.tasks.remove(task);
+            return this.clock.monotonicTime() - startTime;
         } else {
             return -1L;
         }
@@ -61,15 +61,15 @@ public class DefaultLongTaskTimer extends AbstractMeter implements LongTaskTimer
 
     @Override
     public double duration(long task, TimeUnit unit) {
-        Long startTime = tasks.get(task);
-        return (startTime != null) ? TimeUtils.nanosToUnit(clock.monotonicTime() - startTime, unit) : -1L;
+        Long startTime = this.tasks.get(task);
+        return (startTime != null) ? TimeUtils.nanosToUnit(this.clock.monotonicTime() - startTime, unit) : -1L;
     }
 
     @Override
     public double duration(TimeUnit unit) {
-        long now = clock.monotonicTime();
+        long now = this.clock.monotonicTime();
         long sum = 0L;
-        for (long startTime : tasks.values()) {
+        for (long startTime : this.tasks.values()) {
             sum += now - startTime;
         }
         return TimeUtils.nanosToUnit(sum, unit);
@@ -77,7 +77,7 @@ public class DefaultLongTaskTimer extends AbstractMeter implements LongTaskTimer
 
     @Override
     public int activeTasks() {
-        return tasks.size();
+        return this.tasks.size();
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

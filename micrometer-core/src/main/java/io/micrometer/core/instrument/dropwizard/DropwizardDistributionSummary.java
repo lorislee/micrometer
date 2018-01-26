@@ -45,25 +45,25 @@ public class DropwizardDistributionSummary extends AbstractDistributionSummary {
     @Override
     protected void recordNonNegative(double amount) {
         if (amount >= 0) {
-            impl.update((long) amount);
-            totalAmount.add(amount);
-            max.record(amount);
+            this.impl.update((long) amount);
+            this.totalAmount.add(amount);
+            this.max.record(amount);
         }
     }
 
     @Override
     public long count() {
-        return impl.getCount();
+        return this.impl.getCount();
     }
 
     @Override
     public double totalAmount() {
-        return totalAmount.doubleValue();
+        return this.totalAmount.doubleValue();
     }
 
     @Override
     public double max() {
-        return max.poll();
+        return this.max.poll();
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

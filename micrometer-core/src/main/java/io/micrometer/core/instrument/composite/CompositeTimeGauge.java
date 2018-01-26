@@ -34,7 +34,7 @@ class CompositeTimeGauge<T> extends AbstractCompositeMeter<TimeGauge> implements
 
     CompositeTimeGauge(Id id, T obj, TimeUnit fUnit, ToDoubleFunction<T> f) {
         super(id);
-        ref = new WeakReference<>(obj);
+        this.ref = new WeakReference<>(obj);
         this.f = f;
         this.fUnit = fUnit;
     }
@@ -56,11 +56,11 @@ class CompositeTimeGauge<T> extends AbstractCompositeMeter<TimeGauge> implements
 
     @Override
     TimeGauge registerNewMeter(MeterRegistry registry) {
-        final T obj = ref.get();
+        final T obj = this.ref.get();
         if (obj == null) {
             return null;
         }
-        return TimeGauge.builder(getId().getName(), obj, fUnit, f)
+        return TimeGauge.builder(getId().getName(), obj, this.fUnit, this.f)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .register(registry);

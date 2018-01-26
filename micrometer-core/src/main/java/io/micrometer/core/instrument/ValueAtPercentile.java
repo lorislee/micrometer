@@ -36,20 +36,20 @@ public final class ValueAtPercentile {
     }
 
     public double percentile() {
-        return percentile;
+        return this.percentile;
     }
 
     public double value() {
-        return value;
+        return this.value;
     }
 
     public double value(TimeUnit unit) {
-        return TimeUtils.nanosToUnit(value, unit);
+        return TimeUtils.nanosToUnit(this.value, unit);
     }
 
     @Override
     public String toString() {
-        return "(" + value + " at " + percentile * 100 + "%)";
+        return "(" + this.value + " at " + this.percentile * 100 + "%)";
     }
 
 }

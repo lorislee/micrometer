@@ -36,20 +36,20 @@ public final class CountAtValue {
     }
 
     public long value() {
-        return value;
+        return this.value;
     }
 
     public double value(TimeUnit unit) {
-        return TimeUtils.nanosToUnit(value, unit);
+        return TimeUtils.nanosToUnit(this.value, unit);
     }
 
     public double count() {
-        return count;
+        return this.count;
     }
 
     @Override
     public String toString() {
-        return "(" + count + " at " + value + ')';
+        return "(" + this.count + " at " + this.value + ')';
     }
 
 }

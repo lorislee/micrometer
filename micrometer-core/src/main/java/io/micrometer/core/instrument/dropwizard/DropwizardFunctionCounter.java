@@ -51,19 +51,19 @@ public class DropwizardFunctionCounter<T> extends AbstractMeter implements Funct
             @Override
             public double getFifteenMinuteRate() {
                 count();
-                return rate.getFifteenMinuteRate();
+                return DropwizardFunctionCounter.this.rate.getFifteenMinuteRate();
             }
 
             @Override
             public double getFiveMinuteRate() {
                 count();
-                return rate.getFiveMinuteRate();
+                return DropwizardFunctionCounter.this.rate.getFiveMinuteRate();
             }
 
             @Override
             public double getOneMinuteRate() {
                 count();
-                return rate.getOneMinuteRate();
+                return DropwizardFunctionCounter.this.rate.getOneMinuteRate();
             }
 
             @Override
@@ -75,18 +75,18 @@ public class DropwizardFunctionCounter<T> extends AbstractMeter implements Funct
     }
 
     public Meter getDropwizardMeter() {
-        return dropwizardMeter;
+        return this.dropwizardMeter;
     }
 
     @Override
     public double count() {
-        T obj = ref.get();
+        T obj = this.ref.get();
         if (obj == null)
-            return last.get();
-        return last.updateAndGet(prev -> {
-            long newCount = (long) f.applyAsDouble(obj);
+            return this.last.get();
+        return this.last.updateAndGet(prev -> {
+            long newCount = (long) this.f.applyAsDouble(obj);
             long diff = newCount - prev;
-            rate.increment(diff);
+            this.rate.increment(diff);
             return newCount;
         });
     }

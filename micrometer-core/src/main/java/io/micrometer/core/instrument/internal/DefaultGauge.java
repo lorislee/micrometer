@@ -39,8 +39,8 @@ public class DefaultGauge<T> extends AbstractMeter implements Gauge {
 
     @Override
     public double value() {
-        T obj = ref.get();
-        return obj != null ? value.applyAsDouble(ref.get()) : Double.NaN;
+        T obj = this.ref.get();
+        return obj != null ? this.value.applyAsDouble(this.ref.get()) : Double.NaN;
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

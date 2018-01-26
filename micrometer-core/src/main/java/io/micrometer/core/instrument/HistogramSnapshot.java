@@ -61,27 +61,27 @@ public final class HistogramSnapshot {
     }
 
     public long count() {
-        return count;
+        return this.count;
     }
 
     public double total() {
-        return total;
+        return this.total;
     }
 
     public double total(TimeUnit unit) {
-        return TimeUtils.nanosToUnit(total, unit);
+        return TimeUtils.nanosToUnit(this.total, unit);
     }
 
     public double max() {
-        return max;
+        return this.max;
     }
 
     public double max(TimeUnit unit) {
-        return TimeUtils.nanosToUnit(max, unit);
+        return TimeUtils.nanosToUnit(this.max, unit);
     }
 
     public double mean() {
-        return count == 0 ? 0 : total / count;
+        return this.count == 0 ? 0 : this.total / this.count;
     }
 
     public double mean(TimeUnit unit) {
@@ -89,31 +89,31 @@ public final class HistogramSnapshot {
     }
 
     public ValueAtPercentile[] percentileValues() {
-        return percentileValues;
+        return this.percentileValues;
     }
 
     public CountAtValue[] histogramCounts() {
-        return histogramCounts;
+        return this.histogramCounts;
     }
 
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
         buf.append("HistogramSnapshot{count=");
-        buf.append(count);
+        buf.append(this.count);
         buf.append(", total=");
-        buf.append(total);
+        buf.append(this.total);
         buf.append(", mean=");
         buf.append(mean());
         buf.append(", max=");
-        buf.append(max);
-        if (percentileValues.length > 0) {
+        buf.append(this.max);
+        if (this.percentileValues.length > 0) {
             buf.append(", percentileValues=");
-            buf.append(Arrays.toString(percentileValues));
+            buf.append(Arrays.toString(this.percentileValues));
         }
-        if (histogramCounts.length > 0) {
+        if (this.histogramCounts.length > 0) {
             buf.append(", histogramCounts=");
-            buf.append(Arrays.toString(histogramCounts));
+            buf.append(Arrays.toString(this.histogramCounts));
         }
         buf.append('}');
         return buf.toString();

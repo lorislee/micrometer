@@ -38,8 +38,8 @@ public class CompositeFunctionCounter<T> extends AbstractCompositeMeter<Function
 
     @Override
     public double count() {
-        T value = ref.get();
-        return value != null ? f.applyAsDouble(value) : 0;
+        T value = this.ref.get();
+        return value != null ? this.f.applyAsDouble(value) : 0;
     }
 
     @Override
@@ -49,11 +49,11 @@ public class CompositeFunctionCounter<T> extends AbstractCompositeMeter<Function
 
     @Override
     FunctionCounter registerNewMeter(MeterRegistry registry) {
-        final T obj = ref.get();
+        final T obj = this.ref.get();
         if (obj == null) {
             return null;
         }
-        return FunctionCounter.builder(getId().getName(), obj, f)
+        return FunctionCounter.builder(getId().getName(), obj, this.f)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .baseUnit(getId().getBaseUnit())

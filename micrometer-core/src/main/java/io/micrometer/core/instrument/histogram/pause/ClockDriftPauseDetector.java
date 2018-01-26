@@ -35,11 +35,11 @@ public class ClockDriftPauseDetector implements PauseDetector {
     }
 
     public Duration getSleepInterval() {
-        return sleepInterval;
+        return this.sleepInterval;
     }
 
     public Duration getPauseThreshold() {
-        return pauseThreshold;
+        return this.pauseThreshold;
     }
 
 }

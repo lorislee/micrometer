@@ -34,7 +34,7 @@ class DelegatingDropwizardLongGauge implements Gauge<Long> {
 
     @Override
     public Long getValue() {
-        return delegate.get();
+        return this.delegate.get();
     }
 
 }

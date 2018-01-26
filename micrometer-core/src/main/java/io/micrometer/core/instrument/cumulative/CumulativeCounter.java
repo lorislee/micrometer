@@ -35,12 +35,12 @@ public class CumulativeCounter extends AbstractMeter implements Counter {
 
     @Override
     public void increment(double amount) {
-        value.add(amount);
+        this.value.add(amount);
     }
 
     @Override
     public double count() {
-        return value.sum();
+        return this.value.sum();
     }
 
 }

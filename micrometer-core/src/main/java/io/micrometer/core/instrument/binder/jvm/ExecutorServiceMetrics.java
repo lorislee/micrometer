@@ -111,18 +111,18 @@ public class ExecutorServiceMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        if (executorService == null) {
+        if (this.executorService == null) {
             return;
         }
-        String className = executorService.getClass().getName();
-        if (executorService instanceof ThreadPoolExecutor) {
-            monitor(registry, (ThreadPoolExecutor) executorService);
+        String className = this.executorService.getClass().getName();
+        if (this.executorService instanceof ThreadPoolExecutor) {
+            monitor(registry, (ThreadPoolExecutor) this.executorService);
         } else if (className.equals("java.util.concurrent.Executors$DelegatedScheduledExecutorService")) {
-            monitor(registry, unwrapThreadPoolExecutor(executorService, executorService.getClass()));
+            monitor(registry, unwrapThreadPoolExecutor(this.executorService, this.executorService.getClass()));
         } else if (className.equals("java.util.concurrent.Executors$FinalizableDelegatedExecutorService")) {
-            monitor(registry, unwrapThreadPoolExecutor(executorService, executorService.getClass().getSuperclass()));
-        } else if (executorService instanceof ForkJoinPool) {
-            monitor(registry, (ForkJoinPool) executorService);
+            monitor(registry, unwrapThreadPoolExecutor(this.executorService, this.executorService.getClass().getSuperclass()));
+        } else if (this.executorService instanceof ForkJoinPool) {
+            monitor(registry, (ForkJoinPool) this.executorService);
         }
     }
 
@@ -135,7 +135,7 @@ public class ExecutorServiceMetrics implements MeterBinder {
         try {
             Field e = wrapper.getDeclaredField("e");
             e.setAccessible(true);
-            return (ThreadPoolExecutor) e.get(executorService);
+            return (ThreadPoolExecutor) e.get(this.executorService);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // Do nothing. We simply can't get to the underlying ThreadPoolExecutor.
         }
@@ -146,48 +146,48 @@ public class ExecutorServiceMetrics implements MeterBinder {
         if (tp == null) {
             return;
         }
-        FunctionCounter.builder(name + ".completed", tp, ThreadPoolExecutor::getCompletedTaskCount)
-            .tags(tags)
+        FunctionCounter.builder(this.name + ".completed", tp, ThreadPoolExecutor::getCompletedTaskCount)
+            .tags(this.tags)
             .description("The approximate total number of tasks that have completed execution")
             .register(registry);
 
-        Gauge.builder(name + ".active", tp, ThreadPoolExecutor::getActiveCount)
-            .tags(tags)
+        Gauge.builder(this.name + ".active", tp, ThreadPoolExecutor::getActiveCount)
+            .tags(this.tags)
             .description("The approximate number of threads that are actively executing tasks")
             .register(registry);
 
-        Gauge.builder(name + ".queued", tp, tpRef -> tpRef.getQueue().size())
-            .tags(tags)
+        Gauge.builder(this.name + ".queued", tp, tpRef -> tpRef.getQueue().size())
+            .tags(this.tags)
             .description("The approximate number of threads that are queued for execution")
             .register(registry);
 
-        Gauge.builder(name + ".pool", tp, ThreadPoolExecutor::getPoolSize)
-            .tags(tags)
+        Gauge.builder(this.name + ".pool", tp, ThreadPoolExecutor::getPoolSize)
+            .tags(this.tags)
             .description("The current number of threads in the pool")
             .register(registry);
     }
 
     private void monitor(MeterRegistry registry, ForkJoinPool fj) {
-        FunctionCounter.builder(name + ".steals", fj, ForkJoinPool::getStealCount)
-            .tags(tags)
+        FunctionCounter.builder(this.name + ".steals", fj, ForkJoinPool::getStealCount)
+            .tags(this.tags)
             .description("Estimate of the total number of tasks stolen from " +
                 "one thread's work queue by another. The reported value " +
                 "underestimates the actual total number of steals when the pool " +
                 "is not quiescent")
             .register(registry);
 
-        Gauge.builder(name + ".queued", fj, ForkJoinPool::getQueuedTaskCount)
-            .tags(tags)
+        Gauge.builder(this.name + ".queued", fj, ForkJoinPool::getQueuedTaskCount)
+            .tags(this.tags)
             .description("An estimate of the total number of tasks currently held in queues by worker threads")
             .register(registry);
 
-        Gauge.builder(name + ".active", fj, ForkJoinPool::getActiveThreadCount)
-            .tags(tags)
+        Gauge.builder(this.name + ".active", fj, ForkJoinPool::getActiveThreadCount)
+            .tags(this.tags)
             .description("An estimate of the number of threads that are currently stealing or executing tasks")
             .register(registry);
 
-        Gauge.builder(name + ".running", fj, ForkJoinPool::getRunningThreadCount)
-            .tags(tags)
+        Gauge.builder(this.name + ".running", fj, ForkJoinPool::getRunningThreadCount)
+            .tags(this.tags)
             .description("An estimate of the number of worker threads that are not blocked waiting to join tasks or for other managed synchronization threads")
             .register(registry);
     }

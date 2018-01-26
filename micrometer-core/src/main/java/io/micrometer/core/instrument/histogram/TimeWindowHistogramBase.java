@@ -72,14 +72,14 @@ abstract class TimeWindowHistogramBase<T, U> {
             rejectHistogramConfig("histogramBufferLength (" + ageBuckets + ") must be greater than 0.");
         }
         //noinspection unchecked
-        ringBuffer = (T[]) Array.newInstance(bucketType, ageBuckets);
-        durationBetweenRotatesMillis = histogramConfig.getHistogramExpiry().toMillis() / ageBuckets;
-        if (durationBetweenRotatesMillis <= 0) {
+        this.ringBuffer = (T[]) Array.newInstance(bucketType, ageBuckets);
+        this.durationBetweenRotatesMillis = histogramConfig.getHistogramExpiry().toMillis() / ageBuckets;
+        if (this.durationBetweenRotatesMillis <= 0) {
             rejectHistogramConfig("histogramExpiry (" + histogramConfig.getHistogramExpiry().toMillis() +
                 "ms) / histogramBufferLength (" + ageBuckets + ") must be greater than 0.");
         }
-        currentBucket = 0;
-        lastRotateTimestampMillis = clock.wallTime();
+        this.currentBucket = 0;
+        this.lastRotateTimestampMillis = clock.wallTime();
     }
 
     private static HistogramConfig validateHistogramConfig(HistogramConfig histogramConfig) {
@@ -114,10 +114,10 @@ abstract class TimeWindowHistogramBase<T, U> {
     }
 
     void initRingBuffer() {
-        for (int i = 0; i < ringBuffer.length; i++) {
-            ringBuffer[i] = newBucket(histogramConfig);
+        for (int i = 0; i < this.ringBuffer.length; i++) {
+            this.ringBuffer[i] = newBucket(this.histogramConfig);
         }
-        accumulatedHistogram = newAccumulatedHistogram(ringBuffer);
+        this.accumulatedHistogram = newAccumulatedHistogram(this.ringBuffer);
     }
 
     abstract T newBucket(HistogramConfig histogramConfig);
@@ -142,7 +142,7 @@ abstract class TimeWindowHistogramBase<T, U> {
         rotate();
         synchronized (this) {
             accumulateIfStale();
-            return valueAtPercentile(accumulatedHistogram, percentile * 100);
+            return valueAtPercentile(this.accumulatedHistogram, percentile * 100);
         }
     }
 
@@ -154,7 +154,7 @@ abstract class TimeWindowHistogramBase<T, U> {
         rotate();
         synchronized (this) {
             accumulateIfStale();
-            return countAtValue(accumulatedHistogram, value);
+            return countAtValue(this.accumulatedHistogram, value);
         }
     }
 
@@ -172,30 +172,30 @@ abstract class TimeWindowHistogramBase<T, U> {
     }
 
     private void accumulateIfStale() {
-        if (accumulatedHistogramStale) {
-            accumulate(ringBuffer[currentBucket], accumulatedHistogram);
-            accumulatedHistogramStale = false;
+        if (this.accumulatedHistogramStale) {
+            accumulate(this.ringBuffer[this.currentBucket], this.accumulatedHistogram);
+            this.accumulatedHistogramStale = false;
         }
     }
 
     private ValueAtPercentile[] takeValueSnapshot() {
-        final double[] monitoredPercentiles = histogramConfig.getPercentiles();
+        final double[] monitoredPercentiles = this.histogramConfig.getPercentiles();
         if (monitoredPercentiles.length == 0) {
             return null;
         }
         final ValueAtPercentile[] values = new ValueAtPercentile[monitoredPercentiles.length];
         for (int i = 0; i < monitoredPercentiles.length; i++) {
             final double p = monitoredPercentiles[i];
-            values[i] = ValueAtPercentile.of(p, valueAtPercentile(accumulatedHistogram, p * 100));
+            values[i] = ValueAtPercentile.of(p, valueAtPercentile(this.accumulatedHistogram, p * 100));
         }
         return values;
     }
 
     private CountAtValue[] takeCountSnapshot(boolean supportsAggregablePercentiles) {
-        if (!histogramConfig.isPublishingHistogram()) {
+        if (!this.histogramConfig.isPublishingHistogram()) {
             return null;
         }
-        final Set<Long> monitoredValues = histogramConfig.getHistogramBuckets(supportsAggregablePercentiles);
+        final Set<Long> monitoredValues = this.histogramConfig.getHistogramBuckets(supportsAggregablePercentiles);
         if (monitoredValues.isEmpty()) {
             return null;
         }
@@ -203,7 +203,7 @@ abstract class TimeWindowHistogramBase<T, U> {
         final Iterator<Long> iterator = monitoredValues.iterator();
         for (int i = 0; i < counts.length; i++) {
             final long v = iterator.next();
-            counts[i] = CountAtValue.of(v, countAtValue(accumulatedHistogram, v));
+            counts[i] = CountAtValue.of(v, countAtValue(this.accumulatedHistogram, v));
         }
         return counts;
     }
@@ -211,32 +211,32 @@ abstract class TimeWindowHistogramBase<T, U> {
     public final void recordLong(long value) {
         rotate();
         try {
-            for (T bucket : ringBuffer) {
+            for (T bucket : this.ringBuffer) {
                 recordLong(bucket, value);
             }
         } catch (IndexOutOfBoundsException ignored) {
             // the value is so large (or small) that the dynamic range of the histogram cannot be extended to include it
         } finally {
-            accumulatedHistogramStale = true;
+            this.accumulatedHistogramStale = true;
         }
     }
 
     public final void recordDouble(double value) {
         rotate();
         try {
-            for (T bucket : ringBuffer) {
+            for (T bucket : this.ringBuffer) {
                 recordDouble(bucket, value);
             }
         } catch (IndexOutOfBoundsException ignored) {
             // the value is so large (or small) that the dynamic range of the histogram cannot be extended to include it
         } finally {
-            accumulatedHistogramStale = true;
+            this.accumulatedHistogramStale = true;
         }
     }
 
     private void rotate() {
-        long timeSinceLastRotateMillis = clock.wallTime() - lastRotateTimestampMillis;
-        if (timeSinceLastRotateMillis < durationBetweenRotatesMillis) {
+        long timeSinceLastRotateMillis = this.clock.wallTime() - this.lastRotateTimestampMillis;
+        if (timeSinceLastRotateMillis < this.durationBetweenRotatesMillis) {
             // Need to wait more for next rotation.
             return;
         }
@@ -247,19 +247,19 @@ abstract class TimeWindowHistogramBase<T, U> {
         try {
             synchronized (this) {
                 do {
-                    resetBucket(ringBuffer[currentBucket]);
-                    if (++currentBucket >= ringBuffer.length) {
-                        currentBucket = 0;
+                    resetBucket(this.ringBuffer[this.currentBucket]);
+                    if (++this.currentBucket >= this.ringBuffer.length) {
+                        this.currentBucket = 0;
                     }
-                    timeSinceLastRotateMillis -= durationBetweenRotatesMillis;
-                    lastRotateTimestampMillis += durationBetweenRotatesMillis;
-                } while (timeSinceLastRotateMillis >= durationBetweenRotatesMillis);
+                    timeSinceLastRotateMillis -= this.durationBetweenRotatesMillis;
+                    this.lastRotateTimestampMillis += this.durationBetweenRotatesMillis;
+                } while (timeSinceLastRotateMillis >= this.durationBetweenRotatesMillis);
 
-                resetAccumulatedHistogram(accumulatedHistogram);
-                accumulatedHistogramStale = true;
+                resetAccumulatedHistogram(this.accumulatedHistogram);
+                this.accumulatedHistogramStale = true;
             }
         } finally {
-            rotating = 0;
+            this.rotating = 0;
         }
     }
 

@@ -40,7 +40,7 @@ public class CompositeMeterRegistry extends MeterRegistry {
 
     private final Set<MeterRegistry> registries = ConcurrentHashMap.newKeySet();
 
-    private final Set<MeterRegistry> unmodifiableRegistries = Collections.unmodifiableSet(registries);
+    private final Set<MeterRegistry> unmodifiableRegistries = Collections.unmodifiableSet(this.registries);
 
     public CompositeMeterRegistry() {
         this(Clock.SYSTEM);
@@ -49,12 +49,12 @@ public class CompositeMeterRegistry extends MeterRegistry {
     public CompositeMeterRegistry(Clock clock) {
         super(clock);
         config().namingConvention(NamingConvention.identity);
-        config().onMeterAdded(m -> registries.forEach(((CompositeMeter) m)::add));
+        config().onMeterAdded(m -> this.registries.forEach(((CompositeMeter) m)::add));
     }
 
     @Override
     protected Timer newTimer(Meter.Id id, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
-        return new CompositeTimer(id, clock, histogramConfig, pauseDetector);
+        return new CompositeTimer(id, this.clock, histogramConfig, pauseDetector);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CompositeMeterRegistry extends MeterRegistry {
     }
 
     public CompositeMeterRegistry add(MeterRegistry registry) {
-        if (registries.add(registry)) {
+        if (this.registries.add(registry)) {
             // in the event of a race, the new meter will be added to this registry via the onMeterAdded listener
             forEachMeter(m -> ((CompositeMeter) m).add(registry));
         }
@@ -116,14 +116,14 @@ public class CompositeMeterRegistry extends MeterRegistry {
     }
 
     public CompositeMeterRegistry remove(MeterRegistry registry) {
-        if (registries.remove(registry)) {
+        if (this.registries.remove(registry)) {
             forEachMeter(m -> ((CompositeMeter) m).remove(registry));
         }
         return this;
     }
 
     public Set<MeterRegistry> getRegistries() {
-        return unmodifiableRegistries;
+        return this.unmodifiableRegistries;
     }
 
 }

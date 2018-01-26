@@ -34,11 +34,11 @@ public class DefaultMeter extends AbstractMeter {
 
     @Override
     public Iterable<Measurement> measure() {
-        return measurements;
+        return this.measurements;
     }
 
     public Type getType() {
-        return type;
+        return this.type;
     }
 
 }

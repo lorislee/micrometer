@@ -87,28 +87,28 @@ public class JCacheMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        Gauge.builder(name + ".requests", objectName, CacheStatistics.CacheHits::get)
-            .tags(tags).tags("result", "hit")
+        Gauge.builder(this.name + ".requests", this.objectName, CacheStatistics.CacheHits::get)
+            .tags(this.tags).tags("result", "hit")
             .description("The number of times cache lookup methods have returned a cached value")
             .register(registry);
 
-        Gauge.builder(name + ".requests", objectName, CacheStatistics.CacheMisses::get)
-            .tags(tags).tags("result", "miss")
+        Gauge.builder(this.name + ".requests", this.objectName, CacheStatistics.CacheMisses::get)
+            .tags(this.tags).tags("result", "miss")
             .description("The number of times cache lookup methods have not returned a value")
             .register(registry);
 
-        Gauge.builder(name + ".puts", objectName, CacheStatistics.CachePuts::get)
-            .tags(tags)
+        Gauge.builder(this.name + ".puts", this.objectName, CacheStatistics.CachePuts::get)
+            .tags(this.tags)
             .description("Cache puts")
             .register(registry);
 
-        Gauge.builder(name + ".removals", objectName, CacheStatistics.CacheRemovals::get)
-            .tags(tags)
+        Gauge.builder(this.name + ".removals", this.objectName, CacheStatistics.CacheRemovals::get)
+            .tags(this.tags)
             .description("Cache removals")
             .register(registry);
 
-        Gauge.builder(name + ".evictions", objectName, CacheStatistics.CacheEvictions::get)
-            .tags(tags)
+        Gauge.builder(this.name + ".evictions", this.objectName, CacheStatistics.CacheEvictions::get)
+            .tags(this.tags)
             .description("Cache evictions")
             .register(registry);
     }

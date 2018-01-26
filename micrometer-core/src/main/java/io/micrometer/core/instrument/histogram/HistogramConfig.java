@@ -78,18 +78,18 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
     }
 
     public boolean isPublishingHistogram() {
-        return (percentileHistogram != null && percentileHistogram) || (sla != null && sla.length > 0);
+        return (this.percentileHistogram != null && this.percentileHistogram) || (this.sla != null && this.sla.length > 0);
     }
 
     public NavigableSet<Long> getHistogramBuckets(boolean supportsAggregablePercentiles) {
         NavigableSet<Long> buckets = new TreeSet<>();
-        if (percentileHistogram != null && percentileHistogram && supportsAggregablePercentiles) {
+        if (this.percentileHistogram != null && this.percentileHistogram && supportsAggregablePercentiles) {
             buckets.addAll(PercentileHistogramBuckets.buckets(this));
-            buckets.add(minimumExpectedValue);
-            buckets.add(maximumExpectedValue);
+            buckets.add(this.minimumExpectedValue);
+            buckets.add(this.maximumExpectedValue);
         }
-        if (sla != null) {
-            for (long slaBoundary : sla) {
+        if (this.sla != null) {
+            for (long slaBoundary : this.sla) {
                 buckets.add(slaBoundary);
             }
         }
@@ -98,37 +98,37 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
 
     public @Nullable
     Boolean isPercentileHistogram() {
-        return percentileHistogram;
+        return this.percentileHistogram;
     }
 
     public @Nullable
     double[] getPercentiles() {
-        return percentiles;
+        return this.percentiles;
     }
 
     public @Nullable
     Long getMinimumExpectedValue() {
-        return minimumExpectedValue;
+        return this.minimumExpectedValue;
     }
 
     public @Nullable
     Long getMaximumExpectedValue() {
-        return maximumExpectedValue;
+        return this.maximumExpectedValue;
     }
 
     public @Nullable
     Duration getHistogramExpiry() {
-        return histogramExpiry;
+        return this.histogramExpiry;
     }
 
     public @Nullable
     Integer getHistogramBufferLength() {
-        return histogramBufferLength;
+        return this.histogramBufferLength;
     }
 
     public @Nullable
     long[] getSlaBoundaries() {
-        return sla;
+        return this.sla;
     }
 
     public static class Builder {
@@ -136,42 +136,42 @@ public class HistogramConfig implements Mergeable<HistogramConfig> {
         private final HistogramConfig config = new HistogramConfig();
 
         public Builder percentilesHistogram(@Nullable Boolean enabled) {
-            config.percentileHistogram = enabled;
+            this.config.percentileHistogram = enabled;
             return this;
         }
 
         public Builder percentiles(@Nullable double... percentiles) {
-            config.percentiles = percentiles;
+            this.config.percentiles = percentiles;
             return this;
         }
 
         public Builder sla(@Nullable long... sla) {
-            config.sla = sla;
+            this.config.sla = sla;
             return this;
         }
 
         public Builder minimumExpectedValue(@Nullable Long min) {
-            config.minimumExpectedValue = min;
+            this.config.minimumExpectedValue = min;
             return this;
         }
 
         public Builder maximumExpectedValue(@Nullable Long max) {
-            config.maximumExpectedValue = max;
+            this.config.maximumExpectedValue = max;
             return this;
         }
 
         public Builder histogramExpiry(@Nullable Duration expiry) {
-            config.histogramExpiry = expiry;
+            this.config.histogramExpiry = expiry;
             return this;
         }
 
         public Builder histogramBufferLength(@Nullable Integer bufferLength) {
-            config.histogramBufferLength = bufferLength;
+            this.config.histogramBufferLength = bufferLength;
             return this;
         }
 
         public HistogramConfig build() {
-            return config;
+            return this.config;
         }
 
     }

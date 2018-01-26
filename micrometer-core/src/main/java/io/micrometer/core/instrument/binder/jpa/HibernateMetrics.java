@@ -62,8 +62,8 @@ public class HibernateMetrics implements MeterBinder {
         if (this.stats == null) {
             return;
         }
-        FunctionCounter.builder(name, stats, f)
-            .tags(tags)
+        FunctionCounter.builder(name, this.stats, f)
+            .tags(this.tags)
             .tags(extraTags)
             .description(description)
             .register(registry);
@@ -132,17 +132,17 @@ public class HibernateMetrics implements MeterBinder {
         counter(registry, "hibernate.query.natural.id.executions", "The number of naturalId queries executed against the database",
             Statistics::getNaturalIdQueryExecutionCount);
 
-        TimeGauge.builder("hibernate.query.natural.id.executions.max", stats, TimeUnit.MILLISECONDS, Statistics::getNaturalIdQueryExecutionMaxTime)
+        TimeGauge.builder("hibernate.query.natural.id.executions.max", this.stats, TimeUnit.MILLISECONDS, Statistics::getNaturalIdQueryExecutionMaxTime)
             .description("The maximum query time for naturalId queries executed against the database")
-            .tags(tags)
+            .tags(this.tags)
             .register(registry);
 
         // Query stats
         counter(registry, "hibernate.query.executions", "The number of executed queries", Statistics::getQueryExecutionCount);
 
-        TimeGauge.builder("hibernate.query.executions.max", stats, TimeUnit.MILLISECONDS, Statistics::getQueryExecutionMaxTime)
+        TimeGauge.builder("hibernate.query.executions.max", this.stats, TimeUnit.MILLISECONDS, Statistics::getQueryExecutionMaxTime)
             .description("The time of the slowest query")
-            .tags(tags)
+            .tags(this.tags)
             .register(registry);
 
         // Update timestamp cache

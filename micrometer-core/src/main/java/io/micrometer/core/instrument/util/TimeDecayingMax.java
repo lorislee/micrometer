@@ -63,7 +63,7 @@ public class TimeDecayingMax {
     public void record(double sample, TimeUnit timeUnit) {
         rotate();
         final long sampleNanos = (long) TimeUtils.convert(sample, timeUnit, TimeUnit.NANOSECONDS);
-        for (AtomicLong max : ringBuffer) {
+        for (AtomicLong max : this.ringBuffer) {
             updateMax(max, sampleNanos);
         }
     }
@@ -71,7 +71,7 @@ public class TimeDecayingMax {
     public double poll(TimeUnit timeUnit) {
         rotate();
         synchronized (this) {
-            return TimeUtils.nanosToUnit(ringBuffer[currentBucket].get(), timeUnit);
+            return TimeUtils.nanosToUnit(this.ringBuffer[this.currentBucket].get(), timeUnit);
         }
     }
 
@@ -81,7 +81,7 @@ public class TimeDecayingMax {
     public double poll() {
         rotate();
         synchronized (this) {
-            return Double.longBitsToDouble(ringBuffer[currentBucket].get());
+            return Double.longBitsToDouble(this.ringBuffer[this.currentBucket].get());
         }
     }
 
@@ -91,7 +91,7 @@ public class TimeDecayingMax {
     public void record(double sample) {
         rotate();
         long sampleLong = Double.doubleToLongBits(sample);
-        for (AtomicLong max : ringBuffer) {
+        for (AtomicLong max : this.ringBuffer) {
             updateMax(max, sampleLong);
         }
     }
@@ -105,8 +105,8 @@ public class TimeDecayingMax {
     }
 
     private void rotate() {
-        long timeSinceLastRotateMillis = clock.wallTime() - lastRotateTimestampMillis;
-        if (timeSinceLastRotateMillis < durationBetweenRotatesMillis) {
+        long timeSinceLastRotateMillis = this.clock.wallTime() - this.lastRotateTimestampMillis;
+        if (timeSinceLastRotateMillis < this.durationBetweenRotatesMillis) {
             // Need to wait more for next rotation.
             return;
         }
@@ -117,16 +117,16 @@ public class TimeDecayingMax {
         try {
             synchronized (this) {
                 do {
-                    ringBuffer[currentBucket].set(0);
-                    if (++currentBucket >= ringBuffer.length) {
-                        currentBucket = 0;
+                    this.ringBuffer[this.currentBucket].set(0);
+                    if (++this.currentBucket >= this.ringBuffer.length) {
+                        this.currentBucket = 0;
                     }
-                    timeSinceLastRotateMillis -= durationBetweenRotatesMillis;
-                    lastRotateTimestampMillis += durationBetweenRotatesMillis;
-                } while (timeSinceLastRotateMillis >= durationBetweenRotatesMillis);
+                    timeSinceLastRotateMillis -= this.durationBetweenRotatesMillis;
+                    this.lastRotateTimestampMillis += this.durationBetweenRotatesMillis;
+                } while (timeSinceLastRotateMillis >= this.durationBetweenRotatesMillis);
             }
         } finally {
-            rotating = 0;
+            this.rotating = 0;
         }
     }
 

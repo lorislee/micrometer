@@ -35,12 +35,12 @@ public class DropwizardCounter extends AbstractMeter implements Counter {
 
     @Override
     public void increment(double amount) {
-        impl.mark((long) amount);
+        this.impl.mark((long) amount);
     }
 
     @Override
     public double count() {
-        return impl.getCount();
+        return this.impl.getCount();
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

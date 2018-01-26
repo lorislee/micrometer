@@ -32,7 +32,8 @@ public interface SimpleConfig extends StepRegistryConfig {
     /**
      * Returns the step size (reporting frequency) to use. The default is 10 seconds.
      */
-    default Duration step() {
+    @Override
+	default Duration step() {
         String v = get(prefix() + ".step");
         return v == null ? Duration.ofMinutes(1) : Duration.parse(v);
     }

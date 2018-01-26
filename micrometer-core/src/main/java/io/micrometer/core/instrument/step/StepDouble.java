@@ -42,31 +42,31 @@ public class StepDouble {
     public StepDouble(Clock clock, long stepMillis) {
         this.clock = clock;
         this.stepMillis = stepMillis;
-        lastInitPos = new AtomicLong(clock.wallTime() / stepMillis);
+        this.lastInitPos = new AtomicLong(clock.wallTime() / stepMillis);
     }
 
     private void rollCount(long now) {
-        final long stepTime = now / stepMillis;
-        final long lastInit = lastInitPos.get();
-        if (lastInit < stepTime && lastInitPos.compareAndSet(lastInit, stepTime)) {
-            final double v = current.sumThenReset();
+        final long stepTime = now / this.stepMillis;
+        final long lastInit = this.lastInitPos.get();
+        if (lastInit < stepTime && this.lastInitPos.compareAndSet(lastInit, stepTime)) {
+            final double v = this.current.sumThenReset();
             // Need to check if there was any activity during the previous step interval. If there was
             // then the init position will move forward by 1, otherwise it will be older. No activity
             // means the previous interval should be set to the `init` value.
-            previous = (lastInit == stepTime - 1) ? v : 0.0;
+            this.previous = (lastInit == stepTime - 1) ? v : 0.0;
         }
     }
 
     public DoubleAdder getCurrent() {
-        return current;
+        return this.current;
     }
 
     /**
      * Get the value for the last completed interval.
      */
     public double poll() {
-        rollCount(clock.wallTime());
-        return previous;
+        rollCount(this.clock.wallTime());
+        return this.previous;
     }
 
 }

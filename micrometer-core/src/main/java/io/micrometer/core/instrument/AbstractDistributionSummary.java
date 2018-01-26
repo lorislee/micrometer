@@ -36,7 +36,7 @@ public abstract class AbstractDistributionSummary extends AbstractMeter implemen
     @Override
     public final void record(double amount) {
         if (amount >= 0) {
-            histogram.recordDouble(amount);
+            this.histogram.recordDouble(amount);
             recordNonNegative(amount);
         }
     }
@@ -45,17 +45,17 @@ public abstract class AbstractDistributionSummary extends AbstractMeter implemen
 
     @Override
     public double percentile(double percentile) {
-        return histogram.percentile(percentile);
+        return this.histogram.percentile(percentile);
     }
 
     @Override
     public double histogramCountAtValue(long value) {
-        return histogram.histogramCountAtValue(value);
+        return this.histogram.histogramCountAtValue(value);
     }
 
     @Override
     public HistogramSnapshot takeSnapshot(boolean supportsAggregablePercentiles) {
-        return histogram.takeSnapshot(count(), totalAmount(), max(), supportsAggregablePercentiles);
+        return this.histogram.takeSnapshot(count(), totalAmount(), max(), supportsAggregablePercentiles);
     }
 
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
@@ -70,7 +70,7 @@ public abstract class AbstractDistributionSummary extends AbstractMeter implemen
     }
 
     public HistogramConfig statsConfig() {
-        return histogramConfig;
+        return this.histogramConfig;
     }
 
 }

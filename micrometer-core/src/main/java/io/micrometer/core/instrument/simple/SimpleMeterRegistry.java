@@ -57,21 +57,21 @@ public class SimpleMeterRegistry extends MeterRegistry {
     @Override
     protected DistributionSummary newDistributionSummary(Meter.Id id, HistogramConfig histogramConfig) {
         HistogramConfig merged = histogramConfig.merge(HistogramConfig.builder()
-            .histogramExpiry(config.step())
+            .histogramExpiry(this.config.step())
             .build());
         DistributionSummary summary;
-        switch (config.mode()) {
+        switch (this.config.mode()) {
             case Cumulative:
-                summary = new CumulativeDistributionSummary(id, clock, merged);
+                summary = new CumulativeDistributionSummary(id, this.clock, merged);
                 break;
             case Step:
             default:
-                summary = new StepDistributionSummary(id, clock, merged);
+                summary = new StepDistributionSummary(id, this.clock, merged);
                 break;
         }
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
-                gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", percentileFormat.format(percentile)),
+                gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", this.percentileFormat.format(percentile)),
                     summary, s -> summary.percentile(percentile));
             }
         }
@@ -92,29 +92,29 @@ public class SimpleMeterRegistry extends MeterRegistry {
     @Override
     protected Timer newTimer(Meter.Id id, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
         HistogramConfig merged = histogramConfig.merge(HistogramConfig.builder()
-            .histogramExpiry(config.step())
+            .histogramExpiry(this.config.step())
             .build());
 
         Timer timer;
-        switch (config.mode()) {
+        switch (this.config.mode()) {
             case Cumulative:
-                timer = new CumulativeTimer(id, clock, merged, pauseDetector, getBaseTimeUnit());
+                timer = new CumulativeTimer(id, this.clock, merged, pauseDetector, getBaseTimeUnit());
                 break;
             case Step:
             default:
-                timer = new StepTimer(id, clock, merged, pauseDetector, getBaseTimeUnit());
+                timer = new StepTimer(id, this.clock, merged, pauseDetector, getBaseTimeUnit());
                 break;
         }
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
-                gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", percentileFormat.format(percentile)),
+                gauge(id.getName(), Tags.concat(getConventionTags(id), "percentile", this.percentileFormat.format(percentile)),
                     timer, t -> t.percentile(percentile, getBaseTimeUnit()));
             }
         }
         if (histogramConfig.isPublishingHistogram()) {
             for (Long bucket : histogramConfig.getHistogramBuckets(false)) {
                 more().counter(getConventionName(id), Tags.concat(getConventionTags(id), "bucket",
-                    percentileFormat.format(TimeUtils.nanosToUnit(bucket, getBaseTimeUnit()))),
+                    this.percentileFormat.format(TimeUtils.nanosToUnit(bucket, getBaseTimeUnit()))),
                     timer, t -> t.histogramCountAtValue(bucket));
             }
         }
@@ -128,18 +128,18 @@ public class SimpleMeterRegistry extends MeterRegistry {
 
     @Override
     protected Counter newCounter(Meter.Id id) {
-        switch (config.mode()) {
+        switch (this.config.mode()) {
             case Cumulative:
                 return new CumulativeCounter(id);
             case Step:
             default:
-                return new StepCounter(id, clock, config.step().toMillis());
+                return new StepCounter(id, this.clock, this.config.step().toMillis());
         }
     }
 
     @Override
     protected LongTaskTimer newLongTaskTimer(Meter.Id id) {
-        return new DefaultLongTaskTimer(id, clock);
+        return new DefaultLongTaskTimer(id, this.clock);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class SimpleMeterRegistry extends MeterRegistry {
     @Override
     protected HistogramConfig defaultHistogramConfig() {
         return HistogramConfig.builder()
-            .histogramExpiry(config.step())
+            .histogramExpiry(this.config.step())
             .build()
             .merge(HistogramConfig.DEFAULT);
     }

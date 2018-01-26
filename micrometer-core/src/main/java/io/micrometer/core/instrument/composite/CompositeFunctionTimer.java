@@ -67,12 +67,12 @@ class CompositeFunctionTimer<T> extends AbstractCompositeMeter<FunctionTimer> im
 
     @Override
     FunctionTimer registerNewMeter(MeterRegistry registry) {
-        final T obj = ref.get();
+        final T obj = this.ref.get();
         if (obj == null) {
             return null;
         }
-        return FunctionTimer.builder(getId().getName(), obj, countFunction,
-            totalTimeFunction, totalTimeFunctionUnits)
+        return FunctionTimer.builder(getId().getName(), obj, this.countFunction,
+            this.totalTimeFunction, this.totalTimeFunctionUnits)
             .tags(getId().getTags())
             .description(getId().getDescription())
             .baseUnit(getId().getBaseUnit()).register(registry);

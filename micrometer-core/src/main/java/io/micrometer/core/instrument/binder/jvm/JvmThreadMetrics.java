@@ -47,17 +47,17 @@ public class JvmThreadMetrics implements MeterBinder {
         ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
 
         Gauge.builder("jvm.threads.peak", threadBean, ThreadMXBean::getPeakThreadCount)
-            .tags(tags)
+            .tags(this.tags)
             .description("The peak live thread count since the Java virtual machine started or peak was reset")
             .register(registry);
 
         Gauge.builder("jvm.threads.daemon", threadBean, ThreadMXBean::getDaemonThreadCount)
-            .tags(tags)
+            .tags(this.tags)
             .description("The current number of live daemon threads")
             .register(registry);
 
         Gauge.builder("jvm.threads.live", threadBean, ThreadMXBean::getThreadCount)
-            .tags(tags)
+            .tags(this.tags)
             .description("The current number of live threads including both daemon and non-daemon threads")
             .register(registry);
     }

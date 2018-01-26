@@ -69,12 +69,12 @@ public class OkHttpMetricsEventListener extends EventListener {
 
     @Override
     public void callStart(Call call) {
-        callState.put(call, new CallState(registry.config().clock().monotonicTime()));
+        this.callState.put(call, new CallState(this.registry.config().clock().monotonicTime()));
     }
 
     @Override
     public void requestHeadersEnd(Call call, Request request) {
-        callState.computeIfPresent(call, (c, state) -> {
+        this.callState.computeIfPresent(call, (c, state) -> {
             state.request = request;
             return state;
         });
@@ -82,7 +82,7 @@ public class OkHttpMetricsEventListener extends EventListener {
 
     @Override
     public void callFailed(Call call, IOException e) {
-        CallState state = callState.remove(call);
+        CallState state = this.callState.remove(call);
         if (state != null) {
             state.exception = e;
             time(state);
@@ -91,7 +91,7 @@ public class OkHttpMetricsEventListener extends EventListener {
 
     @Override
     public void responseHeadersEnd(Call call, Response response) {
-        CallState state = callState.remove(call);
+        CallState state = this.callState.remove(call);
         if (state != null) {
             state.response = response;
             time(state);
@@ -100,8 +100,8 @@ public class OkHttpMetricsEventListener extends EventListener {
 
     private void time(CallState state) {
         String uri = state.response == null ? "UNKNOWN" :
-            (state.response.code() == 404 || state.response.code() == 301 ? "NOT_FOUND" : urlMapper.apply(state.request));
-        Iterable<Tag> tags = Tags.concat(extraTags, Tags.zip(
+            (state.response.code() == 404 || state.response.code() == 301 ? "NOT_FOUND" : this.urlMapper.apply(state.request));
+        Iterable<Tag> tags = Tags.concat(this.extraTags, Tags.zip(
             "method", state.request != null ? state.request.method() : "UNKNOWN",
             "uri", uri,
             "status", getStatusMessage(state.response, state.exception),
@@ -110,8 +110,8 @@ public class OkHttpMetricsEventListener extends EventListener {
         Timer.builder(this.requestsMetricName)
             .tags(tags)
             .description("Timer of OkHttp operation")
-            .register(registry)
-            .record(registry.config().clock().monotonicTime() - state.startTime, TimeUnit.NANOSECONDS);
+            .register(this.registry)
+            .record(this.registry.config().clock().monotonicTime() - state.startTime, TimeUnit.NANOSECONDS);
     }
 
     private String getStatusMessage(@Nullable Response response, @Nullable IOException exception) {
@@ -169,7 +169,7 @@ public class OkHttpMetricsEventListener extends EventListener {
         }
 
         public OkHttpMetricsEventListener build() {
-            return new OkHttpMetricsEventListener(registry, name, uriMapper, tags);
+            return new OkHttpMetricsEventListener(this.registry, this.name, this.uriMapper, this.tags);
         }
 
     }

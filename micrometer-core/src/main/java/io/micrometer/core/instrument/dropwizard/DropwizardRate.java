@@ -49,12 +49,12 @@ class DropwizardRate {
      * @param increment Spread the increment out over the interval
      */
     private synchronized void tickIfNecessary(long increment) {
-        final long oldTime = lastTime.get();
-        final long currentTime = clock.monotonicTime();
+        final long oldTime = this.lastTime.get();
+        final long currentTime = this.clock.monotonicTime();
         final long age = currentTime - oldTime;
         if (age > TICK_INTERVAL) {
             final long newIntervalStartTick = currentTime - age % TICK_INTERVAL;
-            if (lastTime.compareAndSet(oldTime, newIntervalStartTick)) {
+            if (this.lastTime.compareAndSet(oldTime, newIntervalStartTick)) {
                 final long requiredTicks = age / TICK_INTERVAL;
 
                 // divide the increment equally over the interval to arrive at a reasonable approximation
@@ -62,24 +62,24 @@ class DropwizardRate {
                 final long updateAtEachInterval = increment / requiredTicks;
 
                 for (long i = 0; i < requiredTicks; i++) {
-                    m1Rate.update(updateAtEachInterval);
-                    m5Rate.update(updateAtEachInterval);
-                    m15Rate.update(updateAtEachInterval);
+                    this.m1Rate.update(updateAtEachInterval);
+                    this.m5Rate.update(updateAtEachInterval);
+                    this.m15Rate.update(updateAtEachInterval);
 
-                    m1Rate.tick();
-                    m5Rate.tick();
-                    m15Rate.tick();
+                    this.m1Rate.tick();
+                    this.m5Rate.tick();
+                    this.m15Rate.tick();
                 }
 
                 final long updateRemainder = increment % requiredTicks;
-                m1Rate.update(updateRemainder);
-                m5Rate.update(updateRemainder);
-                m15Rate.update(updateRemainder);
+                this.m1Rate.update(updateRemainder);
+                this.m5Rate.update(updateRemainder);
+                this.m15Rate.update(updateRemainder);
             }
         } else {
-            m1Rate.update(increment);
-            m5Rate.update(increment);
-            m15Rate.update(increment);
+            this.m1Rate.update(increment);
+            this.m5Rate.update(increment);
+            this.m15Rate.update(increment);
         }
     }
 
@@ -93,17 +93,17 @@ class DropwizardRate {
 
     public double getOneMinuteRate() {
         tickIfNecessary(0);
-        return m1Rate.getRate(TimeUnit.SECONDS);
+        return this.m1Rate.getRate(TimeUnit.SECONDS);
     }
 
     public double getFifteenMinuteRate() {
         tickIfNecessary(0);
-        return m15Rate.getRate(TimeUnit.SECONDS);
+        return this.m15Rate.getRate(TimeUnit.SECONDS);
     }
 
     public double getFiveMinuteRate() {
         tickIfNecessary(0);
-        return m5Rate.getRate(TimeUnit.SECONDS);
+        return this.m5Rate.getRate(TimeUnit.SECONDS);
     }
 
 }

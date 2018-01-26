@@ -55,7 +55,7 @@ public class JvmMemoryMetrics implements MeterBinder {
     @Override
     public void bindTo(MeterRegistry registry) {
         for (BufferPoolMXBean bufferPoolBean : ManagementFactory.getPlatformMXBeans(BufferPoolMXBean.class)) {
-            Iterable<Tag> tagsWithId = Tags.concat(tags, "id", bufferPoolBean.getName());
+            Iterable<Tag> tagsWithId = Tags.concat(this.tags, "id", bufferPoolBean.getName());
 
             Gauge.builder("jvm.buffer.count", bufferPoolBean, BufferPoolMXBean::getCount)
                 .tags(tagsWithId)
@@ -77,7 +77,7 @@ public class JvmMemoryMetrics implements MeterBinder {
 
         for (MemoryPoolMXBean memoryPoolBean : ManagementFactory.getPlatformMXBeans(MemoryPoolMXBean.class)) {
             String area = MemoryType.HEAP.equals(memoryPoolBean.getType()) ? "heap" : "nonheap";
-            Iterable<Tag> tagsWithId = Tags.concat(tags, "id", memoryPoolBean.getName(), "area", area);
+            Iterable<Tag> tagsWithId = Tags.concat(this.tags, "id", memoryPoolBean.getName(), "area", area);
 
             Gauge.builder("jvm.memory.used", memoryPoolBean, (mem) -> mem.getUsage().getUsed())
                 .tags(tagsWithId)

@@ -56,13 +56,13 @@ public class DropwizardMeterRegistry extends MeterRegistry {
     }
 
     public MetricRegistry getDropwizardRegistry() {
-        return registry;
+        return this.registry;
     }
 
     @Override
     protected Counter newCounter(Meter.Id id) {
-        com.codahale.metrics.Meter meter = new com.codahale.metrics.Meter(dropwizardClock);
-        registry.register(hierarchicalName(id), meter);
+        com.codahale.metrics.Meter meter = new com.codahale.metrics.Meter(this.dropwizardClock);
+        this.registry.register(hierarchicalName(id), meter);
         return new DropwizardCounter(id, meter);
     }
 
@@ -73,13 +73,13 @@ public class DropwizardMeterRegistry extends MeterRegistry {
             T obj2 = ref.get();
             return obj2 != null ? f.applyAsDouble(ref.get()) : Double.NaN;
         };
-        registry.register(hierarchicalName(id), gauge);
+        this.registry.register(hierarchicalName(id), gauge);
         return new DropwizardGauge(id, gauge);
     }
 
     @Override
     protected Timer newTimer(Meter.Id id, HistogramConfig histogramConfig, PauseDetector pauseDetector) {
-        DropwizardTimer timer = new DropwizardTimer(id, registry.timer(hierarchicalName(id)), clock, histogramConfig, pauseDetector);
+        DropwizardTimer timer = new DropwizardTimer(id, this.registry.timer(hierarchicalName(id)), this.clock, histogramConfig, pauseDetector);
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 String formattedPercentile = DoubleFormat.toString(percentile * 100) + "percentile";
@@ -98,7 +98,7 @@ public class DropwizardMeterRegistry extends MeterRegistry {
 
     @Override
     protected DistributionSummary newDistributionSummary(Meter.Id id, HistogramConfig histogramConfig) {
-        DropwizardDistributionSummary summary = new DropwizardDistributionSummary(id, clock, registry.histogram(hierarchicalName(id)), histogramConfig);
+        DropwizardDistributionSummary summary = new DropwizardDistributionSummary(id, this.clock, this.registry.histogram(hierarchicalName(id)), histogramConfig);
         if (histogramConfig.getPercentiles() != null) {
             for (double percentile : histogramConfig.getPercentiles()) {
                 String formattedPercentile = DoubleFormat.toString(percentile * 100) + "percentile";
@@ -117,30 +117,30 @@ public class DropwizardMeterRegistry extends MeterRegistry {
 
     @Override
     protected LongTaskTimer newLongTaskTimer(Meter.Id id) {
-        LongTaskTimer ltt = new DefaultLongTaskTimer(id, clock);
-        registry.register(hierarchicalName(id.withTag(Statistic.ActiveTasks)), (Gauge<Integer>) ltt::activeTasks);
-        registry.register(hierarchicalName(id.withTag(Statistic.Duration)), (Gauge<Double>) () -> ltt.duration(TimeUnit.NANOSECONDS));
+        LongTaskTimer ltt = new DefaultLongTaskTimer(id, this.clock);
+        this.registry.register(hierarchicalName(id.withTag(Statistic.ActiveTasks)), (Gauge<Integer>) ltt::activeTasks);
+        this.registry.register(hierarchicalName(id.withTag(Statistic.Duration)), (Gauge<Double>) () -> ltt.duration(TimeUnit.NANOSECONDS));
         return ltt;
     }
 
     @Override
     protected <T> FunctionTimer newFunctionTimer(Meter.Id id, T obj, ToLongFunction<T> countFunction, ToDoubleFunction<T> totalTimeFunction, TimeUnit totalTimeFunctionUnits) {
-        DropwizardFunctionTimer ft = new DropwizardFunctionTimer<>(id, clock, obj, countFunction, totalTimeFunction,
+        DropwizardFunctionTimer ft = new DropwizardFunctionTimer<>(id, this.clock, obj, countFunction, totalTimeFunction,
             totalTimeFunctionUnits, getBaseTimeUnit());
-        registry.register(hierarchicalName(id), ft.getDropwizardMeter());
+        this.registry.register(hierarchicalName(id), ft.getDropwizardMeter());
         return ft;
     }
 
     @Override
     protected <T> FunctionCounter newFunctionCounter(Meter.Id id, T obj, ToDoubleFunction<T> f) {
-        DropwizardFunctionCounter<T> fc = new DropwizardFunctionCounter<>(id, clock, obj, f);
-        registry.register(hierarchicalName(id), fc.getDropwizardMeter());
+        DropwizardFunctionCounter<T> fc = new DropwizardFunctionCounter<>(id, this.clock, obj, f);
+        this.registry.register(hierarchicalName(id), fc.getDropwizardMeter());
         return fc;
     }
 
     @Override
     protected Meter newMeter(Meter.Id id, Meter.Type type, Iterable<Measurement> measurements) {
-        measurements.forEach(ms -> registry.register(hierarchicalName(id.withTag(ms.getStatistic())), (Gauge<Double>) ms::getValue));
+        measurements.forEach(ms -> this.registry.register(hierarchicalName(id.withTag(ms.getStatistic())), (Gauge<Double>) ms::getValue));
         return new DefaultMeter(id, type, measurements);
     }
 
@@ -150,13 +150,13 @@ public class DropwizardMeterRegistry extends MeterRegistry {
     }
 
     private String hierarchicalName(Meter.Id id) {
-        return nameMapper.toHierarchicalName(id, config().namingConvention());
+        return this.nameMapper.toHierarchicalName(id, config().namingConvention());
     }
 
     @Override
     protected HistogramConfig defaultHistogramConfig() {
         return HistogramConfig.builder()
-            .histogramExpiry(dropwizardConfig.step())
+            .histogramExpiry(this.dropwizardConfig.step())
             .build()
             .merge(HistogramConfig.DEFAULT);
     }

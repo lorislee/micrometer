@@ -79,13 +79,13 @@ class CompositeDistributionSummary extends AbstractCompositeMeter<DistributionSu
             .tags(getId().getTags())
             .description(getId().getDescription())
             .baseUnit(getId().getBaseUnit())
-            .publishPercentiles(histogramConfig.getPercentiles())
-            .publishPercentileHistogram(histogramConfig.isPercentileHistogram())
-            .maximumExpectedValue(histogramConfig.getMaximumExpectedValue())
-            .minimumExpectedValue(histogramConfig.getMinimumExpectedValue())
-            .histogramBufferLength(histogramConfig.getHistogramBufferLength())
-            .histogramExpiry(histogramConfig.getHistogramExpiry())
-            .sla(histogramConfig.getSlaBoundaries())
+            .publishPercentiles(this.histogramConfig.getPercentiles())
+            .publishPercentileHistogram(this.histogramConfig.isPercentileHistogram())
+            .maximumExpectedValue(this.histogramConfig.getMaximumExpectedValue())
+            .minimumExpectedValue(this.histogramConfig.getMinimumExpectedValue())
+            .histogramBufferLength(this.histogramConfig.getHistogramBufferLength())
+            .histogramExpiry(this.histogramConfig.getHistogramExpiry())
+            .sla(this.histogramConfig.getSlaBoundaries())
             .register(registry);
     }
 

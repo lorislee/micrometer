@@ -39,17 +39,17 @@ public class Measurement {
      * Value for the measurement.
      */
     public double getValue() {
-        return f.get();
+        return this.f.get();
     }
 
     public Statistic getStatistic() {
-        return statistic;
+        return this.statistic;
     }
 
     @Override
     public String toString() {
         return "Measurement{" +
-            "statistic='" + statistic + '\'' +
+            "statistic='" + this.statistic + '\'' +
             ", value=" + getValue() +
             '}';
     }

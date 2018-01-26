@@ -52,7 +52,7 @@ public class LogbackMetrics implements MeterBinder {
     @Override
     public void bindTo(MeterRegistry registry) {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.addTurboFilter(new MetricsTurboFilter(registry, tags));
+        context.addTurboFilter(new MetricsTurboFilter(registry, this.tags));
     }
 
 }
@@ -72,27 +72,27 @@ class MetricsTurboFilter extends TurboFilter {
     private final Counter traceCounter;
 
     MetricsTurboFilter(MeterRegistry registry, Iterable<Tag> tags) {
-        errorCounter = Counter.builder("logback.events")
+        this.errorCounter = Counter.builder("logback.events")
             .tags(tags).tags("level", "error")
             .description("Number of error level events that made it to the logs")
             .register(registry);
 
-        warnCounter = Counter.builder("logback.events")
+        this.warnCounter = Counter.builder("logback.events")
             .tags(tags).tags("level", "warn")
             .description("Number of warn level events that made it to the logs")
             .register(registry);
 
-        infoCounter = Counter.builder("logback.events")
+        this.infoCounter = Counter.builder("logback.events")
             .tags(tags).tags("level", "info")
             .description("Number of info level events that made it to the logs")
             .register(registry);
 
-        debugCounter = Counter.builder("logback.events")
+        this.debugCounter = Counter.builder("logback.events")
             .tags(tags).tags("level", "debug")
             .description("Number of debug level events that made it to the logs")
             .register(registry);
 
-        traceCounter = Counter.builder("logback.events")
+        this.traceCounter = Counter.builder("logback.events")
             .tags(tags).tags("level", "trace")
             .description("Number of trace level events that made it to the logs")
             .register(registry);
@@ -104,19 +104,19 @@ class MetricsTurboFilter extends TurboFilter {
         if (level.isGreaterOrEqual(logger.getEffectiveLevel()) && format != null) {
             switch (level.toInt()) {
                 case Level.ERROR_INT:
-                    errorCounter.increment();
+                    this.errorCounter.increment();
                     break;
                 case Level.WARN_INT:
-                    warnCounter.increment();
+                    this.warnCounter.increment();
                     break;
                 case Level.INFO_INT:
-                    infoCounter.increment();
+                    this.infoCounter.increment();
                     break;
                 case Level.DEBUG_INT:
-                    debugCounter.increment();
+                    this.debugCounter.increment();
                     break;
                 case Level.TRACE_INT:
-                    traceCounter.increment();
+                    this.traceCounter.increment();
                     break;
             }
         }

@@ -55,7 +55,7 @@ public class JettyStatisticsMetrics implements MeterBinder {
         bindCounter(reg, "jetty.async.requests", "Total number of async requests", StatisticsHandler::getAsyncRequests);
         bindCounter(reg, "jetty.async.dispatches", "Total number of requests that have been asynchronously dispatched", StatisticsHandler::getAsyncDispatches);
         bindCounter(reg, "jetty.async.expires", "Total number of async requests that have expired", StatisticsHandler::getExpires);
-        FunctionCounter.builder("jetty.responses.size", statisticsHandler, StatisticsHandler::getResponsesBytesTotal)
+        FunctionCounter.builder("jetty.responses.size", this.statisticsHandler, StatisticsHandler::getResponsesBytesTotal)
             .description("Total number of bytes across all responses")
             .baseUnit("bytes")
             .register(reg);
@@ -84,36 +84,36 @@ public class JettyStatisticsMetrics implements MeterBinder {
     }
 
     private void bindGauge(MeterRegistry reg, String name, String desc, ToDoubleFunction<StatisticsHandler> func) {
-        Gauge.builder(name, statisticsHandler, func)
-            .tags(tags)
+        Gauge.builder(name, this.statisticsHandler, func)
+            .tags(this.tags)
             .description(desc)
             .register(reg);
     }
 
     private void bindTimer(MeterRegistry reg, String name, String desc, ToLongFunction<StatisticsHandler> countFunc, ToDoubleFunction<StatisticsHandler> consumer) {
-        FunctionTimer.builder(name, statisticsHandler, countFunc, consumer, TimeUnit.MILLISECONDS)
-            .tags(tags)
+        FunctionTimer.builder(name, this.statisticsHandler, countFunc, consumer, TimeUnit.MILLISECONDS)
+            .tags(this.tags)
             .description(desc)
             .register(reg);
     }
 
     private void bindTimeGauge(MeterRegistry reg, String name, String desc, ToDoubleFunction<StatisticsHandler> consumer) {
-        TimeGauge.builder(name, statisticsHandler, TimeUnit.MILLISECONDS, consumer)
-            .tags(tags)
+        TimeGauge.builder(name, this.statisticsHandler, TimeUnit.MILLISECONDS, consumer)
+            .tags(this.tags)
             .description(desc)
             .register(reg);
     }
 
     private void bindCounter(MeterRegistry reg, String name, String desc, ToDoubleFunction<StatisticsHandler> consumer) {
-        FunctionCounter.builder(name, statisticsHandler, consumer)
-            .tags(tags)
+        FunctionCounter.builder(name, this.statisticsHandler, consumer)
+            .tags(this.tags)
             .description(desc)
             .register(reg);
     }
 
     private void buildStatusCounter(MeterRegistry reg, String status, ToDoubleFunction<StatisticsHandler> consumer) {
-        FunctionCounter.builder("jetty.responses", statisticsHandler, consumer)
-            .tags(tags)
+        FunctionCounter.builder("jetty.responses", this.statisticsHandler, consumer)
+            .tags(this.tags)
             .description("Number of requests with response status")
             .tags("status", status)
             .register(reg);

@@ -42,6 +42,6 @@ public class MicrometerMetricsPublisher extends HystrixMetricsPublisher {
                                                                         HystrixCommandMetrics metrics,
                                                                         HystrixCircuitBreaker circuitBreaker,
                                                                         HystrixCommandProperties properties) {
-        return new MicrometerMetricsPublisherCommand(registry, commandKey, commandGroupKey, metrics, circuitBreaker, properties);
+        return new MicrometerMetricsPublisherCommand(this.registry, commandKey, commandGroupKey, metrics, circuitBreaker, properties);
     }
 }

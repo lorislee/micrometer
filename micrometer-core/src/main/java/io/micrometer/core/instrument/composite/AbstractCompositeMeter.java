@@ -54,11 +54,11 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
     abstract T registerNewMeter(MeterRegistry registry);
 
     final void forEachChild(Consumer<T> task) {
-        children.forEach(e -> task.accept(e.meter()));
+        this.children.forEach(e -> task.accept(e.meter()));
     }
 
     final Stream<T> childStream() {
-        return children.stream().map(Entry::meter);
+        return this.children.stream().map(Entry::meter);
     }
 
     final T firstChild() {
@@ -88,26 +88,28 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
 
     @Nullable
     private T findFirstChild() {
-        if (children.isEmpty()) {
+        if (this.children.isEmpty()) {
             return null;
         }
-        Iterator<Entry> i = children.iterator();
+        Iterator<Entry> i = this.children.iterator();
         return i.hasNext() ? i.next().meter() : null;
     }
 
-    public final void add(MeterRegistry registry) {
+    @Override
+	public final void add(MeterRegistry registry) {
         final T newMeter = registerNewMeter(registry);
         if (newMeter == null) {
             return;
         }
-        children.add(new Entry(registry, newMeter));
+        this.children.add(new Entry(registry, newMeter));
         firstMeterUpdater.compareAndSet(this, null, newMeter);
     }
 
-    public final void remove(MeterRegistry registry) {
+    @Override
+	public final void remove(MeterRegistry registry) {
         // Not very efficient, but this operation is expected to be used rarely.
         AtomicReference<T> firstMeterHolder = new AtomicReference<>();
-        children.removeIf(e -> {
+        this.children.removeIf(e -> {
             if (e.registry() == registry) {
                 firstMeterHolder.compareAndSet(null, e.meter());
                 return true;
@@ -133,12 +135,12 @@ abstract class AbstractCompositeMeter<T extends Meter> extends AbstractMeter imp
         }
 
         MeterRegistry registry() {
-            return registry;
+            return this.registry;
         }
 
         @SuppressWarnings("unchecked")
         <U> U meter() {
-            return (U) meter;
+            return (U) this.meter;
         }
 
     }

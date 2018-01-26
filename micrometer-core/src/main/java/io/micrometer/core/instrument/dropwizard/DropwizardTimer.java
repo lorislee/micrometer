@@ -44,27 +44,27 @@ public class DropwizardTimer extends AbstractTimer {
     @Override
     protected void recordNonNegative(long amount, TimeUnit unit) {
         if (amount >= 0) {
-            impl.update(amount, unit);
+            this.impl.update(amount, unit);
 
             long nanoAmount = TimeUnit.NANOSECONDS.convert(amount, unit);
-            max.record(nanoAmount, TimeUnit.NANOSECONDS);
-            totalTime.addAndGet(nanoAmount);
+            this.max.record(nanoAmount, TimeUnit.NANOSECONDS);
+            this.totalTime.addAndGet(nanoAmount);
         }
     }
 
     @Override
     public long count() {
-        return impl.getCount();
+        return this.impl.getCount();
     }
 
     @Override
     public double totalTime(TimeUnit unit) {
-        return TimeUtils.nanosToUnit(totalTime.get(), unit);
+        return TimeUtils.nanosToUnit(this.totalTime.get(), unit);
     }
 
     @Override
     public double max(TimeUnit unit) {
-        return max.poll(unit);
+        return this.max.poll(unit);
     }
 
 }

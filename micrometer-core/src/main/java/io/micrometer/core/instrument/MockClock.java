@@ -30,17 +30,17 @@ public class MockClock implements Clock {
 
     @Override
     public long monotonicTime() {
-        return timeNanos;
+        return this.timeNanos;
     }
 
     @Override
     public long wallTime() {
-        return TimeUnit.MILLISECONDS.convert(timeNanos, TimeUnit.NANOSECONDS);
+        return TimeUnit.MILLISECONDS.convert(this.timeNanos, TimeUnit.NANOSECONDS);
     }
 
     public long add(long amount, TimeUnit unit) {
-        timeNanos += unit.toNanos(amount);
-        return timeNanos;
+        this.timeNanos += unit.toNanos(amount);
+        return this.timeNanos;
     }
 
     public long add(Duration duration) {

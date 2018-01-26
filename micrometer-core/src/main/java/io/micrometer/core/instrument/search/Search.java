@@ -109,13 +109,13 @@ public class Search {
 
     public Collection<Meter> meters() {
         Stream<Meter> meterStream =
-            registry.getMeters().stream().filter(m -> m.getId().getName().equals(name));
+            this.registry.getMeters().stream().filter(m -> m.getId().getName().equals(this.name));
 
-        if (!tags.isEmpty()) {
+        if (!this.tags.isEmpty()) {
             meterStream = meterStream.filter(m -> {
                 final List<Tag> idTags = new ArrayList<>();
                 m.getId().getTags().forEach(idTags::add);
-                return idTags.containsAll(tags);
+                return idTags.containsAll(this.tags);
             });
         }
 

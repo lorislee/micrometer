@@ -91,9 +91,9 @@ public class JvmGcMetrics implements MeterBinder {
     public JvmGcMetrics(Iterable<Tag> tags) {
         for (MemoryPoolMXBean mbean : ManagementFactory.getMemoryPoolMXBeans()) {
             if (isYoungGenPool(mbean.getName()))
-                youngGenPoolName = mbean.getName();
+                this.youngGenPoolName = mbean.getName();
             if (isOldGenPool(mbean.getName()))
-                oldGenPoolName = mbean.getName();
+                this.oldGenPoolName = mbean.getName();
         }
         this.tags = tags;
     }
@@ -102,7 +102,7 @@ public class JvmGcMetrics implements MeterBinder {
     public void bindTo(MeterRegistry registry) {
         AtomicLong maxDataSize = new AtomicLong(0L);
         Gauge.builder("jvm.gc.max.data.size", maxDataSize, AtomicLong::get)
-            .tags(tags)
+            .tags(this.tags)
             .description("Max size of old generation memory pool")
             .baseUnit("bytes")
             .register(registry);
@@ -110,17 +110,17 @@ public class JvmGcMetrics implements MeterBinder {
         AtomicLong liveDataSize = new AtomicLong(0L);
 
         Gauge.builder("jvm.gc.live.data.size", liveDataSize, AtomicLong::get)
-            .tags(tags)
+            .tags(this.tags)
             .description("Size of old generation memory pool after a full GC")
             .baseUnit("bytes")
             .register(registry);
 
-        Counter promotedBytes = Counter.builder("jvm.gc.memory.promoted").tags(tags)
+        Counter promotedBytes = Counter.builder("jvm.gc.memory.promoted").tags(this.tags)
             .baseUnit("bytes")
             .description("Count of positive increases in the size of the old generation memory pool before GC to after GC")
             .register(registry);
 
-        Counter allocatedBytes = Counter.builder("jvm.gc.memory.allocated").tags(tags)
+        Counter allocatedBytes = Counter.builder("jvm.gc.memory.allocated").tags(this.tags)
             .baseUnit("bytes")
             .description("Incremented for an increase in the size of the young generation memory pool after one GC to before the next")
             .register(registry);
@@ -138,14 +138,14 @@ public class JvmGcMetrics implements MeterBinder {
 
                         if (isConcurrentPhase(notificationInfo)) {
                             Timer.builder("jvm.gc.concurrent.phase.time")
-                                .tags(tags)
+                                .tags(this.tags)
                                 .tags("action", notificationInfo.getGcAction(), "cause", notificationInfo.getGcCause())
                                 .description("Time spent in concurrent phase")
                                 .register(registry)
                                 .record(notificationInfo.getGcInfo().getDuration(), TimeUnit.MILLISECONDS);
                         } else {
                             Timer.builder("jvm.gc.pause")
-                                .tags(tags)
+                                .tags(this.tags)
                                 .tags("action", notificationInfo.getGcAction(),
                                     "cause", notificationInfo.getGcCause())
                                 .description("Time spent in GC pause")
@@ -159,9 +159,9 @@ public class JvmGcMetrics implements MeterBinder {
                         final Map<String, MemoryUsage> before = gcInfo.getMemoryUsageBeforeGc();
                         final Map<String, MemoryUsage> after = gcInfo.getMemoryUsageAfterGc();
 
-                        if (oldGenPoolName != null) {
-                            final long oldBefore = before.get(oldGenPoolName).getUsed();
-                            final long oldAfter = after.get(oldGenPoolName).getUsed();
+                        if (this.oldGenPoolName != null) {
+                            final long oldBefore = before.get(this.oldGenPoolName).getUsed();
+                            final long oldAfter = after.get(this.oldGenPoolName).getUsed();
                             final long delta = oldAfter - oldBefore;
                             if (delta > 0L) {
                                 promotedBytes.increment(delta);
@@ -172,14 +172,14 @@ public class JvmGcMetrics implements MeterBinder {
                             // after a major GC.
                             if (oldAfter < oldBefore || GcGenerationAge.fromName(notificationInfo.getGcName()) == GcGenerationAge.OLD) {
                                 liveDataSize.set(oldAfter);
-                                final long oldMaxAfter = after.get(oldGenPoolName).getMax();
+                                final long oldMaxAfter = after.get(this.oldGenPoolName).getMax();
                                 maxDataSize.set(oldMaxAfter);
                             }
                         }
 
-                        if (youngGenPoolName != null) {
-                            final long youngBefore = before.get(youngGenPoolName).getUsed();
-                            final long youngAfter = after.get(youngGenPoolName).getUsed();
+                        if (this.youngGenPoolName != null) {
+                            final long youngBefore = before.get(this.youngGenPoolName).getUsed();
+                            final long youngAfter = after.get(this.youngGenPoolName).getUsed();
                             final long delta = youngBefore - youngGenSizeAfter.get();
                             youngGenSizeAfter.set(youngAfter);
                             if (delta > 0L) {

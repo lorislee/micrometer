@@ -68,15 +68,15 @@ public class FileDescriptorMetrics implements MeterBinder {
 
     @Override
     public void bindTo(MeterRegistry registry) {
-        if (openFdsMethod != null) {
-            Gauge.builder("process.open.fds", osBean, x -> invoke(openFdsMethod))
-                .tags(tags)
+        if (this.openFdsMethod != null) {
+            Gauge.builder("process.open.fds", this.osBean, x -> invoke(this.openFdsMethod))
+                .tags(this.tags)
                 .description("The open file descriptor count")
                 .register(registry);
         }
-        if (maxFdsMethod != null) {
-            Gauge.builder("process.max.fds", osBean, x -> invoke(maxFdsMethod))
-                .tags(tags)
+        if (this.maxFdsMethod != null) {
+            Gauge.builder("process.max.fds", this.osBean, x -> invoke(this.maxFdsMethod))
+                .tags(this.tags)
                 .description("The maximum file descriptor count")
                 .register(registry);
         }
@@ -84,7 +84,7 @@ public class FileDescriptorMetrics implements MeterBinder {
 
     private double invoke(@Nullable Method method) {
         try {
-            return method != null ? (double) (long) method.invoke(osBean) : Double.NaN;
+            return method != null ? (double) (long) method.invoke(this.osBean) : Double.NaN;
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             return Double.NaN;
         }
@@ -93,7 +93,7 @@ public class FileDescriptorMetrics implements MeterBinder {
     @Nullable
     private Method detectMethod(String name) {
         try {
-            final Method method = osBean.getClass().getDeclaredMethod(name);
+            final Method method = this.osBean.getClass().getDeclaredMethod(name);
             method.setAccessible(true);
             return method;
         } catch (NoSuchMethodException | SecurityException e) {

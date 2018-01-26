@@ -39,11 +39,11 @@ class StepMeasurement extends Measurement {
 
     @Override
     public double getValue() {
-        double absoluteCount = f.get();
-        double inc = Math.max(0, absoluteCount - lastCount.sum());
-        lastCount.add(inc);
-        value.getCurrent().add(inc);
-        return value.poll();
+        double absoluteCount = this.f.get();
+        double inc = Math.max(0, absoluteCount - this.lastCount.sum());
+        this.lastCount.add(inc);
+        this.value.getCurrent().add(inc);
+        return this.value.poll();
     }
 
 }

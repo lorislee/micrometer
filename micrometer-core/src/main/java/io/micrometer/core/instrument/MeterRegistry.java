@@ -185,15 +185,15 @@ public abstract class MeterRegistry {
      * @return The set of registered meters.
      */
     public List<Meter> getMeters() {
-        return Collections.unmodifiableList(new ArrayList<>(meterMap.values()));
+        return Collections.unmodifiableList(new ArrayList<>(this.meterMap.values()));
     }
 
     public void forEachMeter(Consumer<? super Meter> consumer) {
-        meterMap.values().forEach(consumer);
+        this.meterMap.values().forEach(consumer);
     }
 
     public Config config() {
-        return config;
+        return this.config;
     }
 
     public Search find(String name) {
@@ -256,7 +256,7 @@ public abstract class MeterRegistry {
      * Access to less frequently used meter types and patterns.
      */
     public More more() {
-        return more;
+        return this.more;
     }
 
     /**
@@ -363,7 +363,7 @@ public abstract class MeterRegistry {
                                                          @Nullable HistogramConfig config, BiFunction<Meter.Id, HistogramConfig, Meter> builder,
                                                          Function<Meter.Id, M> noopBuilder) {
         Meter.Id mappedId = id;
-        for (MeterFilter filter : filters) {
+        for (MeterFilter filter : this.filters) {
             mappedId = filter.map(mappedId);
         }
         if (!accept(id)) {
@@ -371,7 +371,7 @@ public abstract class MeterRegistry {
             return noopBuilder.apply(id);
         }
         if (config != null) {
-            for (MeterFilter filter : filters) {
+            for (MeterFilter filter : this.filters) {
                 HistogramConfig filteredConfig = filter.configure(mappedId, config);
                 if (filteredConfig != null) {
                     config = filteredConfig;
@@ -389,15 +389,15 @@ public abstract class MeterRegistry {
     private Meter getOrCreateMeter(@Nullable HistogramConfig config,
                                    BiFunction<Id, /*Nullable Generic*/ HistogramConfig, Meter> builder,
                                    Id mappedId) {
-        Meter m = meterMap.get(mappedId);
+        Meter m = this.meterMap.get(mappedId);
         if (m == null) {
-            synchronized (meterMapLock) {
-                m = meterMap.get(mappedId);
+            synchronized (this.meterMapLock) {
+                m = this.meterMap.get(mappedId);
 
                 if (m == null) {
                     m = builder.apply(mappedId, config);
                     register(mappedId, m);
-                    for (Consumer<Meter> onAdd : meterAddedListeners) {
+                    for (Consumer<Meter> onAdd : this.meterAddedListeners) {
                         onAdd.accept(m);
                     }
                 }
@@ -408,13 +408,13 @@ public abstract class MeterRegistry {
 
     private void register(Id id, Meter meter) {
         HashMap<Id, Meter> newMeterMap = new HashMap<>();
-        newMeterMap.putAll(meterMap);
+        newMeterMap.putAll(this.meterMap);
         newMeterMap.put(id, meter);
-        meterMap = Collections.unmodifiableMap(newMeterMap);
+        this.meterMap = Collections.unmodifiableMap(newMeterMap);
     }
 
     private boolean accept(Meter.Id id) {
-        for (MeterFilter filter : filters) {
+        for (MeterFilter filter : this.filters) {
             switch (filter.accept(id)) {
                 case DENY:
                     return false;
@@ -448,13 +448,13 @@ public abstract class MeterRegistry {
 
         @Incubating(since = "1.0.0-rc.3")
         public Config meterFilter(MeterFilter filter) {
-            filters.add(filter);
+            MeterRegistry.this.filters.add(filter);
             return this;
         }
 
         @Incubating(since = "1.0.0-rc.6")
         public Config onMeterAdded(Consumer<Meter> meter) {
-            meterAddedListeners.add(meter);
+            MeterRegistry.this.meterAddedListeners.add(meter);
             return this;
         }
 
@@ -462,7 +462,7 @@ public abstract class MeterRegistry {
          * Use the provided naming convention, overriding the default for your monitoring system.
          */
         public Config namingConvention(NamingConvention convention) {
-            namingConvention = convention;
+            MeterRegistry.this.namingConvention = convention;
             return this;
         }
 
@@ -470,7 +470,7 @@ public abstract class MeterRegistry {
          * @return The naming convention currently in use on this registry.
          */
         public NamingConvention namingConvention() {
-            return namingConvention;
+            return MeterRegistry.this.namingConvention;
         }
 
         /**
@@ -478,18 +478,18 @@ public abstract class MeterRegistry {
          * influences publishing behavior).
          */
         public Clock clock() {
-            return clock;
+            return MeterRegistry.this.clock;
         }
 
         @Incubating(since = "1.0.0-rc.6")
         public Config pauseDetector(PauseDetector detector) {
-            pauseDetector = detector;
+            MeterRegistry.this.pauseDetector = detector;
             return this;
         }
 
         @Incubating(since = "1.0.0-rc.6")
         public PauseDetector pauseDetector() {
-            return pauseDetector;
+            return MeterRegistry.this.pauseDetector;
         }
 
     }

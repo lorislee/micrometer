@@ -42,13 +42,13 @@ public class StepFunctionCounter<T> extends AbstractMeter implements FunctionCou
 
     @Override
     public double count() {
-        T obj2 = ref.get();
+        T obj2 = this.ref.get();
         if (obj2 != null) {
-            double prevLast = last;
-            last = f.applyAsDouble(obj2);
-            count.getCurrent().add(last - prevLast);
+            double prevLast = this.last;
+            this.last = this.f.applyAsDouble(obj2);
+            this.count.getCurrent().add(this.last - prevLast);
         }
-        return count.poll();
+        return this.count.poll();
     }
 
 }

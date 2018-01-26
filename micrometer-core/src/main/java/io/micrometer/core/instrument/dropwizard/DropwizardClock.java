@@ -28,12 +28,12 @@ public class DropwizardClock extends Clock {
 
     @Override
     public long getTick() {
-        return micrometerClock.monotonicTime();
+        return this.micrometerClock.monotonicTime();
     }
 
     @Override
     public long getTime() {
-        return micrometerClock.wallTime();
+        return this.micrometerClock.wallTime();
     }
 
 }
