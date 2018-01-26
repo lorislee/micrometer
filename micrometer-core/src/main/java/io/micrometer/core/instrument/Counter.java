@@ -29,10 +29,6 @@ import java.util.List;
  */
 public interface Counter extends Meter {
 
-    static Builder builder(String name) {
-        return new Builder(name);
-    }
-
     /**
      * Update the counter by one.
      */
@@ -60,6 +56,10 @@ public interface Counter extends Meter {
     @Override
     default Type type() {
         return Type.Counter;
+    }
+
+    static Builder builder(String name) {
+        return new Builder(name);
     }
 
     /**

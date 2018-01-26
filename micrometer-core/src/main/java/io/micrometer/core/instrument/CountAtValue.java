@@ -37,16 +37,6 @@ public final class CountAtValue {
     }
 
     /**
-     * Return a new {@link CountAtValue} with the specified {@code value} and {@code count}.
-     * @param value the value in nanoseconds
-     * @param count the count
-     * @return a new {@link CountAtValue} instance
-     */
-    public static CountAtValue of(long value, double count) {
-        return new CountAtValue(value, count);
-    }
-
-    /**
      * Return the contained value.
      * @return the value in nanoseconds
      */
@@ -74,6 +64,16 @@ public final class CountAtValue {
     @Override
     public String toString() {
         return "(" + this.count + " at " + this.value + ')';
+    }
+
+    /**
+     * Return a new {@link CountAtValue} with the specified {@code value} and {@code count}.
+     * @param value the value in nanoseconds
+     * @param count the count
+     * @return a new {@link CountAtValue} instance
+     */
+    public static CountAtValue of(long value, double count) {
+        return new CountAtValue(value, count);
     }
 
 }

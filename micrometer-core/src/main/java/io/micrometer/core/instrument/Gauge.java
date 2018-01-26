@@ -28,10 +28,6 @@ import java.util.function.ToDoubleFunction;
  */
 public interface Gauge extends Meter {
 
-    static <T> Builder<T> builder(String name, @Nullable T obj, ToDoubleFunction<T> f) {
-        return new Builder<>(name, obj, f);
-    }
-
     /**
      * Returns the current value. The act of observing the value by calling this method triggers sampling
      * of the underlying number or user-defined function that defines the value for the gauge.
@@ -46,6 +42,10 @@ public interface Gauge extends Meter {
     @Override
     default Type type() {
         return Type.Gauge;
+    }
+
+    static <T> Builder<T> builder(String name, @Nullable T obj, ToDoubleFunction<T> f) {
+        return new Builder<>(name, obj, f);
     }
 
     class Builder<T> {

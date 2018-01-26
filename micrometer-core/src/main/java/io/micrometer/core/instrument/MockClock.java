@@ -27,10 +27,6 @@ public class MockClock implements Clock {
 	// has to be non-zero to prevent divide-by-zeroes and other weird math results based on the clock
     private long timeNanos = 1;
 
-    public static MockClock clock(MeterRegistry registry) {
-        return (MockClock) registry.config().clock();
-    }
-
     @Override
     public long monotonicTime() {
         return this.timeNanos;
@@ -52,6 +48,10 @@ public class MockClock implements Clock {
 
     public long addSeconds(long amount) {
         return add(amount, TimeUnit.SECONDS);
+    }
+
+    public static MockClock clock(MeterRegistry registry) {
+        return (MockClock) registry.config().clock();
     }
 
 }

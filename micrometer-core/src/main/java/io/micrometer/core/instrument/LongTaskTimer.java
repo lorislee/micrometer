@@ -32,10 +32,6 @@ import java.util.function.Supplier;
  */
 public interface LongTaskTimer extends Meter {
 
-    static Builder builder(String name) {
-        return new Builder(name);
-    }
-
     /**
      * Create a timer builder from a {@link Timed} annotation.
      * @param timed The annotation instance to base a new timer on.
@@ -149,6 +145,10 @@ public interface LongTaskTimer extends Meter {
     @Override
     default Type type() {
         return Type.LongTaskTimer;
+    }
+
+    static Builder builder(String name) {
+        return new Builder(name);
     }
 
     class Sample {

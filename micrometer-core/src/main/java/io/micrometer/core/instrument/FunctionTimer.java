@@ -30,12 +30,6 @@ import java.util.function.ToLongFunction;
  */
 public interface FunctionTimer extends Meter {
 
-    static <T> Builder<T> builder(String name, T obj, ToLongFunction<T> countFunction,
-                                  ToDoubleFunction<T> totalTimeFunction,
-                                  TimeUnit totalTimeFunctionUnits) {
-        return new Builder<>(name, obj, countFunction, totalTimeFunction, totalTimeFunctionUnits);
-    }
-
     /**
      * The total number of occurrences of the timed event.
      */
@@ -58,6 +52,12 @@ public interface FunctionTimer extends Meter {
             new Measurement(this::count, Statistic.Count),
             new Measurement(() -> totalTime(baseTimeUnit()), Statistic.TotalTime)
         );
+    }
+
+    static <T> Builder<T> builder(String name, T obj, ToLongFunction<T> countFunction,
+            ToDoubleFunction<T> totalTimeFunction,
+            TimeUnit totalTimeFunctionUnits) {
+        return new Builder<>(name, obj, countFunction, totalTimeFunction, totalTimeFunctionUnits);
     }
 
     class Builder<T> {

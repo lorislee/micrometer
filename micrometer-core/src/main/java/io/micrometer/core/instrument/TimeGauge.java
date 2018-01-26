@@ -29,15 +29,16 @@ import java.util.function.ToDoubleFunction;
  */
 public interface TimeGauge extends Gauge {
 
-    static <T> Builder<T> builder(String name, T obj, TimeUnit fUnits, ToDoubleFunction<T> f) {
-        return new Builder<>(name, obj, fUnits, f);
-    }
-
     TimeUnit baseTimeUnit();
 
     default double value(TimeUnit unit) {
         return TimeUtils.convert(value(), baseTimeUnit(), unit);
     }
+
+    static <T> Builder<T> builder(String name, T obj, TimeUnit fUnits, ToDoubleFunction<T> f) {
+        return new Builder<>(name, obj, fUnits, f);
+    }
+
 
     class Builder<T> {
 

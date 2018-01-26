@@ -32,10 +32,6 @@ import java.util.List;
  */
 public interface DistributionSummary extends Meter {
 
-    static Builder builder(String name) {
-        return new Builder(name);
-    }
-
     /**
      * Updates the statistics kept by the summary with the specified amount.
      * @param amount Amount for an event being measured. For example, if the size in bytes of responses
@@ -80,6 +76,10 @@ public interface DistributionSummary extends Meter {
             new Measurement(() -> (double) count(), Statistic.Count),
             new Measurement(this::totalAmount, Statistic.Total)
         );
+    }
+
+    static Builder builder(String name) {
+        return new Builder(name);
     }
 
     class Builder {

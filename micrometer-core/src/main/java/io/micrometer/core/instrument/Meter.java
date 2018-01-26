@@ -32,10 +32,6 @@ import static java.util.stream.StreamSupport.stream;
  */
 public interface Meter {
 
-    static Builder builder(String name, Type type, Iterable<Measurement> measurements) {
-        return new Builder(name, type, measurements);
-    }
-
     /**
      * A unique combination of name and tags
      */
@@ -50,6 +46,10 @@ public interface Meter {
 
     default Type type() {
         return Type.Other;
+    }
+
+    static Builder builder(String name, Type type, Iterable<Measurement> measurements) {
+        return new Builder(name, type, measurements);
     }
 
     /**

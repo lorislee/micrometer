@@ -30,10 +30,6 @@ import java.util.function.ToDoubleFunction;
  */
 public interface FunctionCounter extends Meter {
 
-    static <T> Builder<T> builder(String name, T obj, ToDoubleFunction<T> f) {
-        return new Builder<>(name, obj, f);
-    }
-
     /**
      * The cumulative count since this counter was created.
      */
@@ -47,6 +43,10 @@ public interface FunctionCounter extends Meter {
     @Override
     default Meter.Type type() {
         return Meter.Type.Counter;
+    }
+
+    static <T> Builder<T> builder(String name, T obj, ToDoubleFunction<T> f) {
+        return new Builder<>(name, obj, f);
     }
 
     class Builder<T> {

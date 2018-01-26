@@ -38,37 +38,6 @@ import java.util.function.Supplier;
  */
 public interface Timer extends Meter {
 
-    static Sample start(MeterRegistry registry) {
-        return new Sample(registry.config().clock());
-    }
-
-    static Sample start(Clock clock) {
-        return new Sample(clock);
-    }
-
-    static Builder builder(String name) {
-        return new Builder(name);
-    }
-
-    /**
-     * Create a timer builder from a {@link Timed} annotation.
-     * @param timed       The annotation instance to base a new timer on.
-     * @param defaultName A default name to use in the event that the value attribute is empty.
-     */
-    static Builder builder(Timed timed, String defaultName) {
-        if (timed.longTask() && timed.value().isEmpty()) {
-            // the user MUST name long task timers, we don't lump them in with regular
-            // timers with the same name
-            throw new IllegalArgumentException("Long tasks instrumented with @Timed require the value attribute to be non-empty");
-        }
-
-        return new Builder(timed.value().isEmpty() ? defaultName : timed.value())
-            .tags(timed.extraTags())
-            .description(timed.description().isEmpty() ? null : timed.description())
-            .publishPercentileHistogram(timed.histogram())
-            .publishPercentiles(timed.percentiles().length > 0 ? timed.percentiles() : null);
-    }
-
     /**
      * Updates the statistics kept by the counter with the specified amount.
      * @param amount Duration of a single event being measured by this timer. If the amount is less than 0
@@ -165,6 +134,37 @@ public interface Timer extends Meter {
     @Override
     default Type type() {
         return Type.Timer;
+    }
+
+    static Sample start(MeterRegistry registry) {
+        return new Sample(registry.config().clock());
+    }
+
+    static Sample start(Clock clock) {
+        return new Sample(clock);
+    }
+
+    static Builder builder(String name) {
+        return new Builder(name);
+    }
+
+    /**
+     * Create a timer builder from a {@link Timed} annotation.
+     * @param timed       The annotation instance to base a new timer on.
+     * @param defaultName A default name to use in the event that the value attribute is empty.
+     */
+    static Builder builder(Timed timed, String defaultName) {
+        if (timed.longTask() && timed.value().isEmpty()) {
+            // the user MUST name long task timers, we don't lump them in with regular
+            // timers with the same name
+            throw new IllegalArgumentException("Long tasks instrumented with @Timed require the value attribute to be non-empty");
+        }
+
+        return new Builder(timed.value().isEmpty() ? defaultName : timed.value())
+            .tags(timed.extraTags())
+            .description(timed.description().isEmpty() ? null : timed.description())
+            .publishPercentileHistogram(timed.histogram())
+            .publishPercentiles(timed.percentiles().length > 0 ? timed.percentiles() : null);
     }
 
     class Sample {
