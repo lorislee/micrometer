@@ -84,7 +84,7 @@ public interface FunctionCounter extends Meter {
         }
 
         public Builder<T> tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+        	this.tags.add(Tag.of(key, value));
             return this;
         }
 
@@ -99,7 +99,7 @@ public interface FunctionCounter extends Meter {
         }
 
         public FunctionCounter register(MeterRegistry registry) {
-            return registry.more().counter(new Meter.Id(name, tags, baseUnit, description, Type.Counter), obj, f);
+            return registry.more().counter(new Meter.Id(this.name, this.tags, this.baseUnit, this.description, Type.Counter), this.obj, this.f);
         }
 
     }

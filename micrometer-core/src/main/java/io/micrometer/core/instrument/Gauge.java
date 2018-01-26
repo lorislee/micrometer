@@ -85,7 +85,7 @@ public interface Gauge extends Meter {
         }
 
         public Builder tag(String key, String value) {
-            tags.add(Tag.of(key, value));
+            this.tags.add(Tag.of(key, value));
             return this;
         }
 
