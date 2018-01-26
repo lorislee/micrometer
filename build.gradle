@@ -64,6 +64,11 @@ subprojects {
         maxHeapSize = "1500m"
     }
 
+	tasks.withType(Checkstyle) {
+        ignoreFailures true
+        exclude '**/src/jvh/**'
+    }
+
 }
 
 task wrapper(type: Wrapper) {
