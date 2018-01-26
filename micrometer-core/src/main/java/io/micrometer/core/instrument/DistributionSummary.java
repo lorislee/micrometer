@@ -38,7 +38,6 @@ public interface DistributionSummary extends Meter {
 
     /**
      * Updates the statistics kept by the summary with the specified amount.
-     *
      * @param amount Amount for an event being measured. For example, if the size in bytes of responses
      *               from a server. If the amount is less than 0 the value will be dropped.
      */
@@ -54,6 +53,9 @@ public interface DistributionSummary extends Meter {
      */
     double totalAmount();
 
+    /**
+     * The mean average for this distribution summary.
+     */
     default double mean() {
         return count() == 0 ? 0 : totalAmount() / count();
     }
